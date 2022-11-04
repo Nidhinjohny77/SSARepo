@@ -1,0 +1,16 @@
+﻿global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.IdentityModel.Tokens;
+global using System.IdentityModel.Tokens.Jwt;
+global using System.Text;
+global using SSA.StartUp;
+global using SSA.Interfaces;
+global using SSA.Handlers;
+global using SSA.Models;
+global using Business.Interface;
+global using Common.Models;
+global using Business.Manager;
+global using Common.Constants;
+global using DataAccess.Interface;
+global using DataAccess.Repository;
+global using DataAccess.DataContext;
+global using AutoMapper;
