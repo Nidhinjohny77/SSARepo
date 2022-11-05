@@ -6,6 +6,7 @@ namespace DataAccess.Interface
     {
         IStudentRepository StudentRepository { get; }
         IUniversityRepository UniversityRepository { get; } 
+        IUserRepository UserRepository { get; }
         Task<int> SaveChangesAsync();
     }
 }

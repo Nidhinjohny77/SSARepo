@@ -12,6 +12,8 @@ namespace DataAccess
 
         public IUniversityRepository UniversityRepository => throw new NotImplementedException();
 
+        public IUserRepository UserRepository => new DefaultRepository();
+
         public void Dispose()
         {
             this.context.Dispose();

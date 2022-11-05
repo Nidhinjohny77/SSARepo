@@ -7,3 +7,4 @@ global using DataAccess.Entities;
 global using DataAccess.Interface;
 global using Microsoft.EntityFrameworkCore;
 global using DataAccess.DataContext;
+global using DataAccess.Repository;

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿
 
 namespace SSA.Controllers
 {
@@ -16,6 +15,7 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public  async Task<IActionResult> Login([FromBody] UserCredentialModel model)
         {
             var token=await this.handler.AuthenticateAsync(model);

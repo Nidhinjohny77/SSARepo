@@ -10,9 +10,24 @@ namespace Business.Manager
             this.uow= uow;
         }
 
-        public Task<UserModel> GetUser(string userName, string password)
+        public async Task<User> GetUserAsync(string userName, string password)
         {
-            throw new NotImplementedException();
+            var userRepo = this.uow.UserRepository;
+            var user=await userRepo.GetUserAsync(userName);
+            
+            if(IsAuthenticated(user,password))
+            {
+                return await Task.FromResult<User>(user);
+            }
+            else
+            {
+                return await Task.FromResult<User>(null);   
+            }
+        }
+
+        private bool IsAuthenticated(User user,string password)
+        {
+            return user != null && user.Password == password;
         }
     }
 }
