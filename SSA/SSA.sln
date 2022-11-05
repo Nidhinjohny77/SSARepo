@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSA", "SSA\SSA.csproj", "{92792B0C-3F5A-4315-99E7-20E902CC4A84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SSA", "SSA\SSA.csproj", "{92792B0C-3F5A-4315-99E7-20E902CC4A84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{D2A000A9-FFEA-4295-B876-AEA206EAAE69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{D2A000A9-FFEA-4295-B876-AEA206EAAE69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{C36B47E3-0E72-482D-8940-0849DBB3F74B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{95CDD2AF-1459-47A7-B195-C68575E33F7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Business\Business.csproj", "{C36B47E3-0E72-482D-8940-0849DBB3F74B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{C36B47E3-0E72-482D-8940-0849DBB3F74B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C36B47E3-0E72-482D-8940-0849DBB3F74B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C36B47E3-0E72-482D-8940-0849DBB3F74B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{95CDD2AF-1459-47A7-B195-C68575E33F7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{95CDD2AF-1459-47A7-B195-C68575E33F7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{95CDD2AF-1459-47A7-B195-C68575E33F7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{95CDD2AF-1459-47A7-B195-C68575E33F7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

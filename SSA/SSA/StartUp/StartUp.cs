@@ -1,6 +1,8 @@
 ﻿
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+using System.Security.Claims;
 
 namespace SSA.StartUp
 {
@@ -28,7 +30,7 @@ namespace SSA.StartUp
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(""))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(GlobalConstant.EncryptionKey))
 
                 };
             });
@@ -36,17 +38,26 @@ namespace SSA.StartUp
 
         private static void ConfigurePolicy(IServiceCollection services)
         {
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(GlobalConstant.StudentCreatorPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, GlobalConstant.AdminRole, GlobalConstant.UniversityRole,GlobalConstant.ConsultantRole));
+                options.AddPolicy(GlobalConstant.StudentPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, GlobalConstant.StudentRole));
+                options.AddPolicy(GlobalConstant.UniversityPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, GlobalConstant.UniversityRole));
+                options.AddPolicy(GlobalConstant.LandlordPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, GlobalConstant.LandlordRole));
+                options.AddPolicy(GlobalConstant.ConsultantPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, GlobalConstant.ConsultantRole));
+            });
         }
 
         private static void ConfigureDependency(IServiceCollection services, ConfigurationManager configManager)
         {
-            services.AddDbContext<SSDbContext>(options => options.UseSqlServer(configManager.GetConnectionString("")));
+            services.AddDbContext<SSDbContext>(options => options.UseSqlServer(configManager.GetConnectionString("DBConnection")));
             services.AddScoped<IAuthHandler,JWTAuthHandler>();
             services.AddScoped<IAuthenticationManager,AuthenticationManager>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<IUniversityRepository, UniversityRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
     }
 }

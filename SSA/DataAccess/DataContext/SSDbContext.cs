@@ -21,5 +21,6 @@ namespace DataAccess.DataContext
 
         public DbSet<Student> Students { get; set; }
         public DbSet<University> Universities { get; set; } 
+        public DbSet<User> Users { get; set; }
     }
 }

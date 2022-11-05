@@ -28,7 +28,7 @@ namespace SSA.Handlers
                     return await Task.FromResult<string>(null);
                 }
 
-                var user = await manager.GetUser(credentials.UserName,credentials.Password);
+                var user = await manager.GetUserAsync(credentials.UserName,credentials.Password);
                 if (user != null)
                 {
                     var tokenHandler = new JwtSecurityTokenHandler();
