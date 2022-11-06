@@ -1,5 +1,7 @@
 
 
+using SSA.Middlewares;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -23,6 +25,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+app.UseMiddleware<TokenManagerMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();

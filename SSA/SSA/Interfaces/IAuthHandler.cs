@@ -2,6 +2,9 @@
 {
     public interface IAuthHandler
     {
-        Task<string> AuthenticateAsync(UserCredentialModel credentials);
+        Task<TokenModel> AuthenticateAsync(UserCredentialModel credentials);
+        Task<TokenModel> RefreshTokenAsync(TokenModel expiredToken);
+        Task<bool> RemoveTokenAsync(TokenModel token);
+        Task<bool> IsTokenValid(string token);
     }
 }
