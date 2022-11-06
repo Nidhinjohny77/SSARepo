@@ -1,4 +1,4 @@
-﻿namespace SSA.Models
+﻿namespace DataModels.Models
 {
     public class UserCredentialModel
     {

@@ -6,3 +6,5 @@ global using System.Threading.Tasks;
 global using Business.Interface;
 global using DataAccess.Interface;
 global using DataAccess.Entities;
+global using AutoMapper;
+global using DataModels.Models;

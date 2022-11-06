@@ -3,7 +3,9 @@ namespace SSA.Constants
 {
     public class GlobalConstant
     {
-        public const string EncryptionKey = "jhdfshdfgdsgf236283erkf/'fe23263et23";
+        public const string SigningKey = "jhdfshdfgdsgf236283erkf/'fe23263et23";
+        public const string SigningAlgorithm = SecurityAlgorithms.HmacSha256Signature;
+        public const int AccessTokenExpirationInMinutes = 5;
 
         public const string StudentCreatorPolicy = "StudentCreatorPolicy";
         public const string StudentPolicy = "StudentPolicy";
