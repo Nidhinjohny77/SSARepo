@@ -1,4 +1,6 @@
-﻿namespace SSA.Middlewares
+﻿using System.Security.Claims;
+
+namespace SSA.Middlewares
 {
     public class TokenManagerMiddleware : IMiddleware
     {
@@ -11,8 +13,10 @@
         {
             var tokenStr = context.Request.Headers.Authorization.ToString();
             var token =tokenStr.Split(' ').Last();
-            if (await this.authHandler.IsTokenValid(token))
+            ClaimsPrincipal claims = null;
+            if (string.IsNullOrEmpty(token) ||this.authHandler.IsTokenValid(token,out claims))
             {
+                context.User = claims;
                 await next(context);
                 return;
             }
