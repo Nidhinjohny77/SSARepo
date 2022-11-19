@@ -12,10 +12,12 @@ namespace DataAccess.Entities
         public int Listedby { get; set; }
         public int ListingStatus { get; set; }
         public bool IsActive { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
         public string LastUpdatedBy { get; set; }
         public DateTime LastUpdatedDate { get; set; }
         
-        public List<PropertyViewing> PropertyViews { get; set; }
-        public List<PropertyRenting> PropertyRentings { get; set; } 
+        public List<PropertyViewing> Viewings { get; set; }
+        public List<PropertyRenting> Rentings { get; set; } 
     }
 }

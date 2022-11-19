@@ -15,8 +15,8 @@ namespace DataAccess.Entities
 
         public Landlord Landlord { get; set; }  
         public List<PropertyImage> Images { get; set; }
-        //public List<PropertyListing> Listings { get; set; }
-        //public List<PropertyReview> Reviews { get; set; }   
+        public List<PropertyListing> Listings { get; set; }
+        public List<PropertyReview> Reviews { get; set; }   
 
         
     }
