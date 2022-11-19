@@ -32,13 +32,17 @@ namespace DataAccess.DataContext
             //Note:- the implementation of 'HasForeignKey("")' with string parameter is normally used with shadow foreign keys.So dont 
             //what will be the impact used with properly defined foreign key.
             modelBuilder.Entity<Student>().HasOne(s => s.University).WithOne().HasForeignKey<Student>(s => s.UniversityUID);
+
+            modelBuilder.Entity<Landlord>().ToTable("Landlord");
+            modelBuilder.Entity<Landlord>().HasKey(l=>l.ProfileUID);
+            modelBuilder.Entity<Landlord>().HasOne(s=>s.User).WithOne().HasForeignKey<Landlord>(s => s.UserUID);
         }
 
        public DbSet<Student> Students { get; set; }
        public DbSet<University> Universities { get; set; } 
        public DbSet<User> Users { get; set; }
        public DbSet<Role> Roles { get; set; }
-       // public DbSet<Landlord> Landlords { get; set; }
+       public DbSet<Landlord> Landlords { get; set; }
         //public DbSet<Property> Properties { get; set; } 
         //public DbSet<PropertyImage> PropertyImages { get; set; }   
         //public DbSet<PropertyListing> PropertyListings { get; set; }
