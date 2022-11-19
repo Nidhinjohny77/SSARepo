@@ -12,10 +12,12 @@ namespace DataAccess.Entities
         public string StudentId { get; set; }
         public string StudentCode { get; set; }
         public string EnrolledCourseName { get; set; }
-        public string UniversityCode { get; set; }
-        public University University { get; set; }
+        public string UniversityUID { get; set; }
         public DateTime CourseStartDate { get; set; }
         public DateTime CourseEndDate { get; set; }
+
+        public University University { get; set; }
+        public User User { get; set; }
 
     }
 }
