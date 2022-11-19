@@ -12,9 +12,9 @@
         public string StudentID { get; set; }
         public string StudentCode { get; set; }
         public string EnrolledCourseName { get; set; }
-        public string UniversityCode { get; set; }
         public DateTime CourseStartDate { get; set; }
         public DateTime CourseEndDate { get; set; }
+        public UniversityModel University { get; set; }
 
     }
 }

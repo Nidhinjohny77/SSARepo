@@ -19,6 +19,15 @@ namespace SSA.Mapper
                 .ForMember(x => x.UserName, opt => opt.MapFrom(src => src.UserName))
                 .ForMember(x => x.Password, opt => opt.MapFrom(src => src.Password))
                 .ForMember(x=>x.Role,opt=>opt.MapFrom(src=>src.Role));
+            this.CreateMap<University, UniversityModel>().ReverseMap()
+                .ForMember(x => x.UID, opt => opt.MapFrom(src => src.UID))
+                .ForMember(x => x.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(x => x.Address, opt => opt.MapFrom(src => src.Address))
+                .ForMember(x => x.UniversityCode, opt => opt.MapFrom(src => src.UniversityCode))
+                .ForMember(x => x.ContactNumber, opt => opt.MapFrom(src => src.ContactNumber))
+                .ForMember(x => x.ContactEmail, opt => opt.MapFrom(src => src.ContactEmail))
+                .ForMember(x => x.CountryCode, opt => opt.MapFrom(src => src.CountryCode))
+                .ForMember(x => x.Ratings, opt => opt.MapFrom(src => src.Ratings));
             this.CreateMap<Student, StudentModel>().ReverseMap()
                 .ForMember(x => x.UserUID, opt => opt.MapFrom(src => src.UserUID))
                 .ForMember(x => x.ProfileUID, opt => opt.MapFrom(src => src.ProfileUID))
@@ -29,7 +38,6 @@ namespace SSA.Mapper
                 .ForMember(x => x.StudentCode, opt => opt.MapFrom(src => src.StudentCode))
                 .ForMember(x => x.EnrolledCourseName, opt => opt.MapFrom(src => src.EnrolledCourseName))
                 .ForMember(x => x.DOB, opt => opt.MapFrom(src => src.DOB))
-                .ForMember(x => x.UniversityCode, opt => opt.MapFrom(src => src.UniversityCode))
                 .ForMember(x => x.Address, opt => opt.MapFrom(src => src.Address))
                 .ForMember(x => x.CountryCode, opt => opt.MapFrom(src => src.CountryCode));
             this.CreateMap<Landlord, LandlordModel>().ReverseMap()
