@@ -19,6 +19,12 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<Role>().HasKey(r=>r.UID);
             modelBuilder.Entity<User>().HasKey(u => u.UID);
             modelBuilder.Entity<User>(entity => entity.HasOne(p => p.Role));
+            modelBuilder.Entity<University>().HasKey(u => u.UID);
+            modelBuilder.Entity<Student>().HasKey(s => s.ProfileUID);
+            modelBuilder.Entity<Student>().HasOne(s => s.User).WithOne().HasForeignKey<Student>(s => s.UserUID);
+            //Note:- the implementation of 'HasForeignKey("")' with string parameter is normally used with shadow foreign keys.So dont 
+            //what will be the impact used with properly defined foreign key.
+            modelBuilder.Entity<Student>().HasOne(s => s.University).WithOne().HasForeignKey<Student>(s => s.UniversityUID);
         }
 
        public DbSet<Student> Students { get; set; }
