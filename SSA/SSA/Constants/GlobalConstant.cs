@@ -7,6 +7,8 @@ namespace SSA.Constants
         public const string SigningAlgorithm = SecurityAlgorithms.HmacSha256Signature;
         public const int AccessTokenExpirationInMinutes = 5;
 
+        public const string UserUID = "UserUID";
+
         public const string StudentCreatorPolicy = "StudentCreatorPolicy";
         public const string StudentPolicy = "StudentPolicy";
         public const string LandlordPolicy = "LandlordPolicy";

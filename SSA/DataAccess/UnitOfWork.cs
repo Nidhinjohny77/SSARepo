@@ -8,11 +8,11 @@ namespace DataAccess
         {
             this.context = context;
         }
-        public IStudentRepository StudentRepository => throw new NotImplementedException();
+        public IStudentRepository StudentRepository => new StudentRepository(this.context);
 
-        public IUniversityRepository UniversityRepository => throw new NotImplementedException();
+        public IUniversityRepository UniversityRepository => new UniversityRepository(this.context);
 
-        public IUserRepository UserRepository => new DefaultRepository();
+        public IUserRepository UserRepository => new UserRepository(this.context);
 
         public void Dispose()
         {
