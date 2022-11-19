@@ -17,6 +17,7 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
+        [Route("Create")]
         public async Task<IActionResult> CreateUserAsync([FromBody] UserModel user)
         {
             try
@@ -30,6 +31,7 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
+        [Route("Student/CreateProfile")]
         public async Task<IActionResult> CreateStudentProfileAsync([FromBody] StudentModel student)
         {
             try
@@ -43,6 +45,7 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
+        [Route("Landlord/CreateProfile")]
         public async Task<IActionResult> CreateLandlordProfileAsync([FromBody] LandlordModel landlord)
         {
             try
@@ -56,6 +59,7 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
+        [Route("Landlord/UpdateProfile")]
         public async Task<IActionResult> UpdateLandlordProfileAsync([FromBody] LandlordModel landlord)
         {
             try
@@ -69,6 +73,7 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
+        [Route("Student/UpdateProfile")]
         public async Task<IActionResult> UpdateStudentProfileAsync([FromBody] StudentModel student)
         {
             try
