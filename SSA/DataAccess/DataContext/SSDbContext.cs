@@ -39,6 +39,12 @@ namespace DataAccess.DataContext
 
             modelBuilder.Entity<ImageFile>().ToTable("ImageFile");
             modelBuilder.Entity<ImageFile>().HasKey(i => i.UID);
+
+            modelBuilder.Entity<Property>().ToTable("Property");
+            modelBuilder.Entity<Property>().HasKey(p => p.UID);
+            modelBuilder.Entity<Property>().HasOne(p=>p.Landlord).WithOne().HasForeignKey<Property>(p => p.LandlordProfileUID);
+            
+            //modelBuilder.Entity<PropertyImage>
         }
 
        public DbSet<Student> Students { get; set; }
@@ -47,7 +53,7 @@ namespace DataAccess.DataContext
        public DbSet<Role> Roles { get; set; }
        public DbSet<Landlord> Landlords { get; set; }
        public DbSet<ImageFile> ImageFiles { get; set; }
-        //public DbSet<Property> Properties { get; set; } 
+       public DbSet<Property> Properties { get; set; } 
         //public DbSet<PropertyImage> PropertyImages { get; set; }   
         //public DbSet<PropertyListing> PropertyListings { get; set; }
         // public DbSet<PropertyViewing> PropertyViewings { get; set; }   
