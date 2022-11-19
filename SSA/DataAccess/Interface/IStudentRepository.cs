@@ -7,9 +7,8 @@ namespace DataAccess.Interface
         Task<Student> UpdateStudentAsync(Student student);
         Task<bool> DeleteStudentAsync(Student student);
         Task<Student> GetStudentByCodeAsync(string code);
-        Task<Student> GetStudentByIdAsync(int id);
+        Task<Student> GetStudentByIdAsync(string uid);
         Task<Student> GetStudentByNameAsync(string name);
-        Task<Student[]> GetAllStudentsAsync();
-        
+        IQueryable<Student> GetAllStudents();
     }
 }
