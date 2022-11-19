@@ -11,8 +11,9 @@ namespace DataAccess.Entities
         public DateTime RentStartDate { get; set; }
         public DateTime RentEndDate { get; set; }
         public int RentPaymentFrequency { get; set; }
-        public DateTime LastUpdatedDate { get; set; }
         public bool IsActive { get; set; }
+        public string LastUpdatedBy { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
 
     }
 }
