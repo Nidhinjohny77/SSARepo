@@ -16,10 +16,17 @@ namespace DataAccess.DataContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Role>().ToTable("Role");
             modelBuilder.Entity<Role>().HasKey(r=>r.UID);
+
+            modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<User>().HasKey(u => u.UID);
             modelBuilder.Entity<User>(entity => entity.HasOne(p => p.Role));
+
+            modelBuilder.Entity<University>().ToTable("University");
             modelBuilder.Entity<University>().HasKey(u => u.UID);
+
+            modelBuilder.Entity<Student>().ToTable("Student");
             modelBuilder.Entity<Student>().HasKey(s => s.ProfileUID);
             modelBuilder.Entity<Student>().HasOne(s => s.User).WithOne().HasForeignKey<Student>(s => s.UserUID);
             //Note:- the implementation of 'HasForeignKey("")' with string parameter is normally used with shadow foreign keys.So dont 
