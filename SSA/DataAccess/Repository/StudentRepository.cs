@@ -18,7 +18,7 @@ namespace DataAccess.Repository
             throw new NotImplementedException();
         }
 
-        public Task<Student[]> GetAllStudentsAsync()
+        public IQueryable<Student> GetAllStudents()
         {
             throw new NotImplementedException();
         }
@@ -28,7 +28,7 @@ namespace DataAccess.Repository
             throw new NotImplementedException();
         }
 
-        public Task<Student> GetStudentByIdAsync(int id)
+        public Task<Student> GetStudentByIdAsync(string id)
         {
             throw new NotImplementedException();
         }

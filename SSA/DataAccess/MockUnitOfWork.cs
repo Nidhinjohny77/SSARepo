@@ -16,6 +16,14 @@ namespace DataAccess
 
         public IUserRepository UserRepository => new DefaultRepository();
 
+        public IImageFileRepository ImageFileRepository => throw new NotImplementedException();
+
+        public ILandlordRepository LandlordRepository => throw new NotImplementedException();
+
+        public IPropertyRepository PropertyRepository => throw new NotImplementedException();
+
+        public IRolesRepository RolesRepository => throw new NotImplementedException();
+
         public void Dispose()
         {
             

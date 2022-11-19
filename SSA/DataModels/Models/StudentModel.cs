@@ -3,6 +3,7 @@
     [Serializable]
     public class StudentModel
     {
+        public string UserUID { get; set; }
         public string ProfileUID { get; set; }
         public string Address { get; set; }
         public string CountryCode { get; set; }
