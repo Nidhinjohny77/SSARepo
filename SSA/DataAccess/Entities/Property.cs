@@ -13,9 +13,10 @@ namespace DataAccess.Entities
         public string LastUpdatedBy { get; set; }
         public DateTime LastUpdatedDate { get; set; }
 
-        public List<PropertyImage> Images { get; set; }
-        public List<PropertyListing> Listings { get; set; }
-        public List<PropertyReview> Reviews { get; set; }   
+        public Landlord Landlord { get; set; }  
+        //public List<PropertyImage> Images { get; set; }
+        //public List<PropertyListing> Listings { get; set; }
+        //public List<PropertyReview> Reviews { get; set; }   
 
         
     }
