@@ -29,14 +29,14 @@ namespace DataAccess.Repository
                     UID =Guid.NewGuid().ToString(),
                     UserName ="NidhinJohny77",
                     Password ="tymeof",
-                    Role=new Role() { UID=1,Name="Admin"}
+                    Role=new Role() { UID="1",Name="Admin"}
                 },
                 new User()
                 {
                     UID = Guid.NewGuid().ToString(),
                     UserName = "dada777",
                     Password = "defg",
-                    Role = new Role() { UID = 1, Name = "LandLord" }
+                    Role = new Role() { UID = "1", Name = "LandLord" }
                 }
             };
         }
