@@ -76,8 +76,8 @@ namespace DataAccess.DataContext
        public DbSet<Property> Properties { get; set; } 
        public DbSet<PropertyImage> PropertyImages { get; set; }   
        public DbSet<PropertyListing> PropertyListings { get; set; }
-        // public DbSet<PropertyViewing> PropertyViewings { get; set; }   
-        //public DbSet<PropertyRenting> PropertyRentings { get; set; }   
-        //public DbSet<PropertyReview> PropertyReviews { get; set; }   
+       public DbSet<PropertyViewing> PropertyViewings { get; set; }   
+       public DbSet<PropertyRenting> PropertyRentings { get; set; }   
+       public DbSet<PropertyReview> PropertyReviews { get; set; }   
     }
 }

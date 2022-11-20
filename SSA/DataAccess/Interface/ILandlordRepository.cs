@@ -3,12 +3,11 @@ namespace DataAccess.Interface
 {
     public interface ILandlordRepository
     {
-        Task<Landlord> AddLandlordAsync(Landlord landlord);
-        Task<Landlord> UpdateLandlordAsync(Landlord landlord);
+        Task<bool> AddLandlordAsync(Landlord landlord);
+        Task<bool> UpdateLandlordAsync(Landlord landlord);
         Task<bool> DeleteLandlordAsync(Landlord landlord);
         Task<Landlord> GetLandlordByProfileAsync(string profileUID);
-        Task<Landlord> GetLandlordByIdAsync(string uid);
-        Task<Landlord> GetLandlordByNameAsync(string name);
+        Task<Landlord> GetLandlordAsync(string userUID);
         IQueryable<Landlord> GetAllLandlords();
     }
 }
