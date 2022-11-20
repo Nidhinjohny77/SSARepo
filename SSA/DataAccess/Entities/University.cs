@@ -8,7 +8,7 @@ namespace DataAccess.Entities
 {
     public class University
     {
-        public int UID { get; set; }
+        public string UID { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public string UniversityCode { get; set; }

@@ -5,7 +5,7 @@ global using System.Text;
 global using SSA.StartUp;
 global using SSA.Interfaces;
 global using SSA.Handlers;
-global using SSA.Models;
+global using DataModels.Models;
 global using Business.Interface;
 global using Business.Manager;
 global using SSA.Constants;

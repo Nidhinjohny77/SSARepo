@@ -9,34 +9,38 @@ namespace DataAccess.Repository
             this.context = context;
         }
 
-        public Task<University> AddUniversityAsync(University university)
+        public async Task<bool> AddUniversityAsync(University university)
         {
-            throw new NotImplementedException();
+            var entry=this.context.Universities.Add(university);
+            return await Task.FromResult(entry.State==EntityState.Added);
+
         }
 
-        public Task<bool> DeleteUniversityAsync(University university)
+        public async  Task<bool> DeleteUniversityAsync(University university)
         {
-            throw new NotImplementedException();
+            var entry=this.context.Universities.Remove(university);
+            return await Task.FromResult(entry.State == EntityState.Deleted);
         }
 
-        public Task<University[]> GetAllUniversitiesAsync()
+        public IQueryable<University> GetAllUniversities()
         {
-            throw new NotImplementedException();
+            return this.context.Universities.AsQueryable<University>();
         }
 
-        public Task<University> GetUniversityByIdAsync(int id)
+        public async Task<University> GetUniversityByIdAsync(string uid)
         {
-            throw new NotImplementedException();
+            return await this.context.Universities.FirstAsync<University>(x=>x.UID==uid);
         }
 
-        public Task<University> GetUniversityByNameAsync(string name)
+        public async Task<University> GetUniversityByNameAsync(string name)
         {
-            throw new NotImplementedException();
+            return await this.context.Universities.FirstAsync<University>(x => x.Name == name);
         }
 
-        public Task<University> UpdateUniversityAsync(University university)
+        public async Task<bool> UpdateUniversityAsync(University university)
         {
-            throw new NotImplementedException();
+            var entry = this.context.Universities.Update(university);
+            return await Task.FromResult(entry.State == EntityState.Modified);
         }
     }
 }

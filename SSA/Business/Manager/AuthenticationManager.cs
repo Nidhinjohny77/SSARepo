@@ -5,23 +5,27 @@ namespace Business.Manager
     public class AuthenticationManager : IAuthenticationManager
     {
         private readonly IUnitOfWork uow;
-        public AuthenticationManager(IUnitOfWork uow)
+        private readonly IMapper mapper;
+
+        public AuthenticationManager(IUnitOfWork uow,IMapper mapper)
         {
             this.uow= uow;
+            this.mapper=mapper;
         }
 
-        public async Task<User> GetUserAsync(string userName, string password)
+        public async Task<UserModel> GetUserAsync(string userName, string password)
         {
             var userRepo = this.uow.UserRepository;
             var user=await userRepo.GetUserAsync(userName);
             
             if(IsAuthenticated(user,password))
             {
-                return await Task.FromResult<User>(user);
+                var model=this.mapper.Map<UserModel>(user);
+                return await Task.FromResult<UserModel>(model);
             }
             else
             {
-                return await Task.FromResult<User>(null);   
+                return await Task.FromResult<UserModel>(null);   
             }
         }
 
