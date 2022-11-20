@@ -3,36 +3,39 @@ namespace DataAccess.Interface
 {
     public interface IPropertyRepository
     {
-        Task<Property> CreatePropertyAsync(Property property);
+        Task<bool> AddPropertyAsync(Property property);
         Task<bool> DeletePropertyAsync(Property property);
-        Task<Property>UpdatePropertyAsync(Property property);
+        Task<bool>UpdatePropertyAsync(Property property);
         Task<Property> GetPropertyAsync(string propertyUID);
-        IQueryable<Property> GetAllPropertiesByLandlord(string landlordProfileUID);
         IQueryable<Property> GetAllProperties();
-        Task<PropertyImage> CreatePropertyImageAsync(PropertyImage image);
-        IQueryable<PropertyImage> GetAllPropertyImages(string propertyUID);
-        Task<bool> DeletePropertyImageAsync(string propertyImageUID);
-        Task<bool> DeleteAllPropertyImageAsync(string propertyUID);
 
-        Task<PropertyListing> CreatePropertyListingAsync(PropertyListing listing);
+        Task<bool> AddPropertyImageAsync(PropertyImage image);
+        Task<bool> UpdatePropertyImageAsync(PropertyImage image);
+        Task<bool> DeletePropertyImageAsync(PropertyImage image);
+        Task<PropertyImage> GetPropertyImageAsync(string propertyImageUID);
+        IQueryable<PropertyImage> GetAllPropertyImages();
+
+        Task<bool> AddPropertyListingAsync(PropertyListing listing);
         Task<bool> DeletePropertyListingAsync(PropertyListing listing);
-        Task<PropertyListing> UpdatePropertyListingAsync(PropertyListing listing);
+        Task<bool> UpdatePropertyListingAsync(PropertyListing listing);
         Task<PropertyListing> GetPropertyListingAsync(string listingUID);
-        IQueryable<PropertyListing> GetAllPropertyListingByLandlord(string landlordProfileUID);
         IQueryable<PropertyListing> GetAllPropertyListings();
 
-        Task<PropertyViewing> CreatePropertyViewingAsync(PropertyViewing viewing);
+        Task<bool> AddPropertyViewingAsync(PropertyViewing viewing);
         Task<bool> DeletePropertyViewingAsync(PropertyViewing viewing);
-        Task<PropertyViewing> UpdatePropertyViewingAsync(PropertyViewing viewing);
-        Task<PropertyViewing> GetPropertyViewingAsync(string listingUID);
-        IQueryable<PropertyViewing> GetAllPropertyViewingByLandlord(string landlordProfileUID);
-        IQueryable<PropertyViewing> GetAllPropertyViewingByStudent(string studentProfileUID);
+        Task<bool> UpdatePropertyViewingAsync(PropertyViewing viewing);
+        Task<PropertyViewing> GetPropertyViewingAsync(string viewingUID);
         IQueryable<PropertyViewing> GetAllPropertyViewings();
 
-        Task<PropertyRenting> CreatePropertyRentingAsync(PropertyRenting renting);
+        Task<bool> AddPropertyRentingAsync(PropertyRenting renting);
         Task<bool> DeletePropertyRentingAsync(PropertyRenting renting);
-        Task<PropertyRenting> UpdatePropertyRentingAsync(PropertyRenting renting);
+        Task<bool> UpdatePropertyRentingAsync(PropertyRenting renting);
         Task<PropertyRenting> GetPropertyRentingAsync(string rentingUID);
-        IQueryable<PropertyRenting> GetAllPropertyRentingByRentedUserUID(string rentedUserUID);
+        IQueryable<PropertyRenting> GetAllPropertyRentings();
+
+        Task<bool> AddPropertyReviewsAsync(PropertyReview review);
+        Task<bool> DeletePropertyReviewAsync(PropertyReview review);
+        IQueryable<PropertyReview> GetAllPropertyReviews();
+        
     }
 }

@@ -11,39 +11,38 @@ namespace DataAccess.Repository
             this.context = context;
         }
 
-        public Task<Landlord> AddLandlordAsync(Landlord landlord)
+        public async Task<bool> AddLandlordAsync(Landlord landlord)
         {
-            throw new NotImplementedException();
+            var entry = this.context.Landlords.Add(landlord);
+            return await Task.FromResult(entry.State == EntityState.Added);
         }
 
-        public Task<bool> DeleteLandlordAsync(Landlord landlord)
+        public async Task<bool> DeleteLandlordAsync(Landlord landlord)
         {
-            throw new NotImplementedException();
+            var entry = this.context.Landlords.Remove(landlord);
+            return await Task.FromResult(entry.State == EntityState.Deleted);
         }
 
         public IQueryable<Landlord> GetAllLandlords()
         {
-            throw new NotImplementedException();
+            return this.context.Landlords.AsQueryable();
         }
 
-        public Task<Landlord> GetLandlordByIdAsync(string uid)
+        public async  Task<Landlord> GetLandlordByProfileAsync(string profileUID)
         {
-            throw new NotImplementedException();
+            return await this.context.Landlords.FirstOrDefaultAsync(x=>x.ProfileUID == profileUID);    
         }
 
-        public Task<Landlord> GetLandlordByNameAsync(string name)
+
+        public async Task<Landlord> GetLandlordAsync(string userUID)
         {
-            throw new NotImplementedException();
+            return await this.context.Landlords.FirstOrDefaultAsync(x => x.UserUID == userUID);
         }
 
-        public Task<Landlord> GetLandlordByProfileAsync(string profileUID)
+        public async Task<bool> UpdateLandlordAsync(Landlord landlord)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<Landlord> UpdateLandlordAsync(Landlord landlord)
-        {
-            throw new NotImplementedException();
+            var entry = this.context.Landlords.Update(landlord);
+            return await Task.FromResult(entry.State == EntityState.Modified);
         }
     }
 }

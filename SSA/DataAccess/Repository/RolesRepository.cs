@@ -13,7 +13,7 @@ namespace DataAccess.Repository
 
         public IQueryable<Role> GetAllRoles()
         {
-            throw new NotImplementedException();
+            return this.context.Roles.AsQueryable();
         }
     }
 }

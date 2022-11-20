@@ -3,8 +3,8 @@ namespace DataAccess.Interface
 {
     public interface IImageFileRepository
     {
-        Task<bool> CreateImageFileAsync(ImageFile file);
-        Task<bool> DeleteImageFileAsync(string imageFileUID);
+        Task<bool> AddImageFileAsync(ImageFile file);
+        Task<bool> DeleteImageFileAsync(ImageFile file);
         Task<ImageFile> GetImageFileAsync(string imageFileUID);
 
     }

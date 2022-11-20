@@ -8,39 +8,43 @@ namespace DataAccess.Repository
         {
             this.context = context;
         }
-        public Task<Student> AddStudentAsync(Student student)
+        public async Task<bool> AddStudentAsync(Student student)
         {
-            throw new NotImplementedException();
+            var entry=this.context.Students.Add(student);
+            return await Task.FromResult(entry.State==EntityState.Added);
         }
 
-        public Task<bool> DeleteStudentAsync(Student student)
+        public async Task<bool> DeleteStudentAsync(Student student)
         {
-            throw new NotImplementedException();
+            var entry = this.context.Students.Remove(student);
+            return await Task.FromResult(entry.State == EntityState.Deleted);
         }
 
         public IQueryable<Student> GetAllStudents()
         {
-            throw new NotImplementedException();
+            return this.context.Students.AsQueryable();
         }
 
-        public Task<Student> GetStudentByCodeAsync(string code)
+        public async Task<Student> GetStudentByCodeAsync(string code)
         {
-            throw new NotImplementedException();
+            return await this.context.Students.FirstOrDefaultAsync(x=>x.StudentCode==code);
         }
 
-        public Task<Student> GetStudentByIdAsync(string id)
+        public async Task<Student> GetStudentByProfileAsync(string profileUID)
         {
-            throw new NotImplementedException();
+            return await this.context.Students.FirstOrDefaultAsync(x => x.ProfileUID == profileUID);
         }
 
-        public Task<Student> GetStudentByNameAsync(string name)
+        public async Task<Student> GetStudentProfileAsync(string UserUID)
         {
-            throw new NotImplementedException();
+            return await this.context.Students.FirstOrDefaultAsync(x => x.UserUID == UserUID);
         }
 
-        public Task<Student> UpdateStudentAsync(Student student)
+
+        public async Task<bool> UpdateStudentAsync(Student student)
         {
-            throw new NotImplementedException();
+            var entry = this.context.Students.Update(student);
+            return await Task.FromResult(entry.State == EntityState.Modified);
         }
     }
 }

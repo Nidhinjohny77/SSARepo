@@ -10,19 +10,21 @@ namespace DataAccess.Repository
         {
             this.context = context;
         }
-        public Task<bool> CreateImageFileAsync(ImageFile file)
+        public async Task<bool> AddImageFileAsync(ImageFile file)
         {
-            throw new NotImplementedException();
+            var entry = this.context.ImageFiles.Add(file);
+            return await Task.FromResult(entry.State == EntityState.Added);
         }
 
-        public Task<bool> DeleteImageFileAsync(string imageFileUID)
+        public async Task<bool> DeleteImageFileAsync(ImageFile file)
         {
-            throw new NotImplementedException();
+            var entry = this.context.ImageFiles.Remove(file);
+            return await Task.FromResult(entry.State == EntityState.Deleted);
         }
 
-        public Task<ImageFile> GetImageFileAsync(string imageFileUID)
+        public async Task<ImageFile> GetImageFileAsync(string imageFileUID)
         {
-            throw new NotImplementedException();
+            return await this.context.ImageFiles.FirstOrDefaultAsync(x => x.UID == imageFileUID);
         }
     }
 }
