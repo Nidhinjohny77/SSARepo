@@ -72,25 +72,27 @@ namespace SSA.Handlers
             return await Task.FromResult<bool>(false);    
         }
 
-        public async Task<bool> IsTokenValid(string token)
+        public bool IsTokenValid(string token, out ClaimsPrincipal claims)
         {
+            claims = null;
             try
             {
                 
                 if (!string.IsNullOrEmpty(token))
                 {
-                    var userModel = GetUserFromToken(token);
-                    if(userModel != null)
+                    claims = GetClaimsPrincipal(token);
+                    if(claims != null)
                     {
-                        var isValid = IsRefreshTokenAvailable(userModel.UserName);
-                        return await Task.FromResult<bool>(isValid);
+                        var userName = claims.FindFirstValue(ClaimTypes.Name);
+                        var isValid = IsRefreshTokenAvailable(userName);
+                        return isValid;
                     }
                 }
-                return await Task.FromResult<bool>(true);
+                return false;
             }
             catch(Exception ex)
             {
-                return await Task.FromResult<bool>(false);
+                return false;
             }            
         }
 
@@ -116,20 +118,12 @@ namespace SSA.Handlers
 
         private UserModel GetUserFromToken(string token)
         {
-            var orginalTokenValidationParameters=StartUp.StartUp.GetConfiguredTokenValidationParameters();
-            var tokenValidationParameters = orginalTokenValidationParameters.Clone();
-            tokenValidationParameters.ValidateLifetime = false;
-            var tokenHandler=new JwtSecurityTokenHandler();
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters ,out SecurityToken securityToken);
-            var jwtSecurityToken= securityToken as JwtSecurityToken;
-            if (jwtSecurityToken == null || jwtSecurityToken.Header.Alg.Equals(GlobalConstant.SigningAlgorithm, StringComparison.InvariantCultureIgnoreCase))
-            {
-                throw new SecurityTokenException("Invalid Token");
-            }
+            var principal=GetClaimsPrincipal(token);
             if (principal != null)
             {
                 var model = new UserModel()
                 {
+                    UID= principal.Claims.FirstOrDefault(x => x.Type == GlobalConstant.UserUID).Value,
                     UserName = principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value,
                     Role = new RoleModel()
                     {
@@ -139,6 +133,25 @@ namespace SSA.Handlers
                 return model;
             }
             return null;
+        }
+
+        private ClaimsPrincipal GetClaimsPrincipal(string token)
+        {
+            ClaimsPrincipal principal = null;
+            if (!string.IsNullOrEmpty(token))
+            {
+                var orginalTokenValidationParameters = StartUp.StartUp.GetConfiguredTokenValidationParameters();
+                var tokenValidationParameters = orginalTokenValidationParameters.Clone();
+                tokenValidationParameters.ValidateLifetime = false;
+                var tokenHandler = new JwtSecurityTokenHandler();
+                principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+                var jwtSecurityToken = securityToken as JwtSecurityToken;
+                if (jwtSecurityToken == null || jwtSecurityToken.Header.Alg.Equals(GlobalConstant.SigningAlgorithm, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    throw new SecurityTokenException("Invalid Token");
+                }
+            }
+            return principal;
         }
 
         private async Task<TokenModel> GenerateTokenAsync(UserModel user)
@@ -152,9 +165,11 @@ namespace SSA.Handlers
 
                 var claims = new List<Claim>()
                     {
-                        new Claim(ClaimTypes.Name,user.UserName)
+                        new Claim(GlobalConstant.UserUID,user.UID),
+                        new Claim(ClaimTypes.Name,user.UserName),
+                        new Claim(ClaimTypes.Role, user.Role.Name)
                     };
-                claims.Add(new Claim(ClaimTypes.Role, user.Role.Name));
+                
                 var tokenDescriptor = new SecurityTokenDescriptor()
                 {
                     Subject = new ClaimsIdentity(claims),
