@@ -18,6 +18,11 @@ namespace DataAccess.DataContext
         {
             modelBuilder.Entity<Role>().ToTable("Role");
             modelBuilder.Entity<Role>().HasKey(r=>r.UID);
+            modelBuilder.Entity<Role>().HasData(new Role() { UID = Guid.NewGuid().ToString(), Name = "Admin" });
+            modelBuilder.Entity<Role>().HasData(new Role() { UID = Guid.NewGuid().ToString(), Name = "Student" });
+            modelBuilder.Entity<Role>().HasData(new Role() { UID = Guid.NewGuid().ToString(), Name = "Landlord" });
+            modelBuilder.Entity<Role>().HasData(new Role() { UID = Guid.NewGuid().ToString(), Name = "University" });
+            modelBuilder.Entity<Role>().HasData(new Role() { UID = Guid.NewGuid().ToString(), Name = "Consultant" });
 
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<User>().HasKey(u => u.UID);

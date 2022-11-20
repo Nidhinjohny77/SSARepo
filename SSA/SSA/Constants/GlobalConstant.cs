@@ -17,7 +17,7 @@ namespace SSA.Constants
 
         public const string AdminRole = "Admin";
         public const string StudentRole = "Student";
-        public const string LandlordRole = "LandLord";
+        public const string LandlordRole = "Landlord";
         public const string UniversityRole = "University";
         public const string ConsultantRole = "Consultant";
 
