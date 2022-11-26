@@ -1,4 +1,5 @@
 ﻿
+using Business.Interface.Validators;
 using Business.Validators;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
@@ -80,6 +81,8 @@ namespace SSA.StartUp
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserValidator, UserValidator>();
             services.AddScoped<IUserManager, UserManager>();
+            services.AddScoped<IStudentValidator, StudentValidator>();
+            services.AddScoped<IStudentManager, StudentManager>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddTransient<TokenManagerMiddleware>();
         }

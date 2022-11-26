@@ -1,6 +1,6 @@
 ﻿
 
-namespace Business.Interface
+namespace Business.Interface.Validators
 {
     public interface IUserValidator
     {
