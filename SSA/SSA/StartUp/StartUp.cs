@@ -83,6 +83,8 @@ namespace SSA.StartUp
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IStudentValidator, StudentValidator>();
             services.AddScoped<IStudentManager, StudentManager>();
+            services.AddScoped<ILandlordValidator,LandlordValidator>();
+            services.AddScoped<ILandlordManager,LandlordManager>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddTransient<TokenManagerMiddleware>();
         }
