@@ -8,16 +8,25 @@ namespace Business.Common
         Revoked=2
     }
 
-    public enum Agents
+    public enum Agent
     {
         Landlord=0,
         Consultant=1
     }
 
+    public enum UserType
+    {
+        Landlord=0,
+        Student=1,
+        Consultant=2,
+        University=3,
+        Admin=4
+    }
+
     public enum ViewingStatus
     {
         NotViewed=0,
-        Viewed=1,
+        Viewed=1
 
     }
 }

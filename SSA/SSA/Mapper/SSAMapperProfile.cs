@@ -18,6 +18,7 @@ namespace SSA.Mapper
                 .ForMember(x => x.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(x => x.UserName, opt => opt.MapFrom(src => src.UserName))
                 .ForMember(x => x.Password, opt => opt.MapFrom(src => src.Password))
+                .ForMember(x=>x.UserType,opt => opt.Ignore())
                 .ForMember(x=>x.Role,opt=>opt.MapFrom(src=>src.Role));
             this.CreateMap<University, UniversityModel>().ReverseMap()
                 .ForMember(x => x.UID, opt => opt.MapFrom(src => src.UID))

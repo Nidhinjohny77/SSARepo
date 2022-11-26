@@ -2,7 +2,7 @@
 
 namespace DataModels.Models
 {
-    internal class PropertyListingModel
+    public class PropertyListingModel
     {
     }
 }

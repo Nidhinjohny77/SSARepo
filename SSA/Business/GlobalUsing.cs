@@ -8,3 +8,5 @@ global using DataAccess.Interface;
 global using DataAccess.Entities;
 global using AutoMapper;
 global using DataModels.Models;
+global using Business.Common;
+global using System.ComponentModel.DataAnnotations;
