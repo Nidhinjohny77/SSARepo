@@ -615,48 +615,30 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<bool>> UploadPropertyImageAsync(string userUID, PropertyImageModel model)
+        public async Task<Result<bool>> CreatePropertyImageAsync(string userUID, PropertyImageModel model)
         {
             try
             {
-                var totalValidationResults=new List<ValidationResult>();
-                var imageValidationResults = await this.imageValidator.ValidateFileImageAsync(userUID, model.Image);
+
                 var validationResults = await this.validator.ValidatePropertyImageAsync(userUID, model);
-                if (imageValidationResults.Any())
-                {
-                    totalValidationResults.AddRange(imageValidationResults);
-                }
+
                 if (validationResults.Any())
                 {
-                    totalValidationResults.AddRange(validationResults);
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(validationResults)));
                 }
-                if (totalValidationResults.Any())
+                var propertyImagingEntity = this.mapper.Map<PropertyImage>(model);
+                propertyImagingEntity.UID = Guid.NewGuid().ToString();
+                propertyImagingEntity.ImageFileUID = model.ImageFileUID;
+                propertyImagingEntity.CreatedBy = userUID;
+                propertyImagingEntity.CreatedDate = DateTime.Now;
+                propertyImagingEntity.LastUpdatedBy = userUID;
+                propertyImagingEntity.LastUpdatedDate = DateTime.Now;
+                var flag = await this.repository.AddPropertyImageAsync(propertyImagingEntity);
+                if (flag)
                 {
-                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(totalValidationResults)));
-                }
-                var imageFileData=this.mapper.Map<ImageFile>(model.Image);
-                imageFileData.UID=Guid.NewGuid().ToString();
-                var imageFlag= await this.uow.ImageFileRepository.AddImageFileAsync(imageFileData);
-                if (imageFlag)
-                {
-                    var propertyImagingEntity = this.mapper.Map<PropertyImage>(model);
-                    propertyImagingEntity.UID = Guid.NewGuid().ToString();
-                    propertyImagingEntity.ImageFileUID = imageFileData.UID;
-                    propertyImagingEntity.CreatedBy = userUID;
-                    propertyImagingEntity.CreatedDate = DateTime.Now;
-                    propertyImagingEntity.LastUpdatedBy = userUID;
-                    propertyImagingEntity.LastUpdatedDate = DateTime.Now;
-                    var flag = await this.repository.AddPropertyImageAsync(propertyImagingEntity);
-                    if (flag)
+                    if (await this.uow.SaveChangesAsync() > 0)
                     {
-                        if (await this.uow.SaveChangesAsync() > 0)
-                        {
-                            return await Task.FromResult<Result<bool>>(new Result<bool>(true));
-                        }
-                        else
-                        {
-                            return await Task.FromResult<Result<bool>>(new Result<bool>(false));
-                        }
+                        return await Task.FromResult<Result<bool>>(new Result<bool>(true));
                     }
                     else
                     {

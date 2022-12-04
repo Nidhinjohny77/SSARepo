@@ -10,7 +10,7 @@ namespace Business.Interface
         Task<Result<PropertyModel>> GetPropertyByUIDAsync(string userUID, string propertyUID);
         Task<Result<bool>> DeletePropertyAsync(string userUID, string propertyUID);
 
-        Task<Result<bool>> UploadPropertyImageAsync(string userUID, PropertyImageModel model);
+        Task<Result<bool>> CreatePropertyImageAsync(string userUID, PropertyImageModel model);
         Task<Result<PropertyImageModel[]>> GetAllPropertyImagesAsync(string userUID, string propertyUID);
         Task<Result<bool>> DeleteAllPropertyImagesAsync(string userUID, string propertyUID);
         Task<Result<bool>> DeletePropertyImageAsync(string userUID, string propertyImageUID);

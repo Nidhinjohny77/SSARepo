@@ -62,6 +62,11 @@ namespace Business.Manager
                     }
                     else
                     {
+                        var validationResults = await this.validator.ValidateFileImageAsync(userUID, imageModel);
+                        if (validationResults.Any())
+                        {
+                            return await Task.FromResult<Result<ImageModel>>(new Result<ImageModel>(new BusinessException(validationResults)));
+                        }
                         imageModel.UID=Guid.NewGuid().ToString();
                         var newEntity=this.mapper.Map<ImageFile>(imageModel);
                         var flag=await this.fileRepo.AddImageFileAsync(newEntity);
