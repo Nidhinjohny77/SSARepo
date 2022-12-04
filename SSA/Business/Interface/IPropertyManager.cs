@@ -4,28 +4,28 @@ namespace Business.Interface
 {
     public interface IPropertyManager
     {
-        Task<Result<PropertyModel>> CreatePropertyAsync(PropertyModel property);
-        Task<Result<PropertyModel>> UpdatePropertyAsync(PropertyModel property);
-        Task<Result<PropertyModel>> GetPropertyByLandlordAsync(string landlordProfileUID);
-        Task<Result<PropertyModel>> GetPropertyByUIDAsync(string propertyUID);
-        Task<Result<bool>> DeletePropertyAsync(string propertyUID);
+        Task<Result<PropertyModel>> CreatePropertyAsync(string userUID, PropertyModel property);
+        Task<Result<PropertyModel>> UpdatePropertyAsync(string userUID, PropertyModel property);
+        Task<Result<PropertyModel>> GetPropertyByLandlordAsync(string userUID, string landlordProfileUID);
+        Task<Result<PropertyModel>> GetPropertyByUIDAsync(string userUID, string propertyUID);
+        Task<Result<bool>> DeletePropertyAsync(string userUID, string propertyUID);
 
-        Task<Result<bool>> UploadPropertyImageAsync(PropertyImageModel model);
-        Task<Result<PropertyImageModel>> GetAllPropertyImagesAsync(string propertyUID);
-        Task<Result<bool>> DeleteAllPropertyImagesAsync(string propertyUID);
-        Task<Result<bool>> DeletePropertyImageAsync(string propertyImageUID);
+        Task<Result<bool>> UploadPropertyImageAsync(string userUID, PropertyImageModel model);
+        Task<Result<PropertyImageModel[]>> GetAllPropertyImagesAsync(string userUID, string propertyUID);
+        Task<Result<bool>> DeleteAllPropertyImagesAsync(string userUID, string propertyUID);
+        Task<Result<bool>> DeletePropertyImageAsync(string userUID, string propertyImageUID);
 
-        Task<Result<PropertyListingModel>> CreatePropertyListingAsync(PropertyListingModel propertyListing);
-        Task<Result<List<PropertyListingModel>>> GetAllPropertyListingsAsync();
-        Task<Result<List<PropertyListingModel>>> GetAllPropertyListingsByFilterAsync(PropertyListingFilterModel filter);
-        Task<Result<PropertyListingModel>> GetPropertyListingByUIDAsync(string propertyListingUID);
-        Task<Result<PropertyListingModel>> UpdatePropertyListing(PropertyListingModel propertyListing);
-        Task<Result<bool>> DeletePropertyListingAsync(string propertyListingUID);
+        Task<Result<PropertyListingModel>> CreatePropertyListingAsync(string userUID, PropertyListingModel propertyListing);
+        Task<Result<List<PropertyListingModel>>> GetAllPropertyListingsAsync(string userUID,string landlordProfileUID);
+        Task<Result<List<PropertyListingModel>>> GetAllPropertyListingsByFilterAsync(string userUID, PropertyListingFilterModel filter);
+        Task<Result<PropertyListingModel>> GetPropertyListingByUIDAsync(string userUID, string propertyListingUID);
+        Task<Result<PropertyListingModel>> UpdatePropertyListing(string userUID, PropertyListingModel propertyListing);
+        Task<Result<bool>> DeletePropertyListingAsync(string userUID, string propertyListingUID);
 
-        Task<Result<PropertyViewingModel>> CreatePropertyViewing(PropertyViewingModel propertyViewingModel);
-        Task<Result<PropertyViewingModel>> UpdatePropertyViewingAsync(PropertyViewingModel propertyViewingModel);
-        Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByStudentAsync(string studentUID);
-        Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByLandlordAsync(string landlordUID);
-        Task<Result<bool>> DeletePropertyViewing(string propertyViewingUID);
+        Task<Result<PropertyViewingModel>> CreatePropertyViewing(string userUID, PropertyViewingModel propertyViewingModel);
+        Task<Result<PropertyViewingModel>> UpdatePropertyViewingAsync(string userUID, PropertyViewingModel propertyViewingModel);
+        Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByStudentAsync(string userUID, string studentUID);
+        Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByLandlordAsync(string userUID, string landlordUID);
+        Task<Result<bool>> DeletePropertyViewing(string userUID, string propertyViewingUID);
     }
 }

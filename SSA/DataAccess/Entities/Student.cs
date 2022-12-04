@@ -15,6 +15,7 @@ namespace DataAccess.Entities
         public string UniversityUID { get; set; }
         public DateTime CourseStartDate { get; set; }
         public DateTime CourseEndDate { get; set; }
+        public bool IsActive { get; set; }
 
         public University University { get; set; }
         public User User { get; set; }

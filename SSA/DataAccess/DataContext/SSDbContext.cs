@@ -56,7 +56,7 @@ namespace DataAccess.DataContext
 
             modelBuilder.Entity<PropertyListing>().ToTable("PropertyListing");
             modelBuilder.Entity<PropertyListing>().HasKey(pl => pl.UID);
-            modelBuilder.Entity<PropertyListing>().HasOne<Property>().WithMany(p => p.Listings).HasForeignKey(pl => pl.PropertyUID);
+            modelBuilder.Entity<PropertyListing>().HasOne(pl=>pl.Property).WithMany(p => p.Listings).HasForeignKey(pl => pl.PropertyUID);
 
             modelBuilder.Entity<PropertyViewing>().ToTable("PropertyViewing");
             modelBuilder.Entity<PropertyViewing>().HasKey(pv => pv.UID);
