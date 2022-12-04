@@ -11,6 +11,7 @@ namespace Business.Common
         T originalData;
         Exception ex;
         bool isFaulted=false;
+        List<ValidationResult> results = null;
 
         public Result(T data)
         {
@@ -21,10 +22,21 @@ namespace Business.Common
         {
             this.ex = ex;
             this.isFaulted=true;
+            results = new List<ValidationResult>();
+            if(ex is BusinessException)
+            {
+                var bex= ex as BusinessException;
+                this.results.AddRange(bex.Results);
+            }
+            else
+            {
+                this.results.Add(new ValidationResult(ex.Message));
+            }
         }
 
         public bool IsFaulted=>this.isFaulted;
         public Exception Exception=>this.ex;
         public T Value=>this.originalData;
+        public List<ValidationResult> Errors => this.results;
     }
 }

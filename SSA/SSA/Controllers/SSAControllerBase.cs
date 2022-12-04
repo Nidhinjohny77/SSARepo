@@ -36,6 +36,7 @@ namespace SSA.Controllers
                                     {
                                         Name = role.Value
                                     };
+                                    this.user.Role = roleModel;
                                 }
                             }
                         }

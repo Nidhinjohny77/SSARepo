@@ -1,58 +1,34 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
+﻿
 namespace SSA.Controllers
 {
-    [Authorize(Policy = GlobalConstant.PropertyPolicy)]
-    [Route("api/[controller]")]
+    [Authorize(Policy = GlobalConstant.AllUsersPolicy)]
+    [Route("api/Property/[controller]")]
     [ApiController]
-    public class PropertyController : SSAControllerBase
+    public class ListingController : SSAControllerBase
     {
         private readonly IPropertyManager propertyManager;
         private readonly ILandlordManager landlordManager;
 
-        public PropertyController(IPropertyManager propertyManager,ILandlordManager landlordManager)
+        public ListingController(IPropertyManager propertyManager, ILandlordManager landlordManager)
         {
             this.propertyManager = propertyManager;
             this.landlordManager = landlordManager;
         }
 
         [HttpGet]
-        [Route("All")]
-        public async Task<IActionResult> GetAllPropertiesAsync()
+        [Route("Current/All")]
+        [Authorize(Policy = GlobalConstant.LandlordPolicy)]
+        public async Task<IActionResult> GetAllPropertyListingsAsync()
         {
             try
             {
-                var landlordProfileResult=await this.landlordManager.GetLandlordProfileAsync(this.User.UID);
+                var landlordProfileResult = await this.landlordManager.GetLandlordProfileAsync(this.User.UID);
                 if (landlordProfileResult.IsFaulted)
                 {
                     return BadRequest(landlordProfileResult.Errors);
                 }
                 var landlordProfileUID = landlordProfileResult.Value.ProfileUID;
-                var result = await this.propertyManager.GetPropertiesByLandlordAsync(this.User.UID,landlordProfileUID);
-                if (result.IsFaulted)
-                {
-                    return BadRequest(result.Errors);
-                }
-                else
-                {
-                    return Ok(result.Value);
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-
-        [HttpGet]
-        [Route("Get")]
-        public async Task<IActionResult> GetPropertyAsync(string propertyUID)
-        {
-            try
-            {
-                var result = await this.propertyManager.GetPropertyByUIDAsync(this.User.UID, propertyUID);
+                var result = await this.propertyManager.GetAllPropertyListingsAsync(this.User.UID, landlordProfileUID);
                 if (result.IsFaulted)
                 {
                     return BadRequest(result.Errors);
@@ -69,11 +45,57 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePropertyAsync(PropertyModel property)
+        [Route("All")]
+        public async Task<IActionResult> GetAllPropertyListingsAsync(PropertyListingFilterModel model)
         {
             try
-            {              
-                var result = await this.propertyManager.CreatePropertyAsync(this.User.UID, property);
+            {
+                var result = await this.propertyManager.GetAllPropertyListingsByFilterAsync(this.User.UID, model);
+                if (result.IsFaulted)
+                {
+                    return BadRequest(result.Errors);
+                }
+                else
+                {
+                    return Ok(result.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+
+        [HttpGet]
+        [Route("{propertyListingUID}")]
+        public async Task<IActionResult> GetPropertyListingAsync(string propertyListingUID)
+        {
+            try
+            {
+                var result = await this.propertyManager.GetPropertyListingByUIDAsync(this.User.UID, propertyListingUID);
+                if (result.IsFaulted)
+                {
+                    return BadRequest(result.Errors);
+                }
+                else
+                {
+                    return Ok(result.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Policy = GlobalConstant.PropertyListingPolicy)]
+        public async Task<IActionResult> CreatePropertyListingAsync(PropertyListingModel propertyListing)
+        {
+            try
+            {
+                var result = await this.propertyManager.CreatePropertyListingAsync(this.User.UID, propertyListing);
                 if (result.IsFaulted)
                 {
                     return BadRequest(result.Errors);
@@ -90,11 +112,12 @@ namespace SSA.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdatePropertyAsync(PropertyModel property)
+        [Authorize(Policy = GlobalConstant.PropertyListingPolicy)]
+        public async Task<IActionResult> UpdatePropertyListingAsync(PropertyListingModel propertyListing)
         {
             try
             {
-                var result = await this.propertyManager.UpdatePropertyAsync(this.User.UID, property);
+                var result = await this.propertyManager.UpdatePropertyListing(this.User.UID, propertyListing);
                 if (result.IsFaulted)
                 {
                     return BadRequest(result.Errors);
@@ -111,11 +134,12 @@ namespace SSA.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeletePropertyAsync(string propertyUID)
+        [Authorize(Policy = GlobalConstant.PropertyListingPolicy)]
+        public async Task<IActionResult> DeletePropertyListingAsync(string propertyListingUID)
         {
             try
             {
-                var result = await this.propertyManager.DeletePropertyAsync(this.User.UID, propertyUID);
+                var result = await this.propertyManager.DeletePropertyListingAsync(this.User.UID, propertyListingUID);
                 if (result.IsFaulted)
                 {
                     return BadRequest(result.Errors);

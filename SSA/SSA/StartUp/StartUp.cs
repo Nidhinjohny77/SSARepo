@@ -61,11 +61,24 @@ namespace SSA.StartUp
         {
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(GlobalConstant.StudentCreatorPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, GlobalConstant.AdminRole, GlobalConstant.UniversityRole,GlobalConstant.ConsultantRole));
+                options.AddPolicy(GlobalConstant.AllUsersPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, GlobalConstant.AdminRole, 
+                    GlobalConstant.UniversityRole, GlobalConstant.ConsultantRole, GlobalConstant.StudentRole, GlobalConstant.LandlordRole));
+                options.AddPolicy(GlobalConstant.StudentCreatorPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, 
+                    GlobalConstant.AdminRole, GlobalConstant.UniversityRole,GlobalConstant.ConsultantRole));
                 options.AddPolicy(GlobalConstant.StudentPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, GlobalConstant.StudentRole));
-                options.AddPolicy(GlobalConstant.UniversityPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, GlobalConstant.UniversityRole));
+                options.AddPolicy(GlobalConstant.UniversityPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, 
+                    GlobalConstant.UniversityRole));
                 options.AddPolicy(GlobalConstant.LandlordPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, GlobalConstant.LandlordRole));
-                options.AddPolicy(GlobalConstant.ConsultantPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, GlobalConstant.ConsultantRole));
+                options.AddPolicy(GlobalConstant.ConsultantPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, 
+                    GlobalConstant.ConsultantRole));
+                options.AddPolicy(GlobalConstant.PropertyPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, GlobalConstant.LandlordRole,
+                    GlobalConstant.ConsultantRole,GlobalConstant.AdminRole));
+                options.AddPolicy(GlobalConstant.PropertyListingPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, GlobalConstant.LandlordRole,
+                        GlobalConstant.ConsultantRole, GlobalConstant.AdminRole));
+                options.AddPolicy(GlobalConstant.PropertyViewingPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, 
+                        GlobalConstant.LandlordRole, GlobalConstant.StudentRole));
+                options.AddPolicy(GlobalConstant.AdminPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role,
+                            GlobalConstant.AdminRole));
             });
         }
 

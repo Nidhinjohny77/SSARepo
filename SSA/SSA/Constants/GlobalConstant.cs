@@ -9,11 +9,16 @@ namespace SSA.Constants
 
         public const string UserUID = "UserUID";
 
+        public const string AllUsersPolicy = "UserPolicy";
+        public const string PropertyPolicy = "PropertyPolicy";
+        public const string PropertyListingPolicy = "PropertyListingPolicy";
+        public const string PropertyViewingPolicy = "PropertyViewingPolicy";
         public const string StudentCreatorPolicy = "StudentCreatorPolicy";
         public const string StudentPolicy = "StudentPolicy";
         public const string LandlordPolicy = "LandlordPolicy";
         public const string UniversityPolicy = "University";
         public const string ConsultantPolicy = "Consultant";
+        public const string AdminPolicy = "AdminPolicy";
 
         public const string AdminRole = "Admin";
         public const string StudentRole = "Student";
