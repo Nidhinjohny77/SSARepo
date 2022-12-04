@@ -14,4 +14,9 @@ namespace Business.Common
         public static string University = "University";
         public static string Consultant = "Consultant";
     }
+
+    public static class FileConstant
+    {
+        public static List<string> AcceptedImageFileTypes = new List<string>() { "JPEG" };
+    }
 }

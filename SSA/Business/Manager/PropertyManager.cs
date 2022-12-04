@@ -8,13 +8,15 @@ namespace Business.Manager
         private readonly IPropertyRepository repository;
         private readonly IMapper mapper;
         private readonly IPropertyValidator validator;
+        private readonly IImageFileValidator imageValidator;
 
-        public PropertyManager(IUnitOfWork uow,IMapper mapper,IPropertyValidator validator)
+        public PropertyManager(IUnitOfWork uow,IMapper mapper,IPropertyValidator validator,IImageFileValidator imageValidator)
         {
             this.uow = uow;
             this.repository = this.uow.PropertyRepository;
             this.mapper = mapper;
             this.validator = validator;
+            this.imageValidator = imageValidator;
         }
         public async Task<Result<PropertyModel>> CreatePropertyAsync(string userUID, PropertyModel property)
         {
@@ -183,7 +185,7 @@ namespace Business.Manager
         {
             try
             {
-                var existingProperty = this.repository.GetAllProperties().Where(x => x.IsActive && x.UID == propertyUID).FirstOrDefault<Property>();
+                var existingProperty = this.repository.GetAllProperties().Where(x =>x.UID == propertyUID).FirstOrDefault<Property>();
                 if (existingProperty==null)
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("The given property profile doesn't exists."))));
@@ -218,7 +220,7 @@ namespace Business.Manager
         {
             try
             {
-                var existingPropertyImage = this.repository.GetAllPropertyImages().Where(x => x.IsActive && x.UID == propertyImageUID).FirstOrDefault<PropertyImage>();
+                var existingPropertyImage = this.repository.GetAllPropertyImages().Where(x => x.UID == propertyImageUID).FirstOrDefault<PropertyImage>();
                 if (existingPropertyImage == null)
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("The given property image doesn't have any pictures uploaded."))));
@@ -253,7 +255,7 @@ namespace Business.Manager
         {
             try
             {
-                var existingPropertyListing = this.repository.GetAllPropertyListings().Where(x => x.IsActive && x.UID == propertyListingUID).FirstOrDefault<PropertyListing>();
+                var existingPropertyListing = this.repository.GetAllPropertyListings().Where(x => x.UID == propertyListingUID).FirstOrDefault<PropertyListing>();
                 if (existingPropertyListing == null)
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("The given property listing doesn't exist."))));
@@ -288,7 +290,7 @@ namespace Business.Manager
         {
             try
             {
-                var existingPropertyViewing = this.repository.GetAllPropertyViewings().Where(x => x.IsActive && x.UID == propertyViewingUID).FirstOrDefault<PropertyViewing>();
+                var existingPropertyViewing = this.repository.GetAllPropertyViewings().Where(x => x.UID == propertyViewingUID).FirstOrDefault<PropertyViewing>();
                 if (existingPropertyViewing == null)
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("The given property viewing doesn't exist."))));
@@ -390,49 +392,525 @@ namespace Business.Manager
             }
         }
 
-        public Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByLandlordAsync(string userUID, string landlordUID)
+        public async Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByLandlordAsync(string userUID, string landlordUID)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var viewings = new List<PropertyViewing>();
+                var property = this.repository.GetAllProperties().Where(x => x.LandlordProfileUID == landlordUID).FirstOrDefault();
+                if (property != null)
+                {
+                    var listings = property.Listings;
+                    if(listings != null)
+                    {
+                        
+                        foreach (var listing in listings)
+                        {
+                            if (listing.Viewings != null)
+                            {
+                                viewings.AddRange(listing.Viewings);
+                            }                           
+                        }
+                    }
+                }
+                var model = this.mapper.Map<List<PropertyViewingModel>>(viewings);
+                return await Task.FromResult<Result<List<PropertyViewingModel>>>(new Result<List<PropertyViewingModel>>(model));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<List<PropertyViewingModel>>>(new Result<List<PropertyViewingModel>>(ex));
+            }
         }
 
-        public Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByStudentAsync(string userUID, string studentUID)
+        public async Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByStudentAsync(string userUID, string studentProfileUID)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+                var viewings = this.repository.GetAllPropertyViewings().Where(x => x.StudentUID == studentProfileUID && x.IsActive).ToList<PropertyViewing>();
+                if (viewings == null)
+                {
+                    viewings = new List<PropertyViewing>();
+                }
+                var model = this.mapper.Map<List<PropertyViewingModel>>(viewings);
+                return await Task.FromResult<Result<List<PropertyViewingModel>>>(new Result<List<PropertyViewingModel>>(model));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<List<PropertyViewingModel>>>(new Result<List<PropertyViewingModel>>(ex));
+            }
         }
 
-        public Task<Result<PropertyModel>> GetPropertyByLandlordAsync(string userUID, string landlordProfileUID)
+        public async Task<Result<List<PropertyModel>>> GetPropertiesByLandlordAsync(string userUID, string landlordProfileUID)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+                var properties = this.repository.GetAllProperties().Where(x => x.LandlordProfileUID == landlordProfileUID && x.IsActive).ToList<Property>();
+                if (properties == null)
+                {
+                    properties = new List<Property>();
+                }
+                var model = this.mapper.Map<List<PropertyModel>>(properties);
+                return await Task.FromResult<Result<List<PropertyModel>>>(new Result<List<PropertyModel>>(model));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<List<PropertyModel>>>(new Result<List<PropertyModel>>(ex));
+            }
         }
 
-        public Task<Result<PropertyModel>> GetPropertyByUIDAsync(string userUID, string propertyUID)
+        public async Task<Result<PropertyModel>> GetPropertyByUIDAsync(string userUID, string propertyUID)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+                var property = this.repository.GetAllProperties().Where(x => x.UID == propertyUID && x.IsActive).ToList<Property>();
+                var model = this.mapper.Map<PropertyModel>(property);
+                return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(model));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(ex));
+            }
         }
 
-        public Task<Result<PropertyListingModel>> GetPropertyListingByUIDAsync(string userUID, string propertyListingUID)
+        public async Task<Result<PropertyListingModel>> GetPropertyListingByUIDAsync(string userUID, string propertyListingUID)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var propertyListing = this.repository.GetAllPropertyListings().Where(x=>x.UID==propertyListingUID).FirstOrDefault<PropertyListing>();
+                var model = this.mapper.Map<PropertyListingModel>(propertyListing);
+                return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(model));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(ex));
+            }
         }
 
-        public Task<Result<PropertyModel>> UpdatePropertyAsync(string userUID, PropertyModel property)
+        public async Task<Result<PropertyModel>> UpdatePropertyAsync(string userUID, PropertyModel property)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var validationResults = await this.validator.ValidatePropertyAsync(userUID, property);
+                if (validationResults.Any())
+                {
+                    return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(new BusinessException(validationResults)));
+                }
+                var existingProperty = await this.repository.GetPropertyAsync(property.UID);
+                if (existingProperty == null)
+                {
+                    return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(new BusinessException(new ValidationResult("The Property profile doesn't exists."))));
+                }
+                var updatedPropertyEntity=this.mapper.Map<Property>(property);
+                updatedPropertyEntity.LastUpdatedBy= userUID;
+                updatedPropertyEntity.LastUpdatedDate= DateTime.Now;    
+                var flag=await this.repository.UpdatePropertyAsync(updatedPropertyEntity);
+                if (flag)
+                {
+                    if (await this.uow.SaveChangesAsync() > 0)
+                    {
+                        return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(property));
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(
+                            new BusinessException(new ValidationResult("Unable to update the property profile to database."))));
+                    }
+                }
+                else
+                {
+                    return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(
+                        new BusinessException(new ValidationResult("Unable to update the property profile to database."))));
+                }
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(ex));
+            }
         }
 
-        public Task<Result<PropertyListingModel>> UpdatePropertyListing(string userUID, PropertyListingModel propertyListing)
+        public async Task<Result<PropertyListingModel>> UpdatePropertyListing(string userUID, PropertyListingModel propertyListing)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var validationResults = await this.validator.ValidatePropertyListingAsync(userUID, propertyListing);
+                if (validationResults.Any())
+                {
+                    return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(new BusinessException(validationResults)));
+                }
+                var existingPropertyListing = await this.repository.GetPropertyListingAsync(propertyListing.UID);
+                if (existingPropertyListing == null)
+                {
+                    return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(new BusinessException(new ValidationResult("The Property profile doesn't exists."))));
+                }
+                var updatedPropertyListingEntity = this.mapper.Map<PropertyListing>(propertyListing);
+                updatedPropertyListingEntity.LastUpdatedBy = userUID;
+                updatedPropertyListingEntity.LastUpdatedDate = DateTime.Now;    
+                var flag = await this.repository.UpdatePropertyListingAsync(updatedPropertyListingEntity);
+                if (flag)
+                {
+                    if (await this.uow.SaveChangesAsync() > 0)
+                    {
+                        return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(propertyListing));
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(
+                            new BusinessException(new ValidationResult("Unable to update the property listing profile to database."))));
+                    }
+                }
+                else
+                {
+                    return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(
+                        new BusinessException(new ValidationResult("Unable to update the property listing profile to database."))));
+                }
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(ex));
+            }
         }
 
-        public Task<Result<PropertyViewingModel>> UpdatePropertyViewingAsync(string userUID, PropertyViewingModel propertyViewingModel)
+        public async Task<Result<PropertyViewingModel>> UpdatePropertyViewingAsync(string userUID, PropertyViewingModel propertyViewingModel)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var validationResults = await this.validator.ValidatePropertyViewingAsync(userUID, propertyViewingModel);
+                if (validationResults.Any())
+                {
+                    return await Task.FromResult<Result<PropertyViewingModel>>(new Result<PropertyViewingModel>(new BusinessException(validationResults)));
+                }
+                var existingPropertyListing = await this.repository.GetPropertyViewingAsync(propertyViewingModel.UID);
+                if (existingPropertyListing == null)
+                {
+                    return await Task.FromResult<Result<PropertyViewingModel>>(new Result<PropertyViewingModel>(new BusinessException(new ValidationResult("The Property profile doesn't exists."))));
+                }
+                var updatedPropertyViewingEntity = this.mapper.Map<PropertyViewing>(propertyViewingModel);
+                updatedPropertyViewingEntity.LastUpdatedBy = userUID;
+                updatedPropertyViewingEntity.LastUpdatedDate = DateTime.Now;    
+                var flag = await this.repository.UpdatePropertyViewingAsync(updatedPropertyViewingEntity);
+                if (flag)
+                {
+                    if (await this.uow.SaveChangesAsync() > 0)
+                    {
+                        return await Task.FromResult<Result<PropertyViewingModel>>(new Result<PropertyViewingModel>(propertyViewingModel));
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<PropertyViewingModel>>(new Result<PropertyViewingModel>(
+                            new BusinessException(new ValidationResult("Unable to update the property viewing profile to database."))));
+                    }
+                }
+                else
+                {
+                    return await Task.FromResult<Result<PropertyViewingModel>>(new Result<PropertyViewingModel>(
+                        new BusinessException(new ValidationResult("Unable to update the property viewing profile to database."))));
+                }
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyViewingModel>>(new Result<PropertyViewingModel>(ex));
+            }
         }
 
-        public Task<Result<bool>> UploadPropertyImageAsync(string userUID, PropertyImageModel model)
+        public async Task<Result<bool>> UploadPropertyImageAsync(string userUID, PropertyImageModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var totalValidationResults=new List<ValidationResult>();
+                var imageValidationResults = await this.imageValidator.ValidateFileImageAsync(userUID, model.Image);
+                var validationResults = await this.validator.ValidatePropertyImageAsync(userUID, model);
+                if (imageValidationResults.Any())
+                {
+                    totalValidationResults.AddRange(imageValidationResults);
+                }
+                if (validationResults.Any())
+                {
+                    totalValidationResults.AddRange(validationResults);
+                }
+                if (totalValidationResults.Any())
+                {
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(totalValidationResults)));
+                }
+                var imageFileData=this.mapper.Map<ImageFile>(model.Image);
+                imageFileData.UID=Guid.NewGuid().ToString();
+                var imageFlag= await this.uow.ImageFileRepository.AddImageFileAsync(imageFileData);
+                if (imageFlag)
+                {
+                    var propertyImagingEntity = this.mapper.Map<PropertyImage>(model);
+                    propertyImagingEntity.UID = Guid.NewGuid().ToString();
+                    propertyImagingEntity.ImageFileUID = imageFileData.UID;
+                    propertyImagingEntity.CreatedBy = userUID;
+                    propertyImagingEntity.CreatedDate = DateTime.Now;
+                    propertyImagingEntity.LastUpdatedBy = userUID;
+                    propertyImagingEntity.LastUpdatedDate = DateTime.Now;
+                    var flag = await this.repository.AddPropertyImageAsync(propertyImagingEntity);
+                    if (flag)
+                    {
+                        if (await this.uow.SaveChangesAsync() > 0)
+                        {
+                            return await Task.FromResult<Result<bool>>(new Result<bool>(true));
+                        }
+                        else
+                        {
+                            return await Task.FromResult<Result<bool>>(new Result<bool>(false));
+                        }
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<bool>>(new Result<bool>(false));
+                    }
+                }
+                else
+                {
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(false));
+                }
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<bool>>(new Result<bool>(ex));
+            }
+        }
+
+        public async Task<Result<PropertyRentingModel>> CreatePropertyRentingAsync(string userUID, PropertyRentingModel propertyRentingModel)
+        {
+            try
+            {
+                var validationResults = await this.validator.ValidatePropertyRentingAsync(userUID, propertyRentingModel);
+                if (validationResults.Any())
+                {
+                    return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(new BusinessException(validationResults)));
+                }
+
+                var newPropertyRentingEntity = this.mapper.Map<PropertyRenting>(propertyRentingModel);
+                newPropertyRentingEntity.UID = Guid.NewGuid().ToString();
+                newPropertyRentingEntity.CreatedBy = userUID;
+                newPropertyRentingEntity.CreatedDate = DateTime.Now;
+                newPropertyRentingEntity.LastUpdatedBy = userUID;
+                newPropertyRentingEntity.LastUpdatedDate = DateTime.Now;
+                var flag = await this.repository.AddPropertyRentingAsync(newPropertyRentingEntity);
+                if (flag)
+                {
+                    if (await this.uow.SaveChangesAsync() > 0)
+                    {
+                        var newPropertyRentingModel = this.mapper.Map<PropertyRentingModel>(newPropertyRentingEntity);
+                        return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(newPropertyRentingModel));
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(
+                            new BusinessException(new ValidationResult("Unable to save the property renting profile to database."))));
+                    }
+                }
+                else
+                {
+                    return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(
+                        new BusinessException(new ValidationResult("Unable to save the property renting profile to database."))));
+                }
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(ex));
+            }
+        }
+        public async Task<Result<PropertyRentingModel>> UpdatePropertyRentingAsync(string userUID, PropertyRentingModel propertyRentingModel)
+        {
+            try
+            {
+                var validationResults = await this.validator.ValidatePropertyRentingAsync(userUID, propertyRentingModel);
+                if (validationResults.Any())
+                {
+                    return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(new BusinessException(validationResults)));
+                }
+                var existingPropertyRenting = await this.repository.GetPropertyRentingAsync(propertyRentingModel.UID);
+                if (existingPropertyRenting == null)
+                {
+                    return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(new BusinessException(new ValidationResult("The Property profile doesn't exists."))));
+                }
+                var updatedPropertyRentingEntity = this.mapper.Map<PropertyRenting>(propertyRentingModel);
+                updatedPropertyRentingEntity.LastUpdatedBy= userUID;
+                updatedPropertyRentingEntity.LastUpdatedDate= DateTime.Now; 
+                var flag = await this.repository.UpdatePropertyRentingAsync(updatedPropertyRentingEntity);
+                if (flag)
+                {
+                    if (await this.uow.SaveChangesAsync() > 0)
+                    {
+                       
+                        return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(propertyRentingModel));
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(
+                            new BusinessException(new ValidationResult("Unable to update the property renting profile to database."))));
+                    }
+                }
+                else
+                {
+                    return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(
+                        new BusinessException(new ValidationResult("Unable to update the property renting profile to database."))));
+                }
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(ex));
+            }
+        }
+        public async Task<Result<List<PropertyRentingModel>>> GetAllPropertyRentingsByLandlordAsync(string userUID, string landlordProfileUID)
+        {
+            try
+            {
+                var propertyRentings = new List<PropertyRenting>();
+                var properties = this.repository.GetAllProperties().Where(x => x.LandlordProfileUID == landlordProfileUID && x.IsActive).ToList<Property>();
+                if (properties != null)
+                {
+                    foreach (var property in properties)
+                    {
+                        if (property.Listings != null)
+                        {
+                            foreach (var listing in property.Listings)
+                            {
+                                if(listing.Rentings != null)
+                                {
+                                    propertyRentings.AddRange(listing.Rentings);
+                                }
+                            }
+                        }
+                    }
+                }
+                var model = this.mapper.Map<List<PropertyRentingModel>>(propertyRentings);
+                return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(model));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(ex));
+            }
+        }
+        public async Task<Result<List<PropertyRentingModel>>> GetAllPropertyRentingsByStudentAsync(string userUID, string studentProfileUID)
+        {
+            try
+            {
+                var studentUser = await this.uow.StudentRepository.GetStudentByProfileAsync(studentProfileUID);
+                if(studentUser == null)
+                {
+                    return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(
+                            new BusinessException(new ValidationResult("The given student profile doesn't exists."))));
+                }
+                var studentUserUID=studentUser.UserUID;
+                var propertyRentings = this.repository.GetAllPropertyRentings().Where(x => x.RentedUserUID == studentUserUID).ToList<PropertyRenting>();
+                if (propertyRentings == null)
+                {
+                    propertyRentings = new List<PropertyRenting>();
+                }
+                var model = this.mapper.Map<List<PropertyRentingModel>>(propertyRentings);
+                return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(model));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(ex));
+            }
+        }
+        public async Task<Result<List<PropertyRentingModel>>> GetAllActivePropertyRentingsByLandlordAsync(string userUID, string landlordProfileUID)
+        {
+            try
+            {
+                var propertyRentingResults = await GetAllPropertyRentingsByLandlordAsync(userUID, landlordProfileUID);
+                var activeRentings = propertyRentingResults.Value.FindAll(x => x.IsActive);
+                return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(activeRentings));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(ex));
+            }
+        }
+        public async Task<Result<List<PropertyRentingModel>>> GetAllActivePropertyRentingsByStudentAsync(string userUID, string studentProfileUID)
+        {
+            try
+            {
+                var propertyRentingResults = await GetAllPropertyRentingsByStudentAsync(userUID, studentProfileUID);
+                var activeRentings = propertyRentingResults.Value.FindAll(x => x.IsActive);
+                return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(activeRentings));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(ex));
+            }
+        }
+        public async Task<Result<List<PropertyRentingModel>>> GetAllPropertyRentingByPropertyUIDAsync(string userUID, string propertyUID)
+        {
+            try
+            {
+                var propertyRentings = new List<PropertyRenting>();
+                var property = this.repository.GetAllProperties().Where(x => x.UID == propertyUID && x.IsActive).FirstOrDefault<Property>();
+
+                if (property != null && property.Listings != null)
+                {
+                    foreach (var listing in property.Listings)
+                    {
+                        if (listing.Rentings != null)
+                        {
+                            propertyRentings.AddRange(listing.Rentings);
+                        }
+                    }
+                }
+
+                var model = this.mapper.Map<List<PropertyRentingModel>>(propertyRentings);
+                return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(model));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(ex));
+            }
+        }
+
+        public async Task<Result<PropertyRentingModel>> GetActivePropertyRentingByPropertyUIDAsync(string userUID, string propertyUID)
+        {
+            try
+            {
+                var propertyRentingResults = await GetAllPropertyRentingByPropertyUIDAsync(userUID, propertyUID);
+                var activeRenting = propertyRentingResults.Value.Find(x => x.IsActive);
+                return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(activeRenting));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(ex));
+            }
+        }
+
+        public async Task<Result<bool>> DeletePropertyRentingAsync(string userUID, string propertyRentingUID)
+        {
+            try
+            {
+                var existingPropertyRenting = this.repository.GetAllPropertyRentings().Where(x => x.UID == propertyRentingUID).FirstOrDefault<PropertyRenting>();
+                if (existingPropertyRenting == null)
+                {
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("The given property renting profile doesn't exists."))));
+                }
+                bool flag = await this.repository.DeletePropertyRentingAsync(existingPropertyRenting);
+
+                if (flag)
+                {
+                    if (await this.uow.SaveChangesAsync() > 0)
+                    {
+                        return await Task.FromResult<Result<bool>>(new Result<bool>(true));
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<bool>>(new Result<bool>(
+                            new BusinessException(new ValidationResult("Unable to delete the property renting profile from database."))));
+                    }
+                }
+                else
+                {
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(
+                        new BusinessException(new ValidationResult("Unable to delete the property renting profile from database."))));
+                }
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<bool>>(new Result<bool>(ex));
+            }
         }
     }
 }

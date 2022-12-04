@@ -10,6 +10,8 @@ namespace Business.Interface.Validators
 
         Task<List<ValidationResult>> ValidatePropertyRentingAsync(string loggedInUser, PropertyRentingModel model);
 
+        Task<List<ValidationResult>> ValidatePropertyImageAsync(string loggedInUser, PropertyImageModel model);
+
 
     }
 }

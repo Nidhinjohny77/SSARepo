@@ -183,13 +183,13 @@ namespace Business.Validators
 
             }
 
-            if (string.IsNullOrEmpty(model.StudentUID))
+            if (string.IsNullOrEmpty(model.StudentProfileUID))
             {
-                validationResults.Add(new ValidationResult("StudentUID is a mandatory field."));
+                validationResults.Add(new ValidationResult("StudentProfileUID is a mandatory field."));
             }
             else
             {
-                var studentProfile=await this.uow.StudentRepository.GetStudentProfileAsync(model.StudentUID);
+                var studentProfile=await this.uow.StudentRepository.GetStudentProfileAsync(model.StudentProfileUID);
                 if(studentProfile == null)
                 {
                     validationResults.Add(new ValidationResult("The given student profile doesn't exists."));
@@ -311,6 +311,49 @@ namespace Business.Validators
             if (model.RentStartDate != null && model.RentEndDate != null && model.RentStartDate < model.RentEndDate)
             {
                 validationResults.Add(new ValidationResult("The given start and end date range is invalid."));
+            }
+            return await Task.FromResult<List<ValidationResult>>(validationResults);
+        }
+
+        public async Task<List<ValidationResult>> ValidatePropertyImageAsync(string loggedInUser, PropertyImageModel model)
+        {
+            var validationResults = new List<ValidationResult>();
+
+            if (loggedInUser == null)
+            {
+                validationResults.Add(new ValidationResult("Invalid LoggedIn user."));
+            }
+            var property=await this.propertyRepo.GetPropertyAsync(model.PropertyUID);
+            if(property == null)
+            {
+                validationResults.Add(new ValidationResult("The given property profile doesn't exists."));
+            }
+            else
+            {
+                var landLord = await this.landlordRepo.GetLandlordByProfileAsync(property.LandlordProfileUID);
+                if (landLord == null)
+                {
+                    validationResults.Add(new ValidationResult("The given landlord profile doesn't exists."));
+                }
+                else
+                {
+                    var user = await this.userRepo.GetUserAsync(landLord.UserUID);
+                    if (user == null)
+                    {
+                        validationResults.Add(new ValidationResult("The given landlord user doesn't exists."));
+                    }
+                    else
+                    {
+                        if (
+                            (!string.Equals(user.Role.Name, RoleConstant.Admin) && !string.Equals(user.Role.Name, RoleConstant.Consultant)) &&
+                             !string.Equals(loggedInUser, user.UID)
+                            )
+                        {
+                            validationResults.Add(new ValidationResult("LoggedIn user doesnt match with landlord user given in model."));
+                        }
+                    }
+
+                }
             }
             return await Task.FromResult<List<ValidationResult>>(validationResults);
         }
