@@ -18,11 +18,11 @@ namespace Business.Manager
             this.validator = validator;
             this.imageValidator = imageValidator;
         }
-        public async Task<Result<PropertyModel>> CreatePropertyAsync(string userUID, PropertyModel property)
+        public async Task<Result<PropertyModel>> CreatePropertyAsync(string loggedInUser, PropertyModel property)
         {
             try
             {
-                var validationResults = await this.validator.ValidatePropertyAsync(userUID, property);
+                var validationResults = await this.validator.ValidatePropertyAsync(loggedInUser, property);
                 if (validationResults.Any())
                 {
                     return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(new BusinessException(validationResults)));
@@ -30,9 +30,9 @@ namespace Business.Manager
                 
                 var newPropertyEntity = this.mapper.Map<Property>(property);
                 newPropertyEntity.UID = Guid.NewGuid().ToString();
-                newPropertyEntity.CreatedBy= userUID;
+                newPropertyEntity.CreatedBy= loggedInUser;
                 newPropertyEntity.CreatedDate = DateTime.Now;
-                newPropertyEntity.LastUpdatedBy = userUID;
+                newPropertyEntity.LastUpdatedBy = loggedInUser;
                 newPropertyEntity.LastUpdatedDate = DateTime.Now;
                 var flag = await this.repository.AddPropertyAsync(newPropertyEntity);
                 if (flag)
@@ -60,20 +60,20 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<PropertyListingModel>> CreatePropertyListingAsync(string userUID, PropertyListingModel propertyListing)
+        public async Task<Result<PropertyListingModel>> CreatePropertyListingAsync(string loggedInUser, PropertyListingModel propertyListing)
         {
             try
             {
-                var validationResults = await this.validator.ValidatePropertyListingAsync(userUID, propertyListing);
+                var validationResults = await this.validator.ValidatePropertyListingAsync(loggedInUser, propertyListing);
                 if (validationResults.Any())
                 {
                     return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(new BusinessException(validationResults)));
                 }
                 var newPropertyListingEntity = this.mapper.Map<PropertyListing>(propertyListing);
                 newPropertyListingEntity.UID= Guid.NewGuid().ToString();
-                newPropertyListingEntity.CreatedBy = userUID;
+                newPropertyListingEntity.CreatedBy = loggedInUser;
                 newPropertyListingEntity.CreatedDate= DateTime.Now;
-                newPropertyListingEntity.LastUpdatedBy= userUID;
+                newPropertyListingEntity.LastUpdatedBy= loggedInUser;
                 newPropertyListingEntity.LastUpdatedDate= DateTime.Now;
                 var flag = await this.repository.AddPropertyListingAsync(newPropertyListingEntity);
                 if (flag)
@@ -101,20 +101,20 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<PropertyViewingModel>> CreatePropertyViewing(string userUID, PropertyViewingModel propertyViewingModel)
+        public async Task<Result<PropertyViewingModel>> CreatePropertyViewing(string loggedInUser, PropertyViewingModel propertyViewingModel)
         {
             try
             {
-                var validationResults = await this.validator.ValidatePropertyViewingAsync(userUID, propertyViewingModel);
+                var validationResults = await this.validator.ValidatePropertyViewingAsync(loggedInUser, propertyViewingModel);
                 if (validationResults.Any())
                 {
                     return await Task.FromResult<Result<PropertyViewingModel>>(new Result<PropertyViewingModel>(new BusinessException(validationResults)));
                 }
                 var newPropertyViewingEntity = this.mapper.Map<PropertyViewing>(propertyViewingModel);
                 newPropertyViewingEntity.UID = Guid.NewGuid().ToString();
-                newPropertyViewingEntity.CreatedBy = userUID;
+                newPropertyViewingEntity.CreatedBy = loggedInUser;
                 newPropertyViewingEntity.CreatedDate = DateTime.Now;
-                newPropertyViewingEntity.LastUpdatedBy = userUID;
+                newPropertyViewingEntity.LastUpdatedBy = loggedInUser;
                 newPropertyViewingEntity.LastUpdatedDate = DateTime.Now;
                 var flag = await this.repository.AddPropertyViewingAsync(newPropertyViewingEntity);
                 if (flag)
@@ -142,7 +142,7 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<bool>> DeleteAllPropertyImagesAsync(string userUID, string propertyUID)
+        public async Task<Result<bool>> DeleteAllPropertyImagesAsync(string loggedInUser, string propertyUID)
         {
             try
             {
@@ -181,7 +181,7 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<bool>> DeletePropertyAsync(string userUID, string propertyUID)
+        public async Task<Result<bool>> DeletePropertyAsync(string loggedInUser, string propertyUID)
         {
             try
             {
@@ -216,7 +216,7 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<bool>> DeletePropertyImageAsync(string userUID, string propertyImageUID)
+        public async Task<Result<bool>> DeletePropertyImageAsync(string loggedInUser, string propertyImageUID)
         {
             try
             {
@@ -251,7 +251,7 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<bool>> DeletePropertyListingAsync(string userUID, string propertyListingUID)
+        public async Task<Result<bool>> DeletePropertyListingAsync(string loggedInUser, string propertyListingUID)
         {
             try
             {
@@ -286,7 +286,7 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<bool>> DeletePropertyViewing(string userUID, string propertyViewingUID)
+        public async Task<Result<bool>> DeletePropertyViewing(string loggedInUser, string propertyViewingUID)
         {
             try
             {
@@ -321,7 +321,7 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<PropertyImageModel[]>> GetAllPropertyImagesAsync(string userUID, string propertyUID)
+        public async Task<Result<PropertyImageModel[]>> GetAllPropertyImagesAsync(string loggedInUser, string propertyUID)
         {
             try
             {
@@ -339,7 +339,7 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<List<PropertyListingModel>>> GetAllPropertyListingsAsync(string userUID, string landlordProfileUID)
+        public async Task<Result<List<PropertyListingModel>>> GetAllPropertyListingsAsync(string loggedInUser, string landlordProfileUID)
         {
             try
             {
@@ -362,7 +362,7 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<List<PropertyListingModel>>> GetAllPropertyListingsByFilterAsync(string userUID, PropertyListingFilterModel filter)
+        public async Task<Result<List<PropertyListingModel>>> GetAllPropertyListingsByFilterAsync(string loggedInUser, PropertyListingFilterModel filter)
         {
             try
             {
@@ -392,7 +392,7 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByLandlordAsync(string userUID, string landlordUID)
+        public async Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByLandlordAsync(string loggedInUser, string landlordUID)
         {
             try
             {
@@ -422,7 +422,7 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByStudentAsync(string userUID, string studentProfileUID)
+        public async Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByStudentAsync(string loggedInUser, string studentProfileUID)
         {
             try
             {
@@ -441,7 +441,7 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<List<PropertyModel>>> GetPropertiesByLandlordAsync(string userUID, string landlordProfileUID)
+        public async Task<Result<List<PropertyModel>>> GetPropertiesByLandlordAsync(string loggedInUser, string landlordProfileUID)
         {
             try
             {
@@ -460,7 +460,7 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<PropertyModel>> GetPropertyByUIDAsync(string userUID, string propertyUID)
+        public async Task<Result<PropertyModel>> GetPropertyByUIDAsync(string loggedInUser, string propertyUID)
         {
             try
             {
@@ -475,7 +475,7 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<PropertyListingModel>> GetPropertyListingByUIDAsync(string userUID, string propertyListingUID)
+        public async Task<Result<PropertyListingModel>> GetPropertyListingByUIDAsync(string loggedInUser, string propertyListingUID)
         {
             try
             {
@@ -489,11 +489,11 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<PropertyModel>> UpdatePropertyAsync(string userUID, PropertyModel property)
+        public async Task<Result<PropertyModel>> UpdatePropertyAsync(string loggedInUser, PropertyModel property)
         {
             try
             {
-                var validationResults = await this.validator.ValidatePropertyAsync(userUID, property);
+                var validationResults = await this.validator.ValidatePropertyAsync(loggedInUser, property);
                 if (validationResults.Any())
                 {
                     return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(new BusinessException(validationResults)));
@@ -503,8 +503,8 @@ namespace Business.Manager
                 {
                     return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(new BusinessException(new ValidationResult("The Property profile doesn't exists."))));
                 }
-                var updatedPropertyEntity=this.mapper.Map<Property>(property);
-                updatedPropertyEntity.LastUpdatedBy= userUID;
+                var updatedPropertyEntity=this.mapper.Map<PropertyModel,Property>(property,existingProperty);
+                updatedPropertyEntity.LastUpdatedBy= loggedInUser;
                 updatedPropertyEntity.LastUpdatedDate= DateTime.Now;    
                 var flag=await this.repository.UpdatePropertyAsync(updatedPropertyEntity);
                 if (flag)
@@ -531,11 +531,11 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<PropertyListingModel>> UpdatePropertyListing(string userUID, PropertyListingModel propertyListing)
+        public async Task<Result<PropertyListingModel>> UpdatePropertyListing(string loggedInUser, PropertyListingModel propertyListing)
         {
             try
             {
-                var validationResults = await this.validator.ValidatePropertyListingAsync(userUID, propertyListing);
+                var validationResults = await this.validator.ValidatePropertyListingAsync(loggedInUser, propertyListing);
                 if (validationResults.Any())
                 {
                     return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(new BusinessException(validationResults)));
@@ -545,8 +545,8 @@ namespace Business.Manager
                 {
                     return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(new BusinessException(new ValidationResult("The Property profile doesn't exists."))));
                 }
-                var updatedPropertyListingEntity = this.mapper.Map<PropertyListing>(propertyListing);
-                updatedPropertyListingEntity.LastUpdatedBy = userUID;
+                var updatedPropertyListingEntity = this.mapper.Map<PropertyListingModel,PropertyListing>(propertyListing,existingPropertyListing);
+                updatedPropertyListingEntity.LastUpdatedBy = loggedInUser;
                 updatedPropertyListingEntity.LastUpdatedDate = DateTime.Now;    
                 var flag = await this.repository.UpdatePropertyListingAsync(updatedPropertyListingEntity);
                 if (flag)
@@ -573,22 +573,22 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<PropertyViewingModel>> UpdatePropertyViewingAsync(string userUID, PropertyViewingModel propertyViewingModel)
+        public async Task<Result<PropertyViewingModel>> UpdatePropertyViewingAsync(string loggedInUser, PropertyViewingModel propertyViewingModel)
         {
             try
             {
-                var validationResults = await this.validator.ValidatePropertyViewingAsync(userUID, propertyViewingModel);
+                var validationResults = await this.validator.ValidatePropertyViewingAsync(loggedInUser, propertyViewingModel);
                 if (validationResults.Any())
                 {
                     return await Task.FromResult<Result<PropertyViewingModel>>(new Result<PropertyViewingModel>(new BusinessException(validationResults)));
                 }
-                var existingPropertyListing = await this.repository.GetPropertyViewingAsync(propertyViewingModel.UID);
-                if (existingPropertyListing == null)
+                var existingPropertyViewing = await this.repository.GetPropertyViewingAsync(propertyViewingModel.UID);
+                if (existingPropertyViewing == null)
                 {
                     return await Task.FromResult<Result<PropertyViewingModel>>(new Result<PropertyViewingModel>(new BusinessException(new ValidationResult("The Property profile doesn't exists."))));
                 }
-                var updatedPropertyViewingEntity = this.mapper.Map<PropertyViewing>(propertyViewingModel);
-                updatedPropertyViewingEntity.LastUpdatedBy = userUID;
+                var updatedPropertyViewingEntity = this.mapper.Map<PropertyViewingModel,PropertyViewing>(propertyViewingModel, existingPropertyViewing);
+                updatedPropertyViewingEntity.LastUpdatedBy = loggedInUser;
                 updatedPropertyViewingEntity.LastUpdatedDate = DateTime.Now;    
                 var flag = await this.repository.UpdatePropertyViewingAsync(updatedPropertyViewingEntity);
                 if (flag)
@@ -615,12 +615,12 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<bool>> CreatePropertyImageAsync(string userUID, PropertyImageModel model)
+        public async Task<Result<bool>> CreatePropertyImageAsync(string loggedInUser, PropertyImageModel model)
         {
             try
             {
 
-                var validationResults = await this.validator.ValidatePropertyImageAsync(userUID, model);
+                var validationResults = await this.validator.ValidatePropertyImageAsync(loggedInUser, model);
 
                 if (validationResults.Any())
                 {
@@ -629,9 +629,9 @@ namespace Business.Manager
                 var propertyImagingEntity = this.mapper.Map<PropertyImage>(model);
                 propertyImagingEntity.UID = Guid.NewGuid().ToString();
                 propertyImagingEntity.ImageFileUID = model.ImageFileUID;
-                propertyImagingEntity.CreatedBy = userUID;
+                propertyImagingEntity.CreatedBy = loggedInUser;
                 propertyImagingEntity.CreatedDate = DateTime.Now;
-                propertyImagingEntity.LastUpdatedBy = userUID;
+                propertyImagingEntity.LastUpdatedBy = loggedInUser;
                 propertyImagingEntity.LastUpdatedDate = DateTime.Now;
                 var flag = await this.repository.AddPropertyImageAsync(propertyImagingEntity);
                 if (flag)
@@ -656,11 +656,11 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<PropertyRentingModel>> CreatePropertyRentingAsync(string userUID, PropertyRentingModel propertyRentingModel)
+        public async Task<Result<PropertyRentingModel>> CreatePropertyRentingAsync(string loggedInUser, PropertyRentingModel propertyRentingModel)
         {
             try
             {
-                var validationResults = await this.validator.ValidatePropertyRentingAsync(userUID, propertyRentingModel);
+                var validationResults = await this.validator.ValidatePropertyRentingAsync(loggedInUser, propertyRentingModel);
                 if (validationResults.Any())
                 {
                     return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(new BusinessException(validationResults)));
@@ -668,9 +668,9 @@ namespace Business.Manager
 
                 var newPropertyRentingEntity = this.mapper.Map<PropertyRenting>(propertyRentingModel);
                 newPropertyRentingEntity.UID = Guid.NewGuid().ToString();
-                newPropertyRentingEntity.CreatedBy = userUID;
+                newPropertyRentingEntity.CreatedBy = loggedInUser;
                 newPropertyRentingEntity.CreatedDate = DateTime.Now;
-                newPropertyRentingEntity.LastUpdatedBy = userUID;
+                newPropertyRentingEntity.LastUpdatedBy = loggedInUser;
                 newPropertyRentingEntity.LastUpdatedDate = DateTime.Now;
                 var flag = await this.repository.AddPropertyRentingAsync(newPropertyRentingEntity);
                 if (flag)
@@ -697,11 +697,11 @@ namespace Business.Manager
                 return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(ex));
             }
         }
-        public async Task<Result<PropertyRentingModel>> UpdatePropertyRentingAsync(string userUID, PropertyRentingModel propertyRentingModel)
+        public async Task<Result<PropertyRentingModel>> UpdatePropertyRentingAsync(string loggedInUser, PropertyRentingModel propertyRentingModel)
         {
             try
             {
-                var validationResults = await this.validator.ValidatePropertyRentingAsync(userUID, propertyRentingModel);
+                var validationResults = await this.validator.ValidatePropertyRentingAsync(loggedInUser, propertyRentingModel);
                 if (validationResults.Any())
                 {
                     return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(new BusinessException(validationResults)));
@@ -711,8 +711,8 @@ namespace Business.Manager
                 {
                     return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(new BusinessException(new ValidationResult("The Property profile doesn't exists."))));
                 }
-                var updatedPropertyRentingEntity = this.mapper.Map<PropertyRenting>(propertyRentingModel);
-                updatedPropertyRentingEntity.LastUpdatedBy= userUID;
+                var updatedPropertyRentingEntity = this.mapper.Map<PropertyRentingModel,PropertyRenting>(propertyRentingModel,existingPropertyRenting);
+                updatedPropertyRentingEntity.LastUpdatedBy= loggedInUser;
                 updatedPropertyRentingEntity.LastUpdatedDate= DateTime.Now; 
                 var flag = await this.repository.UpdatePropertyRentingAsync(updatedPropertyRentingEntity);
                 if (flag)
@@ -739,7 +739,7 @@ namespace Business.Manager
                 return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(ex));
             }
         }
-        public async Task<Result<List<PropertyRentingModel>>> GetAllPropertyRentingsByLandlordAsync(string userUID, string landlordProfileUID)
+        public async Task<Result<List<PropertyRentingModel>>> GetAllPropertyRentingsByLandlordAsync(string loggedInUser, string landlordProfileUID)
         {
             try
             {
@@ -769,7 +769,7 @@ namespace Business.Manager
                 return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(ex));
             }
         }
-        public async Task<Result<List<PropertyRentingModel>>> GetAllPropertyRentingsByStudentAsync(string userUID, string studentProfileUID)
+        public async Task<Result<List<PropertyRentingModel>>> GetAllPropertyRentingsByStudentAsync(string loggedInUser, string studentProfileUID)
         {
             try
             {
@@ -779,8 +779,8 @@ namespace Business.Manager
                     return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(
                             new BusinessException(new ValidationResult("The given student profile doesn't exists."))));
                 }
-                var studentUserUID=studentUser.UserUID;
-                var propertyRentings = this.repository.GetAllPropertyRentings().Where(x => x.RentedUserUID == studentUserUID).ToList<PropertyRenting>();
+                var studentloggedInUser=studentUser.UserUID;
+                var propertyRentings = this.repository.GetAllPropertyRentings().Where(x => x.RentedUserUID == studentloggedInUser).ToList<PropertyRenting>();
                 if (propertyRentings == null)
                 {
                     propertyRentings = new List<PropertyRenting>();
@@ -793,11 +793,11 @@ namespace Business.Manager
                 return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(ex));
             }
         }
-        public async Task<Result<List<PropertyRentingModel>>> GetAllActivePropertyRentingsByLandlordAsync(string userUID, string landlordProfileUID)
+        public async Task<Result<List<PropertyRentingModel>>> GetAllActivePropertyRentingsByLandlordAsync(string loggedInUser, string landlordProfileUID)
         {
             try
             {
-                var propertyRentingResults = await GetAllPropertyRentingsByLandlordAsync(userUID, landlordProfileUID);
+                var propertyRentingResults = await GetAllPropertyRentingsByLandlordAsync(loggedInUser, landlordProfileUID);
                 var activeRentings = propertyRentingResults.Value.FindAll(x => x.IsActive);
                 return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(activeRentings));
             }
@@ -806,11 +806,11 @@ namespace Business.Manager
                 return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(ex));
             }
         }
-        public async Task<Result<List<PropertyRentingModel>>> GetAllActivePropertyRentingsByStudentAsync(string userUID, string studentProfileUID)
+        public async Task<Result<List<PropertyRentingModel>>> GetAllActivePropertyRentingsByStudentAsync(string loggedInUser, string studentProfileUID)
         {
             try
             {
-                var propertyRentingResults = await GetAllPropertyRentingsByStudentAsync(userUID, studentProfileUID);
+                var propertyRentingResults = await GetAllPropertyRentingsByStudentAsync(loggedInUser, studentProfileUID);
                 var activeRentings = propertyRentingResults.Value.FindAll(x => x.IsActive);
                 return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(activeRentings));
             }
@@ -819,7 +819,7 @@ namespace Business.Manager
                 return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(ex));
             }
         }
-        public async Task<Result<List<PropertyRentingModel>>> GetAllPropertyRentingByPropertyUIDAsync(string userUID, string propertyUID)
+        public async Task<Result<List<PropertyRentingModel>>> GetAllPropertyRentingByPropertyUIDAsync(string loggedInUser, string propertyUID)
         {
             try
             {
@@ -846,11 +846,11 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<PropertyRentingModel>> GetActivePropertyRentingByPropertyUIDAsync(string userUID, string propertyUID)
+        public async Task<Result<PropertyRentingModel>> GetActivePropertyRentingByPropertyUIDAsync(string loggedInUser, string propertyUID)
         {
             try
             {
-                var propertyRentingResults = await GetAllPropertyRentingByPropertyUIDAsync(userUID, propertyUID);
+                var propertyRentingResults = await GetAllPropertyRentingByPropertyUIDAsync(loggedInUser, propertyUID);
                 var activeRenting = propertyRentingResults.Value.Find(x => x.IsActive);
                 return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(activeRenting));
             }
@@ -860,7 +860,7 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<bool>> DeletePropertyRentingAsync(string userUID, string propertyRentingUID)
+        public async Task<Result<bool>> DeletePropertyRentingAsync(string loggedInUser, string propertyRentingUID)
         {
             try
             {

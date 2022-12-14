@@ -16,24 +16,26 @@ namespace Business.Manager
             this.repository = this.uow.StudentRepository;
         }
 
-        public async Task<Result<StudentModel>> CreateStudentProfileAysnc(string userUID, StudentModel student)
+        public async Task<Result<StudentModel>> CreateStudentProfileAysnc(string loggedInUser, StudentModel student)
         {
             try
             {
-                student.UserUID=userUID;
-                var validationResults=await this.validator.ValidateAsync(userUID, student);
+                var validationResults=await this.validator.ValidateAsync(loggedInUser, student);
                 if (validationResults.Any())
                 {
                     return await Task.FromResult<Result<StudentModel>>(new Result<StudentModel>(new BusinessException(validationResults)));
                 }
-                var existingProfile=await this.repository.GetStudentProfileAsync(userUID);
+                var existingProfile=await this.repository.GetStudentProfileAsync(loggedInUser);
                 if(existingProfile != null)
                 {
                     return await Task.FromResult<Result<StudentModel>>(new Result<StudentModel>(new BusinessException(new ValidationResult("Student profile already exists."))));
                 }
                 var studentEntity=this.mapper.Map<Student>(student);
                 studentEntity.ProfileUID=Guid.NewGuid().ToString();
-                studentEntity.UserUID=student.UserUID;
+                studentEntity.CreatedBy=loggedInUser;
+                studentEntity.CreatedDate=DateTime.Now;
+                studentEntity.LastUpdatedBy=loggedInUser;
+                studentEntity.LastUpdatedDate=DateTime.Now;
                 await this.repository.AddStudentAsync(studentEntity);
                 if( await this.uow.SaveChangesAsync() > 0)
                 {
@@ -53,11 +55,11 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<bool>> DeleteStudentProfileAsync(string userUID)
+        public async Task<Result<bool>> DeleteStudentProfileAsync(string loggedInUser)
         {
             try
             {
-                var existingProfile = await this.repository.GetStudentProfileAsync(userUID);
+                var existingProfile = await this.repository.GetStudentProfileAsync(loggedInUser);
                 if (existingProfile == null)
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(
@@ -80,11 +82,11 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<StudentModel>> GetStudentProfileAsync(string userUID)
+        public async Task<Result<StudentModel>> GetStudentProfileAsync(string loggedInUser)
         {
             try
             {
-                var entity=await this.repository.GetStudentProfileAsync(userUID);
+                var entity=await this.repository.GetStudentProfileAsync(loggedInUser);
                 if(entity == null)
                 {
                     return await Task.FromResult<Result<StudentModel>>(new Result<StudentModel>(
@@ -102,27 +104,26 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<StudentModel>> UpdateStudentProfileAsync(string userUID, StudentModel student)
+        public async Task<Result<StudentModel>> UpdateStudentProfileAsync(string loggedInUser, StudentModel student)
         {
             try
             {
-                var validationResults = await this.validator.ValidateAsync(userUID, student);
+                var validationResults = await this.validator.ValidateAsync(loggedInUser, student);
                 if (validationResults.Any())
                 {
                     return await Task.FromResult<Result<StudentModel>>(new Result<StudentModel>(new BusinessException(validationResults)));
                 }
-                var existingProfile = await this.repository.GetStudentProfileAsync(userUID);
+                var existingProfile = await this.repository.GetStudentProfileAsync(loggedInUser);
                 if (existingProfile == null)
                 {
                     return await Task.FromResult<Result<StudentModel>>(new Result<StudentModel>(new BusinessException(new ValidationResult("Student profile doesn't exists."))));
                 }
-                var updatedEntity=this.mapper.Map<Student>(student);
-                updatedEntity.ProfileUID=existingProfile.ProfileUID;
-                updatedEntity.UserUID= existingProfile.UserUID;
-                await this.repository.UpdateStudentAsync(updatedEntity);    
-                if(await this.uow.SaveChangesAsync() > 0)
+                existingProfile=this.mapper.Map<StudentModel,Student>(student,existingProfile);
+                existingProfile.LastUpdatedBy = loggedInUser;
+                existingProfile.LastUpdatedDate = DateTime.Now;  
+                if(await this.repository.UpdateStudentAsync(existingProfile) && await this.uow.SaveChangesAsync() > 0)
                 {
-                    var model=this.mapper.Map<StudentModel>(updatedEntity);
+                    var model=this.mapper.Map<StudentModel>(existingProfile);
                     return await Task.FromResult<Result<StudentModel>>(new Result<StudentModel>(model));
                 }
                 else

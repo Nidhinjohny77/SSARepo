@@ -17,13 +17,12 @@ namespace Business.Manager
             this.repository = this.uow.LandlordRepository;
         }
 
-        public async Task<Result<LandlordModel>> CreateLandlordProfileAysnc(string userUID, LandlordModel landlord)
+        public async Task<Result<LandlordModel>> CreateLandlordProfileAysnc(string loggedInUser, LandlordModel landlord)
         {
             try
             {
                 
-                landlord.UserUID = userUID;
-                var validationResults=await this.validator.ValidateAsync(userUID, landlord);
+                var validationResults=await this.validator.ValidateAsync(loggedInUser, landlord);
                 if (validationResults.Any())
                 {
                     return await Task.FromResult<Result<LandlordModel>>(new Result<LandlordModel>(new BusinessException(validationResults)));
@@ -34,7 +33,11 @@ namespace Business.Manager
                     return await Task.FromResult<Result<LandlordModel>>(new Result<LandlordModel>(new BusinessException(new ValidationResult("The landlord profile already exists."))));
                 }
                 landlord.ProfileUID = Guid.NewGuid().ToString();
-                var newLandLordEntity=this.mapper.Map<Landlord>(landlord);
+                var newLandLordEntity=this.mapper.Map<Landlord>(landlord);                
+                newLandLordEntity.CreatedBy= loggedInUser;
+                newLandLordEntity.CreatedDate= DateTime.Now;
+                newLandLordEntity.LastUpdatedBy= loggedInUser;
+                newLandLordEntity.LastUpdatedDate= DateTime.Now;
                 var flag=await this.repository.AddLandlordAsync(newLandLordEntity);
                 if (flag)
                 {
@@ -60,11 +63,11 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<bool>> DeleteLandlordProfileAsync(string userUID)
+        public async Task<Result<bool>> DeleteLandlordProfileAsync(string loggedInUser)
         {
             try
             {
-                var existingProfile = await this.repository.GetLandlordAsync(userUID);
+                var existingProfile = await this.repository.GetLandlordAsync(loggedInUser);
                 if (existingProfile == null)
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("The landlord profile doesn't exists."))));
@@ -94,11 +97,11 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<LandlordModel>> GetLandlordProfileAsync(string userUID)
+        public async Task<Result<LandlordModel>> GetLandlordProfileAsync(string loggedInUser)
         {
             try
             {
-                var existingProfile = await this.repository.GetLandlordAsync(userUID);
+                var existingProfile = await this.repository.GetLandlordAsync(loggedInUser);
                 if (existingProfile == null)
                 {
                     return await Task.FromResult<Result<LandlordModel>>(new Result<LandlordModel>(new BusinessException(new ValidationResult("The landlord profile doesn't exists."))));
@@ -112,12 +115,11 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<LandlordModel>> UpdateLandlordProfileAsync(string userUID, LandlordModel landlord)
+        public async Task<Result<LandlordModel>> UpdateLandlordProfileAsync(string loggedInUser, LandlordModel landlord)
         {
             try
             {
-                landlord.UserUID = userUID;
-                var validationResults = await this.validator.ValidateAsync(userUID, landlord);
+                var validationResults = await this.validator.ValidateAsync(loggedInUser, landlord);
                 if (validationResults.Any())
                 {
                     return await Task.FromResult<Result<LandlordModel>>(new Result<LandlordModel>(new BusinessException(validationResults)));
@@ -127,10 +129,10 @@ namespace Business.Manager
                 {
                     return await Task.FromResult<Result<LandlordModel>>(new Result<LandlordModel>(new BusinessException(new ValidationResult("The landlord profile doesn't exists."))));
                 }
-                var updatedLandLordEntity=this.mapper.Map<Landlord>(landlord);
-                updatedLandLordEntity.UserUID= userUID;
-                updatedLandLordEntity.ProfileUID = existingProfile.ProfileUID;
-                var flag = await this.repository.UpdateLandlordAsync(updatedLandLordEntity);
+                existingProfile = this.mapper.Map<LandlordModel,Landlord>(landlord,existingProfile);
+                existingProfile.LastUpdatedBy = loggedInUser;
+                existingProfile.LastUpdatedDate = DateTime.Now;
+                var flag = await this.repository.UpdateLandlordAsync(existingProfile);
                 if (flag)
                 {
                     if (await this.uow.SaveChangesAsync() > 0)

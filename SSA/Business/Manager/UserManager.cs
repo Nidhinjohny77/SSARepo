@@ -32,9 +32,18 @@ namespace Business.Manager
                 {
                     return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(new ValidationResult("Given user name exists."))));
                 }
+                else
+                {
+                    var role =  this.uow.RolesRepository.GetAllRoles().Where(x => x.Name == user.Role.Name).FirstOrDefault();
+                    user.Role.UID= role.UID;
+                }
                 var userEntity=this.mapper.Map<User>(user);
                 var userType=GetUserType(user.Role);
-                userEntity.UserType=userType;   
+                userEntity.UserType=userType;
+                userEntity.CreatedBy = userEntity.UID;
+                userEntity.CreatedDate = DateTime.Now;
+                userEntity.LastUpdatedBy= userEntity.UID;
+                userEntity.LastUpdatedDate= DateTime.Now;
                 var savedUser=await this.repository.CreateUserAsync(userEntity);
                 if(await this.uow.SaveChangesAsync() > 0)
                 {
@@ -116,12 +125,12 @@ namespace Business.Manager
                 {
                     return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(results)));
                 }
-                var existingEntity=this.repository.GetUserAsync(user.UID);
+                var existingEntity=await this.repository.GetUserAsync(user.UID);
                 if(existingEntity != null)
                 {
-                    var updatedEntity=this.mapper.Map<User>(user);
-                    updatedEntity.UserType=GetUserType(user.Role);
-                    await this.repository.UpdateUserAsync(updatedEntity);
+                    existingEntity = this.mapper.Map<UserModel,User>(user,existingEntity);
+                    existingEntity.UserType=GetUserType(user.Role);
+                    await this.repository.UpdateUserAsync(existingEntity);
                     if(await this.uow.SaveChangesAsync() > 0)
                     {
                         var updatedUser = await this.repository.GetUserAsync(user.UID);
