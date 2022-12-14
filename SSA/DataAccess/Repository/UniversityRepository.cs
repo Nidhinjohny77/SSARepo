@@ -29,12 +29,12 @@ namespace DataAccess.Repository
 
         public async Task<University> GetUniversityByIdAsync(string uid)
         {
-            return await this.context.Universities.FirstAsync<University>(x=>x.UID==uid);
+            return await this.context.Universities.FirstOrDefaultAsync<University>(x=>x.UID==uid);
         }
 
         public async Task<University> GetUniversityByNameAsync(string name)
         {
-            return await this.context.Universities.FirstAsync<University>(x => x.Name == name);
+            return await this.context.Universities.FirstOrDefaultAsync<University>(x => x.Name == name);
         }
 
         public async Task<bool> UpdateUniversityAsync(University university)
