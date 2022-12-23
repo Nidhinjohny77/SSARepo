@@ -43,7 +43,120 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
-        [Route("Student/CreateProfile")]
+        [Route("Edit")]
+        public async Task<IActionResult> UpdateUserAsync([FromBody] UserModel user)
+        {
+            try
+            {
+                var result = await this.userManager.UpdateUserAsync(this.User.UID, user);
+                if (result.IsFaulted)
+                {
+                    return BadRequest(result.Errors);
+                }
+                else
+                {
+                    return Ok(result.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete]
+        [Route("Delete")]
+        [Authorize(Policy = GlobalConstant.AdminPolicy)]
+        public async Task<IActionResult> DeleteUserAsync(UserModel user)
+        {
+            try
+            {
+                var result = await this.userManager.DeleteUserAsync(this.User.UID, user);
+                if (result.IsFaulted)
+                {
+                    return BadRequest(result.Errors);
+                }
+                else
+                {
+                    return Ok(result.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Policy = GlobalConstant.AllUsersPolicy)]
+        public async Task<IActionResult> GetUserAsync()
+        {
+            try
+            {
+                var result = await this.userManager.GetUserAsync(this.User.UID);
+                if (result.IsFaulted)
+                {
+                    return BadRequest(result.Errors);
+                }
+                else
+                {
+                    return Ok(result.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("{UID}")]
+        [Authorize(Policy = GlobalConstant.AdminPolicy)]
+        public async Task<IActionResult> GetUserAsync(string UID)
+        {
+            try
+            {
+                var result = await this.userManager.GetUserAsync(UID);
+                if (result.IsFaulted)
+                {
+                    return BadRequest(result.Errors);
+                }
+                else
+                {
+                    return Ok(result.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("All")]
+        [Authorize(Policy = GlobalConstant.AdminPolicy)]
+        public async Task<IActionResult> GetAllUserAsync()
+        {
+            try
+            {
+                var result = await this.userManager.GetAllUsersAsync();
+                if (result.IsFaulted)
+                {
+                    return BadRequest(result.Errors);
+                }
+                else
+                {
+                    return Ok(result.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        [Route("Student/Profile/Create")]
         [Authorize(Policy = GlobalConstant.StudentPolicy)]
         public async Task<IActionResult> CreateStudentProfileAsync([FromBody] StudentModel student)
         {
@@ -66,7 +179,7 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
-        [Route("Landlord/CreateProfile")]
+        [Route("Landlord/Profile/Create")]
         [Authorize(Policy = GlobalConstant.LandlordPolicy)]
         public async Task<IActionResult> CreateLandlordProfileAsync([FromBody] LandlordModel landlord)
         {
@@ -89,7 +202,7 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
-        [Route("Landlord/UpdateProfile")]
+        [Route("Landlord/Profile/Edit")]
         [Authorize(Policy = GlobalConstant.LandlordPolicy)]
         public async Task<IActionResult> UpdateLandlordProfileAsync([FromBody] LandlordModel landlord)
         {
@@ -112,7 +225,7 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
-        [Route("Student/UpdateProfile")]
+        [Route("Student/Profile/Edit")]
         [Authorize(Policy = GlobalConstant.StudentPolicy)]
         public async Task<IActionResult> UpdateStudentProfileAsync([FromBody] StudentModel student)
         {

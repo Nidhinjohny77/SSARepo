@@ -8,7 +8,7 @@ namespace SSA.Mapper
     {
         public SSAMapperProfile()
         {
-            this.CreateMap<Role, RoleModel>()
+            this.CreateMap<Role, RoleModel>().ReverseMap()
                 .ForMember(x => x.UID, opt => opt.Ignore())
                 .ForMember(x => x.Name, opt => opt.MapFrom(src => src.Name));
             this.CreateMap<User, UserModel>().ReverseMap()
@@ -19,7 +19,12 @@ namespace SSA.Mapper
                 .ForMember(x => x.UserName, opt => opt.MapFrom(src => src.UserName))
                 .ForMember(x => x.Password, opt => opt.MapFrom(src => src.Password))
                 .ForMember(x=>x.UserType,opt => opt.Ignore())
-                .ForMember(x=>x.Role,opt=>opt.MapFrom(src=>src.Role));
+                .ForMember(x=>x.CreatedBy,opt=>opt.Ignore())
+                .ForMember(x => x.CreatedDate, opt => opt.Ignore())
+                .ForMember(x => x.LastUpdatedBy, opt => opt.Ignore())
+                .ForMember(x => x.LastUpdatedBy, opt => opt.Ignore())
+                .ForMember(x => x.RoleUID, opt => opt.Ignore())
+                .ForMember(x=>x.Role, opt => opt.Ignore());
             this.CreateMap<University, UniversityModel>().ReverseMap()
                 .ForMember(x => x.UID, opt => opt.MapFrom(src => src.UID))
                 .ForMember(x => x.Name, opt => opt.MapFrom(src => src.Name))

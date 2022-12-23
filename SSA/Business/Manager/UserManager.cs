@@ -27,33 +27,46 @@ namespace Business.Manager
                 {
                     return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(results)));
                 }
-                var existingUser=this.repository.GetUserAsync(user.UserName);
+                var existingUser=await this.repository.GetUserAsync(user.UserName);
                 if (existingUser != null)
                 {
                     return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(new ValidationResult("Given user name exists."))));
                 }
-                else
-                {
-                    var role =  this.uow.RolesRepository.GetAllRoles().Where(x => x.Name == user.Role.Name).FirstOrDefault();
-                    user.Role.UID= role.UID;
-                }
                 var userEntity=this.mapper.Map<User>(user);
-                var userType=GetUserType(user.Role);
-                userEntity.UserType=userType;
-                userEntity.CreatedBy = userEntity.UID;
-                userEntity.CreatedDate = DateTime.Now;
-                userEntity.LastUpdatedBy= userEntity.UID;
-                userEntity.LastUpdatedDate= DateTime.Now;
-                var savedUser=await this.repository.CreateUserAsync(userEntity);
-                if(await this.uow.SaveChangesAsync() > 0)
-                {
-                    var result = this.mapper.Map<UserModel>(savedUser);
-                    return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(result));
+                if(userEntity != null)
+                {                 
+                    var role = this.uow.RolesRepository.GetAllRoles().Where(x => x.Name == user.Role.Name).FirstOrDefault();
+                    if(role != null)
+                    {
+                        userEntity.RoleUID= role.UID;
+                        user.Role.UID= role.UID;
+                        userEntity.UserType = GetUserType(user.Role);
+                        userEntity.CreatedBy = userEntity.UID;
+                        userEntity.CreatedDate = DateTime.Now;
+                        userEntity.LastUpdatedBy = userEntity.UID;
+                        userEntity.LastUpdatedDate = DateTime.Now;
+                        var savedUser = await this.repository.CreateUserAsync(userEntity);
+                        if (await this.uow.SaveChangesAsync() > 0)
+                        {
+                            var result = this.mapper.Map<UserModel>(savedUser);
+                            return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(result));
+                        }
+                        else
+                        {
+                            return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(
+                                new BusinessException(new ValidationResult("Unable to save new user."))));
+                        }
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(
+                            new BusinessException(new ValidationResult("Unable to map given role as its not available."))));
+                    }
                 }
                 else
                 {
                     return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(
-                        new BusinessException(new ValidationResult("Unable to save new user."))));
+                        new BusinessException(new ValidationResult("Unable to map new user."))));
                 }
             }
             catch (Exception ex)
@@ -116,6 +129,27 @@ namespace Business.Manager
             }
         }
 
+        public async Task<Result<UserModel[]>> GetAllUsersAsync()
+        {
+            try
+            {
+                var entity = await this.repository.GetAllUsersAsync();
+                if (entity == null)
+                {
+                    return await Task.FromResult<Result<UserModel[]>>(new Result<UserModel[]>(new BusinessException(new ValidationResult("User doesn't exists"))));
+                }
+                else
+                {
+                    var model = this.mapper.Map<UserModel[]>(entity);
+                    return await Task.FromResult<Result<UserModel[]>>(new Result<UserModel[]>(model));
+                }
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<UserModel[]>>(new Result<UserModel[]>(ex));
+            }
+        }
+
         public async Task<Result<UserModel>> UpdateUserAsync(string loggedInUser, UserModel user)
         {
             try
@@ -129,17 +163,29 @@ namespace Business.Manager
                 if(existingEntity != null)
                 {
                     existingEntity = this.mapper.Map<UserModel,User>(user,existingEntity);
-                    existingEntity.UserType=GetUserType(user.Role);
-                    await this.repository.UpdateUserAsync(existingEntity);
-                    if(await this.uow.SaveChangesAsync() > 0)
+                    var role = this.uow.RolesRepository.GetAllRoles().Where(x => x.Name == user.Role.Name).FirstOrDefault();
+                    if (role != null)
                     {
-                        var updatedUser = await this.repository.GetUserAsync(user.UID);
-                        var updatedUserModel = this.mapper.Map<UserModel>(updatedUser);
-                        return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(updatedUserModel));
+                        existingEntity.UserType = GetUserType(user.Role);
+                        existingEntity.RoleUID = role.UID;
+                        existingEntity.LastUpdatedBy = loggedInUser;
+                        existingEntity.LastUpdatedDate = DateTime.Now;
+                        await this.repository.UpdateUserAsync(existingEntity);
+                        if (await this.uow.SaveChangesAsync() > 0)
+                        {
+                            var updatedUser = await this.repository.GetUserAsync(user.UID);
+                            var updatedUserModel = this.mapper.Map<UserModel>(updatedUser);
+                            return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(updatedUserModel));
+                        }
+                        else
+                        {
+                            return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(new ValidationResult("Unable to save user to database."))));
+                        }
                     }
                     else
                     {
-                        return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(new ValidationResult("Unable to save user to database."))));
+                        return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(
+                            new ValidationResult("Unable to map new role to user."))));
                     }
                 }
                 else
