@@ -27,7 +27,19 @@ namespace Business.Validators
             {
                 validationResults.Add(new ValidationResult("Course end date is a mandatory field."));
             }
-            if ((student.CourseStartDate!=null && student.CourseEndDate!=null) && (student.CourseStartDate > student.CourseEndDate))
+            DateOnly startDate;
+            DateOnly endDate;
+            bool isValidStartDate = DateOnly.TryParse(student.CourseStartDate, out startDate);
+            bool isValidEndDate = DateOnly.TryParse(student.CourseEndDate, out endDate);
+            if (!isValidStartDate)
+            {
+                validationResults.Add(new ValidationResult("Course start date is not in proper date format (dd/mm/yyyy)."));
+            }            
+            if (!isValidEndDate)
+            {
+                validationResults.Add(new ValidationResult("Course end date is not in proper date format (dd/mm/yyyy)."));
+            }
+            if ((isValidStartDate && isValidEndDate) && (startDate > endDate))
             {
                 validationResults.Add(new ValidationResult("Course start date and end date should be valid."));
             }

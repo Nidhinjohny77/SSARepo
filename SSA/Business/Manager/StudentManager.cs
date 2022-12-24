@@ -30,23 +30,34 @@ namespace Business.Manager
                 {
                     return await Task.FromResult<Result<StudentModel>>(new Result<StudentModel>(new BusinessException(new ValidationResult("Student profile already exists."))));
                 }
-                var studentEntity=this.mapper.Map<Student>(student);
-                studentEntity.ProfileUID=Guid.NewGuid().ToString();
-                studentEntity.CreatedBy=loggedInUser;
-                studentEntity.CreatedDate=DateTime.Now;
-                studentEntity.LastUpdatedBy=loggedInUser;
-                studentEntity.LastUpdatedDate=DateTime.Now;
-                await this.repository.AddStudentAsync(studentEntity);
-                if( await this.uow.SaveChangesAsync() > 0)
+                
+                var university= this.uow.UniversityRepository.GetAllUniversities().Where(x=>x.UniversityCode == student.UniversityCode).FirstOrDefault();
+                if(university != null)
                 {
-                    var savedEntity=await this.repository.GetStudentByProfileAsync(studentEntity.ProfileUID);
-                    var newModel=this.mapper.Map<StudentModel>(savedEntity);
-                    return await Task.FromResult<Result<StudentModel>>(new Result<StudentModel>(newModel));
+                    var studentEntity = this.mapper.Map<Student>(student);
+                    studentEntity.ProfileUID = Guid.NewGuid().ToString();
+                    studentEntity.UniversityUID = university.UID;
+                    studentEntity.CreatedBy = loggedInUser;
+                    studentEntity.CreatedDate = DateTime.Now;
+                    studentEntity.LastUpdatedBy = loggedInUser;
+                    studentEntity.LastUpdatedDate = DateTime.Now;
+                    await this.repository.AddStudentAsync(studentEntity);
+                    if (await this.uow.SaveChangesAsync() > 0)
+                    {
+                        var savedEntity = await this.repository.GetStudentByProfileAsync(studentEntity.ProfileUID);
+                        var newModel = this.mapper.Map<StudentModel>(savedEntity);
+                        return await Task.FromResult<Result<StudentModel>>(new Result<StudentModel>(newModel));
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<StudentModel>>(new Result<StudentModel>(new BusinessException(
+                            new ValidationResult("Unable to add user to the database."))));
+                    }
                 }
                 else
                 {
                     return await Task.FromResult<Result<StudentModel>>(new Result<StudentModel>(new BusinessException(
-                        new ValidationResult("Unable to add user to the database."))));
+                        new ValidationResult("Unable to find the university for the specified university code."))));
                 }
             }
             catch (Exception ex)

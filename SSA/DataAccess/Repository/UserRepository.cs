@@ -32,7 +32,7 @@ namespace DataAccess.Repository
 
         public async Task<User> GetUserAsync(string userName)
         {
-            return await this.context.Users.FirstOrDefaultAsync(x=>x.UserName==userName);
+            return await this.context.Users.Where(x=>x.UserName==userName).FirstOrDefaultAsync();
         }
 
         public async Task<User> GetUserByUIDAsync(string userUID)
