@@ -11,6 +11,9 @@ namespace SSA.Mapper
             this.CreateMap<Role, RoleModel>().ReverseMap()
                 .ForMember(x => x.UID, opt => opt.Ignore())
                 .ForMember(x => x.Name, opt => opt.MapFrom(src => src.Name));
+            this.CreateMap<Country, CountryModel>().ReverseMap()
+                .ForMember(x => x.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(x => x.Code, opt => opt.MapFrom(src => src.Code));
             this.CreateMap<User, UserModel>().ReverseMap()
                 .ForMember(x => x.UID, opt => opt.MapFrom(src=>src.UID))
                 .ForMember(x => x.FirstName, opt => opt.MapFrom(src => src.FirstName))

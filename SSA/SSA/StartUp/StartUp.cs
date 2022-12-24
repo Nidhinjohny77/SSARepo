@@ -91,13 +91,20 @@ namespace SSA.StartUp
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<IUniversityRepository, UniversityRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<IPropertyRepository, PropertyRepository>();
+            services.AddScoped<IRolesRepository, RolesRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserValidator, UserValidator>();
-            services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IStudentValidator, StudentValidator>();
+            services.AddScoped<ILandlordValidator, LandlordValidator>();
+            services.AddScoped<IPropertyValidator, PropertyValidator>();
+            services.AddScoped<IImageFileValidator, ImageFileValidator>();
+            services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IStudentManager, StudentManager>();
-            services.AddScoped<ILandlordValidator,LandlordValidator>();
             services.AddScoped<ILandlordManager,LandlordManager>();
+            services.AddScoped<IPropertyManager, PropertyManager>();
+            services.AddScoped<IMasterDataManager, MasterDataManager>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddTransient<TokenManagerMiddleware>();
         }

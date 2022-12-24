@@ -4,7 +4,7 @@ namespace DataModels.Models
 {
     public class UniversityModel
     {
-        public string UID { get; set; } 
+        public int UID { get; set; } 
         public string Name { get; set; }
         public string Address { get; set; }
         public string UniversityCode { get; set; }

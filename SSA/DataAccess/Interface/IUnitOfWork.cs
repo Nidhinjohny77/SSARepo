@@ -11,6 +11,7 @@ namespace DataAccess.Interface
         ILandlordRepository LandlordRepository { get; }
         IPropertyRepository PropertyRepository { get; }
         IRolesRepository RolesRepository { get; }
+        ICountryRepository CountryRepository { get; }
         Task<int> SaveChangesAsync();
     }
 }

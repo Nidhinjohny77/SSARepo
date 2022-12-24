@@ -27,7 +27,7 @@ namespace DataAccess.Repository
             return this.context.Universities.AsQueryable<University>();
         }
 
-        public async Task<University> GetUniversityByIdAsync(string uid)
+        public async Task<University> GetUniversityByIdAsync(int uid)
         {
             return await this.context.Universities.FirstOrDefaultAsync<University>(x=>x.UID==uid);
         }

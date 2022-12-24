@@ -11,6 +11,7 @@ namespace DataAccess.Entities
         public string Description { get; set; }
         public int Listedby { get; set; }
         public int ListingStatus { get; set; }
+        public bool IsPTIAvailableForSale { get; set; }
         public bool IsActive { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }

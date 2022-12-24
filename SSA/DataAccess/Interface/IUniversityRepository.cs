@@ -6,7 +6,7 @@ namespace DataAccess.Interface
         Task<bool> AddUniversityAsync(University university);
         Task<bool> UpdateUniversityAsync(University university);
         Task<bool> DeleteUniversityAsync(University university);
-        Task<University> GetUniversityByIdAsync(string uid);
+        Task<University> GetUniversityByIdAsync(int uid);
         Task<University> GetUniversityByNameAsync(string name);
         IQueryable<University> GetAllUniversities();
     }

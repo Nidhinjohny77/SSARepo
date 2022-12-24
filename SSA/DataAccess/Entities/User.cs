@@ -15,7 +15,7 @@ namespace DataAccess.Entities
         public DateTime CreatedDate { get; set; }
         public string LastUpdatedBy { get; set; }
         public DateTime LastUpdatedDate { get; set; }  
-        public string RoleUID { get; set; }
+        public int RoleUID { get; set; }
         public Role Role { get; set; }
 
     }

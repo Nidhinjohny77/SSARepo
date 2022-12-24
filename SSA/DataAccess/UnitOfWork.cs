@@ -16,7 +16,7 @@ namespace DataAccess
         public IPropertyRepository PropertyRepository => new PropertyRepository(this.context);  
         public IImageFileRepository ImageFileRepository => new ImageFileRepository(this.context);   
         public IRolesRepository RolesRepository => new RolesRepository(this.context);
-
+        public ICountryRepository CountryRepository => new CountryRepository(this.context);
         public void Dispose()
         {
             this.context.Dispose();
