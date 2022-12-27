@@ -12,5 +12,6 @@ namespace DataAccess.Entities
         public bool IsActive { get; set; }
 
         public PreviousTenantListing PreviousTenantListing { get; set; }
+        public Item Item { get; set; }
     }
 }
