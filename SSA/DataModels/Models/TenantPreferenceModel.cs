@@ -1,13 +1,14 @@
 ﻿
 
-namespace DataAccess.Entities
+namespace DataModels.Models
 {
-    public class TenantRequirement
+    public class TenantPreferenceModel
     {
         public string UID { get; set; }
-        public string UserUID { get; set; }
-        public string PropertyTypeCode { get; set; }
-        public string FurnishmentTypeCode { get; set; }
+        public string TenantUID { get; set; }
+        public int PropertyTypeUID { get; set; }
+        public int FurnishTypeUID { get; set; }
+        public int? PreferedTenancyTypeUID { get; set; }
         public int PreferedBedRoomCount { get; set; }
         public int PreferedBathRoomCount { get; set; }
         public int PreferedOccupantCount { get; set; }
@@ -16,13 +17,9 @@ namespace DataAccess.Entities
         public bool IsRentIncludingBillsPrefered { get; set; }
         public int TenantTypeUID { get; set; }
         public int PreferedTenancyPeriod { get; set; }
+        public double? StartRangeAmount { get; set; }
+        public double? EndRangeAmount { get; set; }
+        public string[] PreferedLocations { get; set; }
         public bool IsActive { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public string LastUpdatedBy { get; set; }
-        public DateTime LastUpdatedDate { get; set; }
-
-        public TenantType TenantType { get; set; }  
-
     }
 }

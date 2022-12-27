@@ -6,7 +6,7 @@ namespace DataModels.Models
         public string UID { get; set; }
         public string PropertyUID { get; set; }
         public int PropertyTypeUID { get; set; }
-        public int FurnishmentTypeUID { get; set; }
+        public int FurnishTypeUID { get; set; }
         public int BedroomCount { get; set; }
         public int BathroomCount { get; set; }
         public int FloorCount { get; set; }

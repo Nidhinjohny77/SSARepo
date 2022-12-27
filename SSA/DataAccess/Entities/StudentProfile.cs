@@ -1,17 +1,13 @@
 ﻿
+
 namespace DataAccess.Entities
 {
-    public class Student
+    public class StudentProfile
     {
-        public string UserUID { get; set; }
-        public string ProfileUID { get; set; }
-        public string Address { get; set; }
-        public string CountryCode { get; set; }
-        public string ContinentCode { get; set; }
-        public string DOB { get; set; }
-        public string PhoneNumber { get; set; }
-        public string StudentId { get; set; }
-        public string StudentCode { get; set; }
+        public string UID { get; set; }
+        public string TenantUID { get; set; }
+        public string UniversityStudentID { get; set; }
+        public string StudentSecurityCode { get; set; }
         public string EnrolledCourseName { get; set; }
         public int UniversityUID { get; set; }
         public DateTime CourseStartDate { get; set; }
@@ -23,7 +19,6 @@ namespace DataAccess.Entities
         public DateTime LastUpdatedDate { get; set; }
 
         public University University { get; set; }
-        public User User { get; set; }
-
+        public Tenant Tenant { get; set; }
     }
 }

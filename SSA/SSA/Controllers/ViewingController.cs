@@ -31,8 +31,8 @@ namespace SSA.Controllers
                     {
                         return BadRequest(studentProfileResult.Errors);
                     }
-                    var studentProfileUID = studentProfileResult.Value.ProfileUID;
-                    var result = await this.propertyManager.GetAllPropertyViewingsByStudentAsync(this.User.UID, studentProfileUID);
+                    var tenantUID = studentProfileResult.Value.TenantUID;
+                    var result = await this.propertyManager.GetAllPropertyViewingsByTenantAsync(this.User.UID, tenantUID);
                     if (result.IsFaulted)
                     {
                         return BadRequest(result.Errors);

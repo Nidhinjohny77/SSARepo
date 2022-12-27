@@ -17,6 +17,20 @@ namespace DataAccess
         public IImageFileRepository ImageFileRepository => new ImageFileRepository(this.context);   
         public IRolesRepository RolesRepository => new RolesRepository(this.context);
         public ICountryRepository CountryRepository => new CountryRepository(this.context);
+        public ITenantRepository TenantRepository => new TenantRepository(this.context);
+
+        public IItemRepository ItemRepository => new ItemRepository(this.context);
+
+        public IItemTypeRepository ItemTypeRepository => new ItemTypeRepository(this.context);
+
+        public IPropertyTypeRepository PropertyTypeRepository => new PropertyTypeRepository(this.context);
+
+        public ITenantTypeRepository TenantTypeRepository => new TenantTypeRepository(this.context);
+
+        public ICurrencyRepository CurrencyRepository => new CurrencyRepository(this.context);
+
+        public IFurnishTypeRepository FurnishTypeRepository => new FurnishTypeRepository(this.context);
+
         public void Dispose()
         {
             this.context.Dispose();

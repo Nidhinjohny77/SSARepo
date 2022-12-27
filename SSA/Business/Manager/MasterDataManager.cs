@@ -8,6 +8,13 @@ namespace Business.Manager
         private readonly IMapper mapper;
         private readonly IRolesRepository roleRepository;
         private readonly ICountryRepository countryRepository;
+        private readonly IPropertyTypeRepository propertyTypeRepository;
+        private readonly ITenantTypeRepository tenantTypeRepository;
+        private readonly ICurrencyRepository currencyRepository;
+        private readonly IItemTypeRepository itemTypeRepository;
+        private readonly IItemRepository itemRepository;
+        private readonly IUniversityRepository universityRepository;
+        private readonly IFurnishTypeRepository furnishTypeRepository;
 
         public MasterDataManager(IUnitOfWork uow,IMapper mapper)
         {
@@ -15,6 +22,13 @@ namespace Business.Manager
             this.mapper = mapper;
             this.roleRepository = this.uow.RolesRepository;
             this.countryRepository = this.uow.CountryRepository;
+            this.propertyTypeRepository = this.uow.PropertyTypeRepository;
+            this.tenantTypeRepository = this.uow.TenantTypeRepository;
+            this.currencyRepository = this.uow.CurrencyRepository;
+            this.itemTypeRepository = this.uow.ItemTypeRepository;
+            this.itemRepository = this.uow.ItemRepository;
+            this.universityRepository = this.uow.UniversityRepository;
+            this.furnishTypeRepository = this.uow.FurnishTypeRepository;
         }
         public async Task<CountryModel[]> GetAllCountriesAsync()
         {

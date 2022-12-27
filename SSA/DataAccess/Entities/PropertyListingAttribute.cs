@@ -17,7 +17,7 @@ namespace DataAccess.Entities
         public bool IsPartyingAllowed { get; set; }
         public bool IsParkingAvailable { get; set; }
         public int TenantTypeUID { get; set; }
-        public int AvailableParkingSlots { get; set; }
+        public int? AvailableParkingSlots { get; set; }
         public bool IsActive { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -26,7 +26,7 @@ namespace DataAccess.Entities
 
         public PropertyListing PropertyListing { get; set; }
         public PropertyAttribute PropertyAttribute { get; set; }
-        public TenantType TenantType { get; set; }  
+        public TenancyType TenantType { get; set; }  
         
     }
 }

@@ -79,6 +79,8 @@ namespace SSA.StartUp
                         GlobalConstant.LandlordRole, GlobalConstant.StudentRole));
                 options.AddPolicy(GlobalConstant.AdminPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role,
                             GlobalConstant.AdminRole));
+                options.AddPolicy(GlobalConstant.AllTenantsPolicy, policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role,
+                            GlobalConstant.StudentRole, GlobalConstant.AdminRole));
             });
         }
 
@@ -89,22 +91,24 @@ namespace SSA.StartUp
             services.AddScoped<IAuthHandler,JWTAuthHandler>();
             services.AddScoped<IAuthenticationManager,AuthenticationManager>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IStudentRepository, StudentRepository>();
-            services.AddScoped<IUniversityRepository, UniversityRepository>();
-            services.AddScoped<ICountryRepository, CountryRepository>();
-            services.AddScoped<IPropertyRepository, PropertyRepository>();
-            services.AddScoped<IRolesRepository, RolesRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            //services.AddScoped<IStudentRepository, StudentRepository>();
+            //services.AddScoped<IUniversityRepository, UniversityRepository>();
+            //services.AddScoped<ICountryRepository, CountryRepository>();
+            //services.AddScoped<IPropertyRepository, PropertyRepository>();
+            //services.AddScoped<IRolesRepository, RolesRepository>();
+            //services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserValidator, UserValidator>();
             services.AddScoped<IStudentValidator, StudentValidator>();
             services.AddScoped<ILandlordValidator, LandlordValidator>();
             services.AddScoped<IPropertyValidator, PropertyValidator>();
             services.AddScoped<IImageFileValidator, ImageFileValidator>();
+            services.AddScoped<ITenantValidator, TenantValidator>();
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IStudentManager, StudentManager>();
             services.AddScoped<ILandlordManager,LandlordManager>();
             services.AddScoped<IPropertyManager, PropertyManager>();
             services.AddScoped<IMasterDataManager, MasterDataManager>();
+            services.AddScoped<ITenantManager, TenantManager>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddTransient<TokenManagerMiddleware>();
         }

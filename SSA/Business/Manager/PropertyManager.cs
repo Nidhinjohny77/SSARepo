@@ -422,12 +422,12 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByStudentAsync(string loggedInUser, string studentProfileUID)
+        public async Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByTenantAsync(string loggedInUser, string tenantUID)
         {
             try
             {
 
-                var viewings = this.repository.GetAllPropertyViewings().Where(x => x.StudentUID == studentProfileUID && x.IsActive).ToList<PropertyViewing>();
+                var viewings = this.repository.GetAllPropertyViewings().Where(x => x.TenantUID == tenantUID && x.IsActive).ToList<PropertyViewing>();
                 if (viewings == null)
                 {
                     viewings = new List<PropertyViewing>();
@@ -769,18 +769,17 @@ namespace Business.Manager
                 return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(ex));
             }
         }
-        public async Task<Result<List<PropertyRentingModel>>> GetAllPropertyRentingsByStudentAsync(string loggedInUser, string studentProfileUID)
+        public async Task<Result<List<PropertyRentingModel>>> GetAllPropertyRentingsByTenantAsync(string loggedInUser, string tenantUID)
         {
             try
             {
-                var studentUser = await this.uow.StudentRepository.GetStudentByProfileAsync(studentProfileUID);
-                if(studentUser == null)
+                var tenant = await this.uow.TenantRepository.GetTenantAsync(tenantUID);
+                if(tenant == null)
                 {
                     return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(
-                            new BusinessException(new ValidationResult("The given student profile doesn't exists."))));
+                            new BusinessException(new ValidationResult("The given tenant profile doesn't exists."))));
                 }
-                var studentloggedInUser=studentUser.UserUID;
-                var propertyRentings = this.repository.GetAllPropertyRentings().Where(x => x.RentedUserUID == studentloggedInUser).ToList<PropertyRenting>();
+                var propertyRentings = this.repository.GetAllPropertyRentings().Where(x => x.TenantUID == tenantUID).ToList<PropertyRenting>();
                 if (propertyRentings == null)
                 {
                     propertyRentings = new List<PropertyRenting>();
@@ -806,11 +805,11 @@ namespace Business.Manager
                 return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(ex));
             }
         }
-        public async Task<Result<List<PropertyRentingModel>>> GetAllActivePropertyRentingsByStudentAsync(string loggedInUser, string studentProfileUID)
+        public async Task<Result<List<PropertyRentingModel>>> GetAllActivePropertyRentingsByTenantAsync(string loggedInUser, string tenantUID)
         {
             try
             {
-                var propertyRentingResults = await GetAllPropertyRentingsByStudentAsync(loggedInUser, studentProfileUID);
+                var propertyRentingResults = await GetAllPropertyRentingsByTenantAsync(loggedInUser, tenantUID);
                 var activeRentings = propertyRentingResults.Value.FindAll(x => x.IsActive);
                 return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(activeRentings));
             }

@@ -9,5 +9,6 @@ namespace DataModels.Models
         public string CountryCode { get; set; }
         public string DOB { get; set; }
         public string PhoneNumber { get; set; }
+        public bool IsActive { get; set; }  
     }
 }

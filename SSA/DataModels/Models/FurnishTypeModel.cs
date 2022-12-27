@@ -2,7 +2,7 @@
 
 namespace DataModels.Models
 {
-    public class FurnishmentTypeModel
+    public class FurnishTypeModel
     {
         public int UID { get; set; }
         public string Code { get; set; }

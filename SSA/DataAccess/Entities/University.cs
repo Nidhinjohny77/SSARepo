@@ -14,12 +14,10 @@ namespace DataAccess.Entities
         public string UniversityCode { get; set; }
         public string ContactNumber { get; set; }
         public string ContactEmail { get; set; }
-        public string CountryCode { get; set; }
+        public int CountryUID { get; set; }
         public int Ratings { get; set; }
-        public bool IsActive { get; set; }  
-        public string CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public string LastUpdatedBy { get; set; }
-        public DateTime LastUpdatedDate { get; set; }
+        public bool IsActive { get; set; } 
+
+        public Country Country { get; set; }    
     }
 }

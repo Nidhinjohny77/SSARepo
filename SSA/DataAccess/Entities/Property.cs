@@ -16,6 +16,7 @@ namespace DataAccess.Entities
         public DateTime LastUpdatedDate { get; set; }
 
         public Landlord Landlord { get; set; }  
+        public PropertyAttribute PropertyAttribute { get; set; }
         public List<PropertyImage> Images { get; set; }
         public List<PropertyListing> Listings { get; set; }
         public List<PropertyReview> Reviews { get; set; }   

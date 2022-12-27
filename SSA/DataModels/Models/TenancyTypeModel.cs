@@ -1,11 +1,9 @@
 ﻿
-
-namespace DataAccess.Entities
+namespace DataModels.Models
 {
-    public class FurnishmentType
+    public class TenancyTypeModel
     {
         public int UID { get; set; }
-        public string Code { get; set; }
         public string Description { get; set; }
     }
 }

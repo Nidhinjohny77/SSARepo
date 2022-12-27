@@ -8,7 +8,7 @@ namespace DataModels.Models
         public string PropertyListingUID { get; set; }
         public double RentAmount { get; set; }
         public double AdvanceAmount { get; set; }
-        public string RentedUserUID { get; set; }
+        public string TenantUID { get; set; }
         public DateTime RentStartDate { get; set; }
         public DateTime RentEndDate { get; set; }
         public int RentPaymentFrequency { get; set; }

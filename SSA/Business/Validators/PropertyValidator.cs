@@ -183,22 +183,22 @@ namespace Business.Validators
 
             }
 
-            if (string.IsNullOrEmpty(model.StudentProfileUID))
+            if (string.IsNullOrEmpty(model.TenantUID))
             {
-                validationResults.Add(new ValidationResult("StudentProfileUID is a mandatory field."));
+                validationResults.Add(new ValidationResult("TenantUID is a mandatory field."));
             }
             else
             {
-                var studentProfile=await this.uow.StudentRepository.GetStudentProfileAsync(model.StudentProfileUID);
-                if(studentProfile == null)
+                var tenantProfile=await this.uow.TenantRepository.GetTenantAsync(model.TenantUID);
+                if(tenantProfile == null)
                 {
-                    validationResults.Add(new ValidationResult("The given student profile doesn't exists."));
+                    validationResults.Add(new ValidationResult("The given tenant profile doesn't exists."));
                 }
                 else
                 {
-                    if (!studentProfile.IsActive)
+                    if (!tenantProfile.IsActive)
                     {
-                        validationResults.Add(new ValidationResult("The given student profile is inactive."));
+                        validationResults.Add(new ValidationResult("The given tenant profile is inactive."));
                     }
                 }
             }
@@ -281,22 +281,22 @@ namespace Business.Validators
 
             }
 
-            if (string.IsNullOrEmpty(model.RentedUserUID))
+            if (string.IsNullOrEmpty(model.TenantUID))
             {
                 validationResults.Add(new ValidationResult("RentedUserUID is a mandatory field."));
             }
             else
             {
-                var userProfile = await this.userRepo.GetUserAsync(model.RentedUserUID);
-                if (userProfile == null)
+                var tenantProfile = await this.uow.TenantRepository.GetTenantAsync(model.TenantUID);
+                if (tenantProfile == null)
                 {
-                    validationResults.Add(new ValidationResult("The given user profile doesn't exists."));
+                    validationResults.Add(new ValidationResult("The given tenant profile doesn't exists."));
                 }
                 else
                 {
-                    if (!userProfile.IsActive)
+                    if (!tenantProfile.IsActive)
                     {
-                        validationResults.Add(new ValidationResult("The given user profile is inactive."));
+                        validationResults.Add(new ValidationResult("The given tenant profile is inactive."));
                     }
                 }
             }

@@ -10,6 +10,7 @@ namespace SSA.Constants
         public const string UserUID = "UserUID";
 
         public const string AllUsersPolicy = "UserPolicy";
+        public const string AllTenantsPolicy = "TenantPolicy";
         public const string PropertyPolicy = "PropertyPolicy";
         public const string PropertyListingPolicy = "PropertyListingPolicy";
         public const string PropertyViewingPolicy = "PropertyViewingPolicy";

@@ -3,12 +3,12 @@ namespace DataAccess.Interface
 {
     public interface IStudentRepository
     {
-        Task<bool> AddStudentAsync(Student student);
-        Task<bool> UpdateStudentAsync(Student student);
-        Task<bool> DeleteStudentAsync(Student student);
-        Task<Student> GetStudentByCodeAsync(string code);
-        Task<Student> GetStudentByProfileAsync(string profileUID);
-        Task<Student> GetStudentProfileAsync(string userUID);
-        IQueryable<Student> GetAllStudents();
+        Task<bool> AddStudentAsync(StudentProfile student);
+        Task<bool> UpdateStudentAsync(StudentProfile student);
+        Task<bool> DeleteStudentAsync(StudentProfile student);
+        Task<StudentProfile> GetStudentByCodeAsync(string securityCode);
+        Task<StudentProfile> GetStudentByProfileAsync(string profileUID);
+        Task<StudentProfile> GetStudentProfileAsync(string tenantUID);
+        IQueryable<StudentProfile> GetAllStudents();
     }
 }

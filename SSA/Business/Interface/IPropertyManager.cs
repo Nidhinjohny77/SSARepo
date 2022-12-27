@@ -24,17 +24,17 @@ namespace Business.Interface
 
         Task<Result<PropertyViewingModel>> CreatePropertyViewing(string loggedInUser, PropertyViewingModel propertyViewingModel);
         Task<Result<PropertyViewingModel>> UpdatePropertyViewingAsync(string loggedInUser, PropertyViewingModel propertyViewingModel);
-        Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByStudentAsync(string loggedInUser, string studentProfileUID);
+        Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByTenantAsync(string loggedInUser, string tenantUID);
         Task<Result<List<PropertyViewingModel>>> GetAllPropertyViewingsByLandlordAsync(string loggedInUser, string landlordUID);
         Task<Result<bool>> DeletePropertyViewing(string loggedInUser, string propertyViewingUID);
 
         Task<Result<PropertyRentingModel>> CreatePropertyRentingAsync(string loggedInUser, PropertyRentingModel propertyRentingModel);
         Task<Result<PropertyRentingModel>> UpdatePropertyRentingAsync(string loggedInUser, PropertyRentingModel propertyRentingModel);
         Task<Result<List<PropertyRentingModel>>> GetAllPropertyRentingsByLandlordAsync(string loggedInUser, string landlordProfileUID);
-        Task<Result<List<PropertyRentingModel>>> GetAllPropertyRentingsByStudentAsync(string loggedInUser, string studentProfileUID);
+        Task<Result<List<PropertyRentingModel>>> GetAllPropertyRentingsByTenantAsync(string loggedInUser, string tenantUID);
 
         Task<Result<List<PropertyRentingModel>>> GetAllActivePropertyRentingsByLandlordAsync(string loggedInUser, string landlordProfileUID);
-        Task<Result<List<PropertyRentingModel>>> GetAllActivePropertyRentingsByStudentAsync(string loggedInUser, string studentProfileUID);
+        Task<Result<List<PropertyRentingModel>>> GetAllActivePropertyRentingsByTenantAsync(string loggedInUser, string tenantUID);
         Task<Result<List<PropertyRentingModel>>> GetAllPropertyRentingByPropertyUIDAsync(string loggedInUser, string propertyUID);
         Task<Result<PropertyRentingModel>> GetActivePropertyRentingByPropertyUIDAsync(string loggedInUser, string propertyUID);
         Task<Result<bool>> DeletePropertyRentingAsync(string loggedInUser, string propertyRentingUID);
