@@ -20,10 +20,10 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<PropertyType>().ToTable("PropertyType");
             modelBuilder.Entity<PropertyType>().HasKey(pt => pt.UID);
             modelBuilder.Entity<PropertyType>().HasData(new PropertyType() { UID = 1, Code = "FLT", Description="Flat" });
-            modelBuilder.Entity<PropertyType>().HasData(new PropertyType() { UID = 1, Code = "HSTL", Description = "Hostel" });
-            modelBuilder.Entity<PropertyType>().HasData(new PropertyType() { UID = 1, Code = "PG", Description = "Paying Guest" });
-            modelBuilder.Entity<PropertyType>().HasData(new PropertyType() { UID = 1, Code = "HSO", Description = "House in Single Occupancy" });
-            modelBuilder.Entity<PropertyType>().HasData(new PropertyType() { UID = 1, Code = "HMO", Description = "House in Multiple Occupancy" });
+            modelBuilder.Entity<PropertyType>().HasData(new PropertyType() { UID = 2, Code = "HSTL", Description = "Hostel" });
+            modelBuilder.Entity<PropertyType>().HasData(new PropertyType() { UID = 3, Code = "PG", Description = "Paying Guest" });
+            modelBuilder.Entity<PropertyType>().HasData(new PropertyType() { UID = 4, Code = "HSO", Description = "House in Single Occupancy" });
+            modelBuilder.Entity<PropertyType>().HasData(new PropertyType() { UID = 5, Code = "HMO", Description = "House in Multiple Occupancy" });
 
             //Master Table #2
             modelBuilder.Entity<FurnishType>().ToTable("FurnishType");
@@ -94,25 +94,25 @@ namespace DataAccess.DataContext
             //Master Table #7
             modelBuilder.Entity<Country>().ToTable("Country");
             modelBuilder.Entity<Country>().HasKey(c => c.UID);
-            modelBuilder.Entity<Country>().HasData(new Country() { UID = 1, Name = "United Kingdom",Code="UK",Continent="Europe" });
-            modelBuilder.Entity<Country>().HasData(new Country() { UID = 2, Name = "India", Code = "IND", Continent = "Asia" });
-            modelBuilder.Entity<Country>().HasData(new Country() { UID = 3, Name = "Bangladesh", Code = "BAN", Continent = "Asia" });
-            modelBuilder.Entity<Country>().HasData(new Country() { UID = 4, Name = "Sri Lanka", Code = "SRL", Continent = "Asia" });
-            modelBuilder.Entity<Country>().HasData(new Country() { UID = 5, Name = "Pakistan", Code = "PAK", Continent = "Asia" });
-            modelBuilder.Entity<Country>().HasData(new Country() { UID = 6, Name = "China", Code = "CNA", Continent = "Asia" });
-            modelBuilder.Entity<Country>().HasData(new Country() { UID = 7, Name = "France", Code = "FRA", Continent = "Europe" });
+            modelBuilder.Entity<Country>().HasOne(c => c.Currency).WithMany().HasForeignKey(c => c.CurrencyUID);
+            modelBuilder.Entity<Country>().HasData(new Country() { UID = 1, Name = "United Kingdom",Code="UK",Continent="Europe",CurrencyUID=2 });
+            modelBuilder.Entity<Country>().HasData(new Country() { UID = 2, Name = "India", Code = "IND", Continent = "Asia", CurrencyUID = 1 });
+            modelBuilder.Entity<Country>().HasData(new Country() { UID = 3, Name = "Bangladesh", Code = "BAN", Continent = "Asia", CurrencyUID = 3 });
+            modelBuilder.Entity<Country>().HasData(new Country() { UID = 4, Name = "Sri Lanka", Code = "SRL", Continent = "Asia", CurrencyUID = 4 });
+            modelBuilder.Entity<Country>().HasData(new Country() { UID = 5, Name = "Pakistan", Code = "PAK", Continent = "Asia", CurrencyUID = 5 });
+            modelBuilder.Entity<Country>().HasData(new Country() { UID = 6, Name = "China", Code = "CNA", Continent = "Asia", CurrencyUID = 6 });
+            modelBuilder.Entity<Country>().HasData(new Country() { UID = 7, Name = "France", Code = "FRA", Continent = "Europe", CurrencyUID = 7 });
 
             //Master Table #8
             modelBuilder.Entity<Currency>().ToTable("Currency");
-            modelBuilder.Entity<Currency>().HasKey(cu=>cu.UID);
-            modelBuilder.Entity<Currency>().HasOne(cu => cu.Country).WithOne().HasForeignKey<Currency>(cu => cu.CountryUID);
+            modelBuilder.Entity<Currency>().HasKey(cu=>cu.UID);           
             modelBuilder.Entity<Currency>().HasData(new Currency() { UID=1,Name="Rupee",Code="INR",Symbol=""});
             modelBuilder.Entity<Currency>().HasData(new Currency() { UID = 2, Name = "Pound", Code = "GBP", Symbol = "" });
             modelBuilder.Entity<Currency>().HasData(new Currency() { UID = 3, Name = "Bangladeshi Taka", Code = "BDT", Symbol = "" });
-            modelBuilder.Entity<Currency>().HasData(new Currency() { UID = 4, Name = "Sri Lankan Rupee", Code = "LKR", Symbol = "" });
-            modelBuilder.Entity<Currency>().HasData(new Currency() { UID = 5, Name = "Pakistani Rupee", Code = "PKR", Symbol = "" });
-            modelBuilder.Entity<Currency>().HasData(new Currency() { UID = 6, Name = "Chinese Yuan", Code = "CNY", Symbol = "" });
-            modelBuilder.Entity<Currency>().HasData(new Currency() { UID = 7, Name = "Euro", Code = "EUR", Symbol = "" });
+            modelBuilder.Entity<Currency>().HasData(new Currency() { UID = 4, Name = "Sri Lankan Rupee", Code = "LKR", Symbol = ""});
+            modelBuilder.Entity<Currency>().HasData(new Currency() { UID = 5, Name = "Pakistani Rupee", Code = "PKR", Symbol = ""});
+            modelBuilder.Entity<Currency>().HasData(new Currency() { UID = 6, Name = "Chinese Yuan", Code = "CNY", Symbol = ""});
+            modelBuilder.Entity<Currency>().HasData(new Currency() { UID = 7, Name = "Euro", Code = "EUR", Symbol = ""});
 
             //Master Table #9
             modelBuilder.Entity<University>().ToTable("University");
@@ -165,7 +165,7 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<StudentProfile>().HasOne(s => s.Tenant).WithOne().HasForeignKey<StudentProfile>(s => s.TenantUID);
             //Note:- the implementation of 'HasForeignKey("")' with string parameter is normally used with shadow foreign keys.So dont 
             //what will be the impact used with properly defined foreign key.
-            modelBuilder.Entity<StudentProfile>().HasOne(s => s.University).WithOne().HasForeignKey<StudentProfile>(s => s.UniversityUID);
+            modelBuilder.Entity<StudentProfile>().HasOne(s => s.University).WithOne().HasForeignKey<StudentProfile>(s => s.UniversityUID).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Landlord>().ToTable("Landlord");
             modelBuilder.Entity<Landlord>().HasKey(l=>l.ProfileUID);
@@ -200,7 +200,7 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<PropertyListingAttribute>().HasOne(pla => pla.TenantType).WithOne()
                                                             .HasForeignKey<PropertyListingAttribute>(pla => pla.TenantTypeUID);
             modelBuilder.Entity<PropertyListingAttribute>().HasOne(pla => pla.PropertyListing).WithOne(pl=>pl.PropertyListingAttribute)
-                                                            .HasForeignKey<PropertyListingAttribute>(pla => pla.PropertyListingUID);
+                                                            .HasForeignKey<PropertyListingAttribute>(pla => pla.PropertyListingUID).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<PropertyListingAttribute>().HasOne(pla => pla.PropertyAttribute).WithMany()
                                                             .HasForeignKey(pla => pla.PropertyAttributeUID);
             modelBuilder.Entity<PropertyListingAttribute>().Property(pla => pla.AvailableParkingSlots).IsRequired(false);
@@ -209,12 +209,12 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<PropertyViewing>().ToTable("PropertyViewing");
             modelBuilder.Entity<PropertyViewing>().HasKey(pv => pv.UID);
             modelBuilder.Entity<PropertyViewing>().HasOne(pv=>pv.PropertyListing).WithMany(pl => pl.Viewings).HasForeignKey(pv => pv.PropertyListingUID);
-            modelBuilder.Entity<PropertyViewing>().HasOne(pv=>pv.Tenant).WithMany(t=>t.Viewings).HasForeignKey(pv => pv.TenantUID);
+            modelBuilder.Entity<PropertyViewing>().HasOne(pv=>pv.Tenant).WithMany(t=>t.Viewings).HasForeignKey(pv => pv.TenantUID).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<PropertyRenting>().ToTable("PropertyRenting");
             modelBuilder.Entity<PropertyRenting>().HasKey(pr => pr.UID);
             modelBuilder.Entity<PropertyRenting>().HasOne(pr=>pr.PropertyListing).WithMany(pl => pl.Rentings).HasForeignKey(pr => pr.PropertyListingUID);
-            modelBuilder.Entity<PropertyRenting>().HasOne(pr => pr.Tenant).WithMany().HasForeignKey(pr => pr.TenantUID);
+            modelBuilder.Entity<PropertyRenting>().HasOne(pr => pr.Tenant).WithMany().HasForeignKey(pr => pr.TenantUID).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<CurrentTenantItem>().ToTable("CurrentTenantItem");
             modelBuilder.Entity<CurrentTenantItem>().HasKey(cti => cti.UID);

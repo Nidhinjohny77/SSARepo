@@ -7,5 +7,6 @@ namespace DataModels.Models
         public string Name { get; set; }
         public string Code { get; set; }
         public string Continent { get; set; }
+        public CurrencyModel Currency { get; set; }
     }
 }

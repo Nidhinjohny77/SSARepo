@@ -10,8 +10,7 @@ namespace SSA.Mapper
         {
             this.CreateMap<Currency, CurrencyModel>()
                 .ForMember(x => x.Code, opt => opt.MapFrom(dest => dest.Code))
-                .ForMember(x => x.Name, opt => opt.MapFrom(dest => dest.Name))
-                .ForMember(x => x.CountryCode, opt => opt.MapFrom(dest => dest.Country.Code));
+                .ForMember(x => x.Name, opt => opt.MapFrom(dest => dest.Name));
             this.CreateMap<ItemType, ItemTypeModel>()
                 .ForMember(x => x.UID, opt => opt.MapFrom(dest => dest.UID))
                 .ForMember(x => x.Name, opt => opt.MapFrom(dest => dest.Name))
@@ -36,7 +35,8 @@ namespace SSA.Mapper
                 .ForMember(x => x.Name, opt => opt.MapFrom(src => src.Name));
             this.CreateMap<Country, CountryModel>().ReverseMap()
                 .ForMember(x => x.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(x => x.Code, opt => opt.MapFrom(src => src.Code));
+                .ForMember(x => x.Code, opt => opt.MapFrom(src => src.Code))
+                .ForMember(x => x.CurrencyUID, opt => opt.MapFrom(dest => dest.Currency.UID));
             this.CreateMap<University, UniversityModel>().ReverseMap()
                 .ForMember(x => x.UID, opt => opt.MapFrom(src => src.UID))
                 .ForMember(x => x.Name, opt => opt.MapFrom(src => src.Name))
