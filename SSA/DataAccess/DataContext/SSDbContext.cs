@@ -45,7 +45,7 @@ namespace DataAccess.DataContext
             //Master Table #4
             modelBuilder.Entity<Item>().ToTable("Item");
             modelBuilder.Entity<Item>().HasKey(it => it.UID);
-            modelBuilder.Entity<Item>().HasOne(it => it.ItemType).WithOne().HasForeignKey<Item>(it => it.ItemTypeUID);
+            modelBuilder.Entity<Item>().HasOne(it => it.ItemType).WithMany().HasForeignKey(it => it.ItemTypeUID);
             modelBuilder.Entity<Item>().HasData(new Item() { UID=1, Name="Study Chair",ItemTypeUID=1});
             modelBuilder.Entity<Item>().HasData(new Item() { UID = 2, Name = "Study Table", ItemTypeUID = 1 });
             modelBuilder.Entity<Item>().HasData(new Item() { UID = 3, Name = "Dining Table", ItemTypeUID = 1 });
@@ -117,10 +117,18 @@ namespace DataAccess.DataContext
             //Master Table #9
             modelBuilder.Entity<University>().ToTable("University");
             modelBuilder.Entity<University>().HasKey(u => u.UID);
-            modelBuilder.Entity<University>().HasOne(u => u.Country).WithOne().HasForeignKey<University>(u => u.CountryUID);
-            modelBuilder.Entity<University>().HasData(new University() {UID=1,Name="Teeside University",Address="Tees Valley,Middlesbrough,England", 
-                                                        UniversityCode="UNITEES",ContactNumber="7464647464",ContactEmail="tees.uni@gmail.com",
-                                                        CountryUID=1});
+            modelBuilder.Entity<University>().HasOne(u => u.Country).WithMany().HasForeignKey(u => u.CountryUID);
+            modelBuilder.Entity<University>().HasData(new University() 
+            {   UID=1,
+                Name="Teeside University",
+                Address="Tees Valley,Middlesbrough,England", 
+                UniversityCode="UNITEES",
+                ContactNumber="7464647464",
+                ContactEmail="tees.uni@gmail.com",
+                CountryUID=1,
+                IsActive=true,
+                Ratings=3
+            });
             modelBuilder.Entity<University>().HasData(new University()
             {
                 UID = 2,
@@ -129,7 +137,9 @@ namespace DataAccess.DataContext
                 UniversityCode = "UNIEDIN",
                 ContactNumber = "7334647464",
                 ContactEmail = "universityofedinburgh.uni@gmail.com",
-                CountryUID = 1
+                CountryUID = 1,
+                IsActive = true,
+                Ratings = 5
             });
 
 
