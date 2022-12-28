@@ -18,6 +18,11 @@ namespace Business.Validators
             return tenant == null ? null : tenant.UserUID;
         }
 
+        protected bool IsUniversityValid(int UniversityUID)
+        {
+            return this.uow.UniversityRepository.GetAllUniversities().Where(x => x.UID == UniversityUID && x.IsActive).Any();
+        }
+
         public async Task<List<ValidationModel>> ValidateAsync(string loggedInUser, StudentProfileModel student)
         {
             var validationResults=new List<ValidationModel>();
@@ -25,6 +30,10 @@ namespace Business.Validators
             if ( GetRole(modelSpecificUserUID)!=RoleConstant.Admin && modelSpecificUserUID != loggedInUser)
             {
                 validationResults.Add(new ValidationModel("The current loggedIn user doesn't have permission to edit profile of another user."));
+            }
+            if (!IsUniversityValid(student.UniversityUID))
+            {
+                validationResults.Add(new ValidationModel("The given University is not valid."));
             }
             if(string.IsNullOrEmpty(student.UniversityStudentID))
             {

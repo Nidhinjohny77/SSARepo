@@ -25,7 +25,7 @@ namespace DataAccess
 
         public IPropertyTypeRepository PropertyTypeRepository => new PropertyTypeRepository(this.context);
 
-        public ITenantTypeRepository TenantTypeRepository => new TenantTypeRepository(this.context);
+        public ITenancyTypeRepository TenancyTypeRepository => new TenancyTypeRepository(this.context);
 
         public ICurrencyRepository CurrencyRepository => new CurrencyRepository(this.context);
 

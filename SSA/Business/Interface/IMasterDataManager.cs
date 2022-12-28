@@ -5,5 +5,12 @@ namespace Business.Interface
     {
         Task<CountryModel[]> GetAllCountriesAsync();
         Task<RoleModel[]> GetAllRolesAsync();
+
+        Task<ItemModel[]> GetAllItemsAsync();
+        Task<CurrencyModel[]> GetAllCurrenciesAsync();
+        Task<FurnishTypeModel[]> GetAllFurnishTypesAsync();
+        Task<PropertyTypeModel[]> GetAllPropertyTypesAsync();
+        Task<TenancyTypeModel[]> GetAllTenancyTypesAsync();
+        Task<UniversityModel[]> GetAllUniversitiesAsync();
     }
 }

@@ -9,7 +9,7 @@ namespace Business.Manager
         private readonly IRolesRepository roleRepository;
         private readonly ICountryRepository countryRepository;
         private readonly IPropertyTypeRepository propertyTypeRepository;
-        private readonly ITenantTypeRepository tenantTypeRepository;
+        private readonly ITenancyTypeRepository tenancyTypeRepository;
         private readonly ICurrencyRepository currencyRepository;
         private readonly IItemTypeRepository itemTypeRepository;
         private readonly IItemRepository itemRepository;
@@ -23,7 +23,7 @@ namespace Business.Manager
             this.roleRepository = this.uow.RolesRepository;
             this.countryRepository = this.uow.CountryRepository;
             this.propertyTypeRepository = this.uow.PropertyTypeRepository;
-            this.tenantTypeRepository = this.uow.TenantTypeRepository;
+            this.tenancyTypeRepository = this.uow.TenancyTypeRepository;
             this.currencyRepository = this.uow.CurrencyRepository;
             this.itemTypeRepository = this.uow.ItemTypeRepository;
             this.itemRepository = this.uow.ItemRepository;
@@ -37,11 +37,53 @@ namespace Business.Manager
             return await Task.FromResult<CountryModel[]>(result);
         }
 
+        public async Task<ItemModel[]> GetAllItemsAsync()
+        {
+            var items=await this.itemRepository.GetAllItemsAsync();
+            var result= this.mapper.Map<ItemModel[]>(items);
+            return await Task.FromResult<ItemModel[]>(result);
+        }
+
         public async Task<RoleModel[]> GetAllRolesAsync()
         {
             var roles = this.roleRepository.GetAllRoles().ToArray();
             var result = this.mapper.Map<RoleModel[]>(roles);
             return await Task.FromResult<RoleModel[]>(result);
+        }
+
+        public async Task<CurrencyModel[]> GetAllCurrenciesAsync()
+        {
+            var entities = this.currencyRepository.GetAllCurrencies().ToArray();
+            var result = this.mapper.Map<CurrencyModel[]>(entities);
+            return await Task.FromResult<CurrencyModel[]>(result);
+        }
+
+        public async Task<FurnishTypeModel[]> GetAllFurnishTypesAsync()
+        {
+            var entities = this.furnishTypeRepository.GetAllFurnishTypes().ToArray();
+            var result = this.mapper.Map<FurnishTypeModel[]>(entities);
+            return await Task.FromResult<FurnishTypeModel[]>(result);
+        }
+
+        public async Task<PropertyTypeModel[]> GetAllPropertyTypesAsync()
+        {
+            var entities = this.propertyTypeRepository.GetAllPropertyTypes().ToArray();
+            var result = this.mapper.Map<PropertyTypeModel[]>(entities);
+            return await Task.FromResult<PropertyTypeModel[]>(result);
+        }
+
+        public async Task<TenancyTypeModel[]> GetAllTenancyTypesAsync()
+        {
+            var entities = this.tenancyTypeRepository.GetAllTenancyTypes().ToArray();
+            var result = this.mapper.Map<TenancyTypeModel[]>(entities);
+            return await Task.FromResult<TenancyTypeModel[]>(result);
+        }
+
+        public async Task<UniversityModel[]> GetAllUniversitiesAsync()
+        {
+            var entities = this.universityRepository.GetAllUniversities().ToArray();
+            var result = this.mapper.Map<UniversityModel[]>(entities);
+            return await Task.FromResult<UniversityModel[]>(result);
         }
     }
 }

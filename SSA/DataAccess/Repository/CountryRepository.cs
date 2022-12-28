@@ -11,7 +11,7 @@ namespace DataAccess.Repository
         }
         public async Task<Country[]> GetAllCountriesAsync()
         {
-            return await this.context.Countries.ToArrayAsync();
+            return await this.context.Countries.Include(x=>x.Currency).ToArrayAsync();
         }
     }
 }

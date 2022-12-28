@@ -44,5 +44,98 @@ namespace SSA.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpGet]
+        [Route("Currencies")]
+        public async Task<IActionResult> GetAllCurrencies()
+        {
+            try
+            {
+                var data = await this.dataManager.GetAllCurrenciesAsync();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+
+        [HttpGet]
+        [Route("Items")]
+        public async Task<IActionResult> GetAllItems()
+        {
+            try
+            {
+                var data = await this.dataManager.GetAllItemsAsync();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("FurnishTypes")]
+        public async Task<IActionResult> GetAllFurnishTypes()
+        {
+            try
+            {
+                var data = await this.dataManager.GetAllFurnishTypesAsync();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+
+        [HttpGet]
+        [Route("PropertyTypes")]
+        public async Task<IActionResult> GetAllPropertyTypes()
+        {
+            try
+            {
+                var data = await this.dataManager.GetAllPropertyTypesAsync();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+
+        [HttpGet]
+        [Route("TenancyTypes")]
+        public async Task<IActionResult> GetAllTenancyTypes()
+        {
+            try
+            {
+                var data = await this.dataManager.GetAllTenancyTypesAsync();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("Universities")]
+        public async Task<IActionResult> GetAllUniversities()
+        {
+            try
+            {
+                var data = await this.dataManager.GetAllUniversitiesAsync();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

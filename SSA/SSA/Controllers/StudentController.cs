@@ -40,7 +40,7 @@ namespace SSA.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("Profile/Edit")]
         [Authorize(Policy = GlobalConstant.StudentPolicy)]
         public async Task<IActionResult> UpdateStudentProfileAsync([FromBody] StudentProfileModel student)
@@ -87,7 +87,7 @@ namespace SSA.Controllers
         }
 
         [HttpDelete]
-        [Route("Student/Profile")]
+        [Route("Profile")]
         [Authorize(Policy = GlobalConstant.StudentPolicy)]
         public async Task<IActionResult> DeleteStudentProfileAsync()
         {

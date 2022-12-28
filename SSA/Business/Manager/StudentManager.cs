@@ -25,23 +25,20 @@ namespace Business.Manager
                 {
                     return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(new BusinessException(validationResults)));
                 }
-                var existingProfile=await this.repository.GetStudentProfileAsync(loggedInUser);
+                var existingProfile=await this.repository.GetStudentProfileAsync(student.TenantUID);
                 if(existingProfile != null)
                 {
                     return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(new BusinessException(new ValidationModel("Student profile already exists."))));
                 }
                 
-                var university= this.uow.UniversityRepository.GetAllUniversities().Where(x=>x.UniversityCode == student.UniversityCode).FirstOrDefault();
-                if(university != null)
+                var studentEntity = this.mapper.Map<StudentProfile>(student);
+                studentEntity.UID = Guid.NewGuid().ToString();
+                studentEntity.CreatedBy = loggedInUser;
+                studentEntity.CreatedDate = DateTime.Now;
+                studentEntity.LastUpdatedBy = loggedInUser;
+                studentEntity.LastUpdatedDate = DateTime.Now;
+                if(await this.repository.AddStudentAsync(studentEntity))
                 {
-                    var studentEntity = this.mapper.Map<StudentProfile>(student);
-                    studentEntity.UID = Guid.NewGuid().ToString();
-                    studentEntity.UniversityUID = university.UID;
-                    studentEntity.CreatedBy = loggedInUser;
-                    studentEntity.CreatedDate = DateTime.Now;
-                    studentEntity.LastUpdatedBy = loggedInUser;
-                    studentEntity.LastUpdatedDate = DateTime.Now;
-                    await this.repository.AddStudentAsync(studentEntity);
                     if (await this.uow.SaveChangesAsync() > 0)
                     {
                         var savedEntity = await this.repository.GetStudentByProfileAsync(studentEntity.UID);
@@ -51,13 +48,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(new BusinessException(
-                            new ValidationModel("Unable to add user to the database."))));
+                            new ValidationModel("Unable to persist student profile to the database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(new BusinessException(
-                        new ValidationModel("Unable to find the university for the specified university code."))));
+                        new ValidationModel("Unable to add student profile to the entity collection."))));
                 }
             }
             catch (Exception ex)
@@ -70,21 +67,30 @@ namespace Business.Manager
         {
             try
             {
-                var existingProfile = await this.repository.GetStudentProfileAsync(loggedInUser);
-                if (existingProfile == null)
+                var tenant =  this.uow.TenantRepository.GetAllTenants().Where(x => x.UserUID == loggedInUser).FirstOrDefault();
+                if(tenant != null)
                 {
-                    return await Task.FromResult<Result<bool>>(new Result<bool>(
-                        new BusinessException(new ValidationModel("Student profile does not exists."))));
-                }
-                await this.repository.DeleteStudentAsync(existingProfile);
-                if(await this.uow.SaveChangesAsync() > 0)
-                {
-                    return await Task.FromResult<Result<bool>>(new Result<bool>(true));
+                    var existingProfile = await this.repository.GetStudentProfileAsync(tenant.UID);
+                    if (existingProfile == null)
+                    {
+                        return await Task.FromResult<Result<bool>>(new Result<bool>(
+                            new BusinessException(new ValidationModel("Student profile does not exists."))));
+                    }
+                    await this.repository.DeleteStudentAsync(existingProfile);
+                    if (await this.uow.SaveChangesAsync() > 0)
+                    {
+                        return await Task.FromResult<Result<bool>>(new Result<bool>(true));
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<bool>>(new Result<bool>(
+                            new BusinessException(new ValidationModel("Unable to delete the student profile from database."))));
+                    }
                 }
                 else
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(
-                        new BusinessException(new ValidationModel("Unable to delete the student profile from database."))));
+                        new BusinessException(new ValidationModel("Unable to get the student tenant from database."))));
                 }
             }
             catch (Exception ex)
@@ -97,16 +103,25 @@ namespace Business.Manager
         {
             try
             {
-                var entity=await this.repository.GetStudentProfileAsync(loggedInUser);
-                if(entity == null)
+                var tenant = this.uow.TenantRepository.GetAllTenants().Where(x => x.UserUID == loggedInUser).FirstOrDefault();
+                if (tenant != null)
                 {
-                    return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(
-                        new BusinessException(new ValidationModel("Student profile not available."))));
+                    var entity = await this.repository.GetStudentProfileAsync(tenant.UID);
+                    if (entity == null)
+                    {
+                        return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(
+                            new BusinessException(new ValidationModel("Student profile not available."))));
+                    }
+                    else
+                    {
+                        var model = this.mapper.Map<StudentProfileModel>(entity);
+                        return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(model));
+                    }
                 }
                 else
                 {
-                    var model=this.mapper.Map<StudentProfileModel>(entity);
-                    return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(model));
+                    return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(
+                            new BusinessException(new ValidationModel("Student tenant profile not available."))));
                 }
             }
             catch (Exception ex)
@@ -124,7 +139,7 @@ namespace Business.Manager
                 {
                     return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(new BusinessException(validationResults)));
                 }
-                var existingProfile = await this.repository.GetStudentProfileAsync(loggedInUser);
+                var existingProfile = await this.repository.GetStudentProfileAsync(student.TenantUID);
                 if (existingProfile == null)
                 {
                     return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(new BusinessException(new ValidationModel("Student profile doesn't exists."))));

@@ -17,7 +17,7 @@ namespace DataAccess.Repository
 
         public async Task<Item[]> GetAllItemsAsync()
         {
-            return await this.context.Items.ToArrayAsync();
+            return await this.context.Items.Include(x=>x.ItemType).ToArrayAsync();
         }
     }
 }

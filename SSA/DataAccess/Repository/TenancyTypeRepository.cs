@@ -2,21 +2,21 @@
 
 namespace DataAccess.Repository
 {
-    public class TenantTypeRepository : ITenantTypeRepository
+    public class TenancyTypeRepository : ITenancyTypeRepository
     {
         private readonly SSDbContext context;
 
-        public TenantTypeRepository(SSDbContext context)
+        public TenancyTypeRepository(SSDbContext context)
         {
             this.context = context;
         }
 
-        public IQueryable<TenancyType> GetAllTenantTypes()
+        public IQueryable<TenancyType> GetAllTenancyTypes()
         {
             return this.context.TenantTypes.AsQueryable();
         }
 
-        public async Task<TenancyType[]> GetAllTenantTypesAsync()
+        public async Task<TenancyType[]> GetAllTenancyTypesAsync()
         {
             return await this.context.TenantTypes.ToArrayAsync();
         }

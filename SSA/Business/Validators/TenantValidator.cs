@@ -30,7 +30,7 @@ namespace Business.Validators
 
         protected bool IsTenantTypeExists(int tenantTypeUID)
         {
-            return this.uow.TenantTypeRepository.GetAllTenantTypes().Where(x => x.UID == tenantTypeUID).Any();
+            return this.uow.TenancyTypeRepository.GetAllTenancyTypes().Where(x => x.UID == tenantTypeUID).Any();
         }
 
         public async Task<List<ValidationModel>> ValidateTenantAsync(string loggedInUser, TenantModel tenant)

@@ -10,43 +10,84 @@ namespace SSA.Mapper
         public SSAMapperProfile()
         {
             this.CreateMap<Currency, CurrencyModel>()
-                .ForMember(x => x.Code, opt => opt.MapFrom(dest => dest.Code))
-                .ForMember(x => x.Name, opt => opt.MapFrom(dest => dest.Name));
+                .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+            this.CreateMap<CurrencyModel, Currency>()
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+
             this.CreateMap<ItemType, ItemTypeModel>()
-                .ForMember(x => x.UID, opt => opt.MapFrom(dest => dest.UID))
-                .ForMember(x => x.Name, opt => opt.MapFrom(dest => dest.Name))
-                .ForMember(x => x.Description, opt => opt.MapFrom(dest => dest.Description));
+                .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+            this.CreateMap<ItemTypeModel, ItemType>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+
             this.CreateMap<Item, ItemModel>()
-                .ForMember(x => x.UID, opt => opt.MapFrom(dest => dest.UID))
-                .ForMember(x => x.Name, opt => opt.MapFrom(dest => dest.Name))
-                .ForMember(x => x.ItemType, opt => opt.MapFrom(dest => dest.ItemType));
-            this.CreateMap<FurnishType, FurnishTypeModel>().ReverseMap()
-                .ForMember(x => x.Code, opt => opt.MapFrom(src => src.Code))
-                .ForMember(x => x.UID, opt => opt.MapFrom(src => src.UID))
-                .ForMember(x => x.Description, opt => opt.MapFrom(src => src.Description));
-            this.CreateMap<PropertyType, PropertyTypeModel>().ReverseMap()
-                .ForMember(x => x.Code, opt => opt.MapFrom(src => src.Code))
-                .ForMember(x => x.UID, opt => opt.MapFrom(src => src.UID))
-                .ForMember(x => x.Description, opt => opt.MapFrom(src => src.Description));
-            this.CreateMap<TenancyType, TenancyTypeModel>().ReverseMap()
-                .ForMember(x => x.UID, opt => opt.MapFrom(src => src.UID))
-                .ForMember(x => x.Description, opt => opt.MapFrom(src => src.Description));
-            this.CreateMap<Role, RoleModel>().ReverseMap()
-                .ForMember(x => x.UID, opt => opt.Ignore())
-                .ForMember(x => x.Name, opt => opt.MapFrom(src => src.Name));
-            this.CreateMap<Country, CountryModel>().ReverseMap()
-                .ForMember(x => x.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(x => x.Code, opt => opt.MapFrom(src => src.Code))
-                .ForMember(x => x.CurrencyUID, opt => opt.MapFrom(dest => dest.Currency.UID));
-            this.CreateMap<University, UniversityModel>().ReverseMap()
-                .ForMember(x => x.UID, opt => opt.MapFrom(src => src.UID))
-                .ForMember(x => x.Name, opt => opt.MapFrom(src => src.Name))
-                .ForMember(x => x.Address, opt => opt.MapFrom(src => src.Address))
-                .ForMember(x => x.UniversityCode, opt => opt.MapFrom(src => src.UniversityCode))
-                .ForMember(x => x.ContactNumber, opt => opt.MapFrom(src => src.ContactNumber))
-                .ForMember(x => x.ContactEmail, opt => opt.MapFrom(src => src.ContactEmail))
-                .ForMember(x => x.CountryUID, opt => opt.Ignore())
-                .ForMember(x => x.Ratings, opt => opt.MapFrom(src => src.Ratings));
+                .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.ItemType));
+            this.CreateMap<ItemModel, Item>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.ItemType));
+
+            this.CreateMap<FurnishType, FurnishTypeModel>()
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
+                .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+            this.CreateMap<FurnishTypeModel, FurnishType>()
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+
+            this.CreateMap<PropertyType, PropertyTypeModel>()
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
+                .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+            this.CreateMap<PropertyTypeModel, PropertyType>()
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+
+            this.CreateMap<TenancyType, TenancyTypeModel>()
+                .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+            this.CreateMap<TenancyTypeModel, TenancyType>()
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+
+            this.CreateMap<Role, RoleModel>()
+                .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+            this.CreateMap<RoleModel, Role>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+
+            this.CreateMap<Country, CountryModel>()
+                .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
+                .ForMember(dest => dest.Currency, opt => opt.MapFrom(dest => dest.Currency));
+            this.CreateMap<Country, CountryModel>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
+                .ForMember(dest => dest.Currency, opt => opt.MapFrom(dest => dest.Currency));
+
+            this.CreateMap<University, UniversityModel>()
+                .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+                .ForMember(dest => dest.UniversityCode, opt => opt.MapFrom(src => src.UniversityCode))
+                .ForMember(dest => dest.ContactNumber, opt => opt.MapFrom(src => src.ContactNumber))
+                .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.ContactEmail))
+                .ForMember(dest => dest.CountryUID, opt => opt.MapFrom(src => src.CountryUID))
+                .ForMember(dest => dest.Ratings, opt => opt.MapFrom(src => src.Ratings));
+            this.CreateMap<UniversityModel, University>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+                .ForMember(dest => dest.UniversityCode, opt => opt.MapFrom(src => src.UniversityCode))
+                .ForMember(dest => dest.ContactNumber, opt => opt.MapFrom(src => src.ContactNumber))
+                .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.ContactEmail))
+                .ForMember(dest => dest.CountryUID, opt => opt.MapFrom(src => src.CountryUID))
+                .ForMember(dest => dest.Ratings, opt => opt.MapFrom(src => src.Ratings));
 
             this.CreateMap<User, UserModel>().ReverseMap()
                 .ForMember(x => x.UID, opt => opt.MapFrom(src=>src.UID))
@@ -113,15 +154,25 @@ namespace SSA.Mapper
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
                 .ForMember(dest => dest.StartRangeAmount, opt => opt.MapFrom(src => src.StartRangeAmount))
                 .ForMember(dest => dest.EndRangeAmount, opt => opt.MapFrom(src => src.EndRangeAmount));
-            this.CreateMap<StudentProfile, StudentProfileModel>().ReverseMap()
-                .ForMember(x => x.TenantUID, opt => opt.Ignore())
-                .ForMember(x => x.StudentSecurityCode, opt => opt.MapFrom(src => src.StudentSecurityCode))
-                .ForMember(x => x.CourseStartDate, opt => opt.MapFrom(src => Convert.ToDateTime(src.CourseStartDate)))
-                .ForMember(x => x.CourseEndDate, opt => opt.MapFrom(src => Convert.ToDateTime(src.CourseEndDate)))
-                .ForMember(x => x.UniversityStudentID, opt => opt.MapFrom(src => src.UniversityStudentID))
-                .ForMember(x => x.EnrolledCourseName, opt => opt.MapFrom(src => src.EnrolledCourseName))
-                .ForMember(x => x.IsActive, opt => opt.MapFrom(src => src.IsActive))
-                .ForMember(x => x.UniversityUID, opt => opt.Ignore());
+            this.CreateMap<StudentProfile, StudentProfileModel>()
+                .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
+                .ForMember(dest => dest.TenantUID, opt => opt.MapFrom(src => src.TenantUID))
+                .ForMember(dest => dest.StudentSecurityCode, opt => opt.MapFrom(src => src.StudentSecurityCode))
+                .ForMember(dest => dest.CourseStartDate, opt => opt.MapFrom(src => src.CourseStartDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(dest => dest.CourseEndDate, opt => opt.MapFrom(src => src.CourseEndDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(dest => dest.UniversityStudentID, opt => opt.MapFrom(src => src.UniversityStudentID))
+                .ForMember(dest => dest.EnrolledCourseName, opt => opt.MapFrom(src => src.EnrolledCourseName))
+                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
+                .ForMember(dest => dest.UniversityUID, opt => opt.MapFrom(src => src.UniversityUID));
+            this.CreateMap<StudentProfileModel, StudentProfile>()
+                .ForMember(dest => dest.TenantUID, opt => opt.MapFrom(src => src.TenantUID))
+                .ForMember(dest => dest.StudentSecurityCode, opt => opt.MapFrom(src => src.StudentSecurityCode))
+                .ForMember(dest => dest.CourseStartDate, opt => opt.MapFrom(src => Convert.ToDateTime(src.CourseStartDate)))
+                .ForMember(dest => dest.CourseEndDate, opt => opt.MapFrom(src => Convert.ToDateTime(src.CourseEndDate)))
+                .ForMember(dest => dest.UniversityStudentID, opt => opt.MapFrom(src => src.UniversityStudentID))
+                .ForMember(dest => dest.EnrolledCourseName, opt => opt.MapFrom(src => src.EnrolledCourseName))
+                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
+                .ForMember(dest => dest.UniversityUID, opt => opt.MapFrom(src => src.UniversityUID));
             this.CreateMap<Landlord, LandlordModel>().ReverseMap()
                 .ForMember(x => x.UserUID, opt => opt.MapFrom(src => src.UserUID))
                 .ForMember(x => x.ProfileUID, opt => opt.MapFrom(src => src.ProfileUID))

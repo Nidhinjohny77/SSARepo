@@ -10,7 +10,7 @@ namespace DataModels.Models
         public string UniversityCode { get; set; }
         public string ContactNumber { get; set; }
         public string ContactEmail { get; set; }
-        public string CountryCode { get; set; }
+        public string CountryUID { get; set; }
         public int Ratings { get; set; }
     }
 }

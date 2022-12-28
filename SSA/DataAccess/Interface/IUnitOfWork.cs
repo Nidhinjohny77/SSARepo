@@ -16,7 +16,7 @@ namespace DataAccess.Interface
         IItemRepository ItemRepository { get; }
         IItemTypeRepository ItemTypeRepository { get; } 
         IPropertyTypeRepository PropertyTypeRepository { get; } 
-        ITenantTypeRepository TenantTypeRepository { get; }
+        ITenancyTypeRepository TenancyTypeRepository { get; }
         ICurrencyRepository CurrencyRepository { get; }
         IFurnishTypeRepository FurnishTypeRepository { get; }
         Task<int> SaveChangesAsync();
