@@ -6,7 +6,7 @@ namespace DataAccess.Entities
         public string UID { get; set; }
         public string UserUID { get; set; }
         public int CountryUID{ get; set; }
-        public int TenantTypeUID { get; set; }
+        public int TenancyTypeUID { get; set; }
         public string Address { get; set; }
         public DateTime DOB { get; set; }
         public string PhoneNumber { get; set; }
@@ -19,7 +19,7 @@ namespace DataAccess.Entities
 
         public User User { get; set; }
         public Country Country { get; set; }
-        public TenancyType TenantType { get; set; }
+        public TenancyType TenancyType { get; set; }
         public List<PropertyViewing> Viewings { get; set; }
 
     }

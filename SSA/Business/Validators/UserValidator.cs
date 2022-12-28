@@ -7,38 +7,38 @@ namespace Business.Validators
         public UserValidator()
         {
         }
-        public async Task<List<ValidationResult>> ValidateAsync(string loggedInUser, UserModel user)
+        public async Task<List<ValidationModel>> ValidateAsync(string loggedInUser, UserModel user)
         {
-            var validationResults = new List<ValidationResult>();
+            var validationResults = new List<ValidationModel>();
             if(loggedInUser == null)
             {
-                validationResults.Add(new ValidationResult("Invalid LoggedIn user.LoggedIn user cannot be null."));
+                validationResults.Add(new ValidationModel("Invalid LoggedIn user.LoggedIn user cannot be null."));
             }
             if (loggedInUser != user.UID)
             {
-                validationResults.Add(new ValidationResult("Invalid LoggedIn user.LoggedIn user doesnt match with userUID in given user model."));
+                validationResults.Add(new ValidationModel("Invalid LoggedIn user.LoggedIn user doesnt match with userUID in given user model."));
             }
             if (string.IsNullOrEmpty(user.UserName))
             {
-                validationResults.Add(new ValidationResult("Username is mandatory"));
+                validationResults.Add(new ValidationModel("Username is mandatory"));
             }
             if (-1 == GetUserType(user.Role))
             {
-                validationResults.Add(new ValidationResult("Invalid role."));
+                validationResults.Add(new ValidationModel("Invalid role."));
             }
             if (string.IsNullOrEmpty(user.Password))
             {
-                validationResults.Add(new ValidationResult("Password is mandatory"));
+                validationResults.Add(new ValidationModel("Password is mandatory"));
             }
             if (string.IsNullOrEmpty(user.Email))
             {
-                validationResults.Add(new ValidationResult("Email is mandatory"));
+                validationResults.Add(new ValidationModel("Email is mandatory"));
             }
             if (string.IsNullOrEmpty(user.FirstName))
             {
-                validationResults.Add(new ValidationResult("FirstName is mandatory"));
+                validationResults.Add(new ValidationModel("FirstName is mandatory"));
             }
-            return await Task.FromResult<List<ValidationResult>>( validationResults);
+            return await Task.FromResult<List<ValidationModel>>( validationResults);
         }
 
         private int GetUserType(RoleModel role)

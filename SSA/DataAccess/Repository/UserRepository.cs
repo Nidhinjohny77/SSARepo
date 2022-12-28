@@ -27,17 +27,17 @@ namespace DataAccess.Repository
 
         public async Task<User[]> GetAllUsersAsync()
         {
-            return await this.context.Users.ToArrayAsync();
+            return await this.context.Users.Include(x => x.Role).ToArrayAsync();
         }
 
         public async Task<User> GetUserAsync(string userName)
         {
-            return await this.context.Users.Where(x=>x.UserName==userName).FirstOrDefaultAsync();
+            return await this.context.Users.Include(x => x.Role).Where(x=>x.UserName==userName).FirstOrDefaultAsync();
         }
 
         public async Task<User> GetUserByUIDAsync(string userUID)
         {
-            return await this.context.Users.FirstOrDefaultAsync(x => x.UID == userUID);
+            return await this.context.Users.Include(x => x.Role).FirstOrDefaultAsync(x => x.UID == userUID);
         }
 
         public async Task<bool> UpdateUserAsync(User user)

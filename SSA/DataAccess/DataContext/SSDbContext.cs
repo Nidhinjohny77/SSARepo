@@ -152,7 +152,7 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<Tenant>().HasKey(t=>t.UID);
             modelBuilder.Entity<Tenant>().HasOne(t=>t.User).WithOne().HasForeignKey<Tenant>(t => t.UserUID);
             modelBuilder.Entity<Tenant>().HasOne(t => t.Country).WithOne().HasForeignKey<Tenant>(t => t.CountryUID);
-            modelBuilder.Entity<Tenant>().HasOne(t => t.TenantType).WithOne().HasForeignKey<Tenant>(t => t.TenantTypeUID);
+            modelBuilder.Entity<Tenant>().HasOne(t => t.TenancyType).WithOne().HasForeignKey<Tenant>(t => t.TenancyTypeUID);
 
             modelBuilder.Entity<TenantPreference>().ToTable("TenantPreference");
             modelBuilder.Entity<TenantPreference>().HasKey(tr => tr.UID);

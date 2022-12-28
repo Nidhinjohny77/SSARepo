@@ -31,11 +31,12 @@ namespace Business.Manager
                 if (existingPreference != null)
                 {
                     return await Task.FromResult<Result<TenantPreferenceModel>>(new Result<TenantPreferenceModel>(
-                        new BusinessException(new ValidationResult("Tenant Preference already exists."))));
+                        new BusinessException(new ValidationModel("Tenant Preference already exists."))));
                 }
                 var newPreference=this.mapper.Map<TenantPreference>(tenantPreference);
                 if(newPreference != null)
                 {
+                    newPreference.UID = Guid.NewGuid().ToString();
                     newPreference.CreatedBy = loggedInUser;
                     newPreference.CreatedDate=DateTime.Now;
                     newPreference.LastUpdatedBy = loggedInUser;
@@ -53,25 +54,25 @@ namespace Business.Manager
                             else
                             {
                                 return await Task.FromResult<Result<TenantPreferenceModel>>(new Result<TenantPreferenceModel>(
-                                    new BusinessException(new ValidationResult("Unable to retrieve saved TenantPreference data from database."))));
+                                    new BusinessException(new ValidationModel("Unable to retrieve saved TenantPreference data from database."))));
                             }
                         }
                         else
                         {
                             return await Task.FromResult<Result<TenantPreferenceModel>>(new Result<TenantPreferenceModel>(
-                                new BusinessException(new ValidationResult("Unable to persist given TenantPreference data to database."))));
+                                new BusinessException(new ValidationModel("Unable to persist given TenantPreference data to database."))));
                         }
                     }
                     else
                     {
                         return await Task.FromResult<Result<TenantPreferenceModel>>(new Result<TenantPreferenceModel>(
-                            new BusinessException(new ValidationResult("Unable to save given TenantPreference data to database."))));
+                            new BusinessException(new ValidationModel("Unable to save given TenantPreference data to database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<TenantPreferenceModel>>(new Result<TenantPreferenceModel>(
-                        new BusinessException(new ValidationResult("Unable to map given TenantPreference model to database."))));
+                        new BusinessException(new ValidationModel("Unable to map given TenantPreference model to database."))));
                 }
             }
             catch (Exception ex)
@@ -93,11 +94,12 @@ namespace Business.Manager
                 if (existingProfile != null)
                 {
                     return await Task.FromResult<Result<TenantModel>>(new Result<TenantModel>(
-                        new BusinessException(new ValidationResult("Tenant Profile already exists."))));
+                        new BusinessException(new ValidationModel("Tenant Profile already exists."))));
                 }
                 var newTenant = this.mapper.Map<Tenant>(tenant);
                 if (newTenant != null)
                 {
+                    newTenant.UID = Guid.NewGuid().ToString();
                     newTenant.CreatedBy = loggedInUser;
                     newTenant.CreatedDate = DateTime.Now;
                     newTenant.LastUpdatedBy = loggedInUser;
@@ -106,7 +108,7 @@ namespace Business.Manager
                     {
                         if (await this.uow.SaveChangesAsync() > 0)
                         {
-                            var savedEntity = await this.tenantRepository.GetTenantPreferenceAsync(newTenant.UserUID);
+                            var savedEntity = await this.tenantRepository.GetTenantByUserUIDAsync(newTenant.UserUID);
                             var resultModel = this.mapper.Map<TenantModel>(savedEntity);
                             if (resultModel != null)
                             {
@@ -115,25 +117,25 @@ namespace Business.Manager
                             else
                             {
                                 return await Task.FromResult<Result<TenantModel>>(new Result<TenantModel>(
-                                    new BusinessException(new ValidationResult("Unable to retrieve saved Tenant data from database."))));
+                                    new BusinessException(new ValidationModel("Unable to retrieve saved Tenant data from database."))));
                             }
                         }
                         else
                         {
                             return await Task.FromResult<Result<TenantModel>>(new Result<TenantModel>(
-                                new BusinessException(new ValidationResult("Unable to persist given Tenant data to database."))));
+                                new BusinessException(new ValidationModel("Unable to persist given Tenant data to database."))));
                         }
                     }
                     else
                     {
                         return await Task.FromResult<Result<TenantModel>>(new Result<TenantModel>(
-                            new BusinessException(new ValidationResult("Unable to save given Tenant data to database."))));
+                            new BusinessException(new ValidationModel("Unable to save given Tenant data to database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<TenantModel>>(new Result<TenantModel>(
-                        new BusinessException(new ValidationResult("Unable to map given Tenant model to database."))));
+                        new BusinessException(new ValidationModel("Unable to map given Tenant model to database."))));
                 }
             }
             catch (Exception ex)
@@ -146,11 +148,11 @@ namespace Business.Manager
         {
             try
             {
-                var existingPreference = await this.tenantRepository.GetTenantPreferenceAsync(tenantPreferenceUID);
+                var existingPreference = await this.tenantRepository.GetTenantPreferenceByUIDAsync(tenantPreferenceUID);
                 if (existingPreference == null)
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(
-                        new BusinessException(new ValidationResult("Tenant preference does not exists."))));
+                        new BusinessException(new ValidationModel("Tenant preference does not exists."))));
                 }
                 await this.tenantRepository.DeleteTenantPreferenceAsync(existingPreference);
                 if (await this.uow.SaveChangesAsync() > 0)
@@ -160,7 +162,7 @@ namespace Business.Manager
                 else
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(
-                        new BusinessException(new ValidationResult("Unable to delete the tenant preference from database."))));
+                        new BusinessException(new ValidationModel("Unable to delete the tenant preference from database."))));
                 }
             }
             catch (Exception ex)
@@ -177,7 +179,7 @@ namespace Business.Manager
                 if (existingProfile == null)
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(
-                        new BusinessException(new ValidationResult("Tenant profile does not exists."))));
+                        new BusinessException(new ValidationModel("Tenant profile does not exists."))));
                 }
                 await this.tenantRepository.DeleteTenantAsync(existingProfile);
                 if (await this.uow.SaveChangesAsync() > 0)
@@ -187,7 +189,7 @@ namespace Business.Manager
                 else
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(
-                        new BusinessException(new ValidationResult("Unable to delete the tenant profile from database."))));
+                        new BusinessException(new ValidationModel("Unable to delete the tenant profile from database."))));
                 }
             }
             catch (Exception ex)
@@ -204,7 +206,7 @@ namespace Business.Manager
                 if (entity == null)
                 {
                     return await Task.FromResult<Result<TenantPreferenceModel>>(new Result<TenantPreferenceModel>(
-                        new BusinessException(new ValidationResult("Tenant preference not available."))));
+                        new BusinessException(new ValidationModel("Tenant preference not available."))));
                 }
                 else
                 {
@@ -226,7 +228,7 @@ namespace Business.Manager
                 if (entity == null)
                 {
                     return await Task.FromResult<Result<TenantModel>>(new Result<TenantModel>(
-                        new BusinessException(new ValidationResult("Tenant profile is not available."))));
+                        new BusinessException(new ValidationModel("Tenant profile is not available."))));
                 }
                 else
                 {
@@ -253,7 +255,7 @@ namespace Business.Manager
                 if (existingPreference == null)
                 {
                     return await Task.FromResult<Result<TenantPreferenceModel>>(new Result<TenantPreferenceModel>(
-                        new BusinessException(new ValidationResult("Tenant Preference doesn't exists."))));
+                        new BusinessException(new ValidationModel("Tenant Preference doesn't exists."))));
                 }
                 existingPreference = this.mapper.Map<TenantPreferenceModel, TenantPreference>(tenantPreference, existingPreference);
                 existingPreference.LastUpdatedBy = loggedInUser;
@@ -270,19 +272,19 @@ namespace Business.Manager
                         else
                         {
                             return await Task.FromResult<Result<TenantPreferenceModel>>(new Result<TenantPreferenceModel>(
-                                new BusinessException(new ValidationResult("Unable to map updated TenantPreference data from database."))));
+                                new BusinessException(new ValidationModel("Unable to map updated TenantPreference data from database."))));
                         }
                     }
                     else
                     {
                         return await Task.FromResult<Result<TenantPreferenceModel>>(new Result<TenantPreferenceModel>(
-                            new BusinessException(new ValidationResult("Unable to persist TenantPreference data changes to database."))));
+                            new BusinessException(new ValidationModel("Unable to persist TenantPreference data changes to database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<TenantPreferenceModel>>(new Result<TenantPreferenceModel>(
-                        new BusinessException(new ValidationResult("Unable to update given TenantPreference data to database."))));
+                        new BusinessException(new ValidationModel("Unable to update given TenantPreference data to database."))));
                 }
 
             }
@@ -305,7 +307,7 @@ namespace Business.Manager
                 if (existingProfile == null)
                 {
                     return await Task.FromResult<Result<TenantModel>>(new Result<TenantModel>(
-                        new BusinessException(new ValidationResult("Tenant Profile doesn't exists."))));
+                        new BusinessException(new ValidationModel("Tenant Profile doesn't exists."))));
                 }
                 existingProfile = this.mapper.Map<TenantModel, Tenant>(tenant, existingProfile);
                 existingProfile.LastUpdatedBy = loggedInUser;
@@ -322,19 +324,19 @@ namespace Business.Manager
                         else
                         {
                             return await Task.FromResult<Result<TenantModel>>(new Result<TenantModel>(
-                                new BusinessException(new ValidationResult("Unable to map updated Tenant Profile data from database."))));
+                                new BusinessException(new ValidationModel("Unable to map updated Tenant Profile data from database."))));
                         }
                     }
                     else
                     {
                         return await Task.FromResult<Result<TenantModel>>(new Result<TenantModel>(
-                            new BusinessException(new ValidationResult("Unable to persist Tenant Profile data changes to database."))));
+                            new BusinessException(new ValidationModel("Unable to persist Tenant Profile data changes to database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<TenantModel>>(new Result<TenantModel>(
-                        new BusinessException(new ValidationResult("Unable to update given Tenant Profile data to database."))));
+                        new BusinessException(new ValidationModel("Unable to update given Tenant Profile data to database."))));
                 }
             }
             catch (Exception ex)

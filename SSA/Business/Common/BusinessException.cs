@@ -3,18 +3,18 @@ namespace Business.Common
 {
     public class BusinessException : Exception
     {
-        List<ValidationResult> results=new List<ValidationResult>();
+        List<ValidationModel> results=new List<ValidationModel>();
 
-        public BusinessException(ValidationResult result)
+        public BusinessException(ValidationModel result)
         {
             this.results.Add(result);
 
         }
-        public BusinessException(List<ValidationResult> results)
+        public BusinessException(List<ValidationModel> results)
         {
             this.results.AddRange( results);
         }
 
-        public List<ValidationResult> Results=>this.results;
+        public List<ValidationModel> Results=>this.results;
     }
 }

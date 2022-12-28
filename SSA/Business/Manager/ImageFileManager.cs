@@ -34,12 +34,12 @@ namespace Business.Manager
                     }
                     else
                     {
-                        return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("The given image doesn't exists."))));
+                        return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationModel("The given image doesn't exists."))));
                     }
                 }
                 else
                 {
-                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("The user doesn't have permission to delete the file."))));
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationModel("The user doesn't have permission to delete the file."))));
                 }
             }
             catch (Exception ex)
@@ -58,7 +58,7 @@ namespace Business.Manager
                     var existingEntity = await this.fileRepo.GetImageFileAsync(imageModel.UID);
                     if (existingEntity != null)
                     {
-                        return await Task.FromResult<Result<ImageModel>>(new Result<ImageModel>(new BusinessException(new ValidationResult("The given image exists."))));
+                        return await Task.FromResult<Result<ImageModel>>(new Result<ImageModel>(new BusinessException(new ValidationModel("The given image exists."))));
                     }
                     else
                     {
@@ -77,13 +77,13 @@ namespace Business.Manager
                         }
                         else
                         {
-                            return await Task.FromResult<Result<ImageModel>>(new Result<ImageModel>(new BusinessException(new ValidationResult("Unable to uplaod the file to database."))));
+                            return await Task.FromResult<Result<ImageModel>>(new Result<ImageModel>(new BusinessException(new ValidationModel("Unable to uplaod the file to database."))));
                         }
                     }
                 }
                 else
                 {
-                    return await Task.FromResult<Result<ImageModel>>(new Result<ImageModel>(new BusinessException(new ValidationResult("The user doesn't have permission to upload the file."))));
+                    return await Task.FromResult<Result<ImageModel>>(new Result<ImageModel>(new BusinessException(new ValidationModel("The user doesn't have permission to upload the file."))));
                 }
             }
             catch (Exception ex)

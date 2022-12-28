@@ -4,6 +4,6 @@ namespace Business.Interface.Validators
 {
     public interface IUserValidator
     {
-        Task<List<ValidationResult>> ValidateAsync(string loggedInUser, UserModel user);
+        Task<List<ValidationModel>> ValidateAsync(string loggedInUser, UserModel user);
     }
 }

@@ -28,7 +28,7 @@ namespace Business.Manager
                 var existingProfile=await this.repository.GetStudentProfileAsync(loggedInUser);
                 if(existingProfile != null)
                 {
-                    return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(new BusinessException(new ValidationResult("Student profile already exists."))));
+                    return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(new BusinessException(new ValidationModel("Student profile already exists."))));
                 }
                 
                 var university= this.uow.UniversityRepository.GetAllUniversities().Where(x=>x.UniversityCode == student.UniversityCode).FirstOrDefault();
@@ -51,13 +51,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(new BusinessException(
-                            new ValidationResult("Unable to add user to the database."))));
+                            new ValidationModel("Unable to add user to the database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(new BusinessException(
-                        new ValidationResult("Unable to find the university for the specified university code."))));
+                        new ValidationModel("Unable to find the university for the specified university code."))));
                 }
             }
             catch (Exception ex)
@@ -74,7 +74,7 @@ namespace Business.Manager
                 if (existingProfile == null)
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(
-                        new BusinessException(new ValidationResult("Student profile does not exists."))));
+                        new BusinessException(new ValidationModel("Student profile does not exists."))));
                 }
                 await this.repository.DeleteStudentAsync(existingProfile);
                 if(await this.uow.SaveChangesAsync() > 0)
@@ -84,7 +84,7 @@ namespace Business.Manager
                 else
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(
-                        new BusinessException(new ValidationResult("Unable to delete the student profile from database."))));
+                        new BusinessException(new ValidationModel("Unable to delete the student profile from database."))));
                 }
             }
             catch (Exception ex)
@@ -101,7 +101,7 @@ namespace Business.Manager
                 if(entity == null)
                 {
                     return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(
-                        new BusinessException(new ValidationResult("Student profile not available."))));
+                        new BusinessException(new ValidationModel("Student profile not available."))));
                 }
                 else
                 {
@@ -127,7 +127,7 @@ namespace Business.Manager
                 var existingProfile = await this.repository.GetStudentProfileAsync(loggedInUser);
                 if (existingProfile == null)
                 {
-                    return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(new BusinessException(new ValidationResult("Student profile doesn't exists."))));
+                    return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(new BusinessException(new ValidationModel("Student profile doesn't exists."))));
                 }
                 existingProfile=this.mapper.Map<StudentProfileModel,StudentProfile>(student,existingProfile);
                 existingProfile.LastUpdatedBy = loggedInUser;
@@ -140,7 +140,7 @@ namespace Business.Manager
                 else
                 {
                     return await Task.FromResult<Result<StudentProfileModel>>(new Result<StudentProfileModel>(
-                        new BusinessException(new ValidationResult("Unable to save student profile to database."))));
+                        new BusinessException(new ValidationModel("Unable to save student profile to database."))));
                 }
             }
             catch (Exception ex)

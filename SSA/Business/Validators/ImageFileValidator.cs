@@ -13,41 +13,41 @@ namespace Business.Validators
             this.fileRepo = this.uow.ImageFileRepository;
         }
 
-        public async Task<List<ValidationResult>> ValidateFileImageAsync(string loggedInUser, ImageModel model)
+        public async Task<List<ValidationModel>> ValidateFileImageAsync(string loggedInUser, ImageModel model)
         {
-            var validationResults = new List<ValidationResult>();
+            var validationResults = new List<ValidationModel>();
 
             if (loggedInUser == null)
             {
-                validationResults.Add(new ValidationResult("Invalid LoggedIn user."));
+                validationResults.Add(new ValidationModel("Invalid LoggedIn user."));
             }
             if(model == null)
             {
-                validationResults.Add(new ValidationResult("Image file is not present."));
+                validationResults.Add(new ValidationModel("Image file is not present."));
             }
             else
             {
                 if (string.IsNullOrEmpty(model.FileName))
                 {
-                    validationResults.Add(new ValidationResult("Image file name is a mandatory field."));
+                    validationResults.Add(new ValidationModel("Image file name is a mandatory field."));
                 }
                 if (string.IsNullOrEmpty(model.FileType))
                 {
-                    validationResults.Add(new ValidationResult("Image file type is a mandatory field."));
+                    validationResults.Add(new ValidationModel("Image file type is a mandatory field."));
                 }
                 if (model.Data==null)
                 {
-                    validationResults.Add(new ValidationResult("Image file data is null or empty."));
+                    validationResults.Add(new ValidationModel("Image file data is null or empty."));
                 }
                 else
                 {
                     if (!FileConstant.AcceptedImageFileTypes.Contains(model.FileType.ToUpper()))
                     {
-                        validationResults.Add(new ValidationResult("Invalid image file type."));
+                        validationResults.Add(new ValidationModel("Invalid image file type."));
                     }
                 }
             }
-            return await Task.FromResult<List<ValidationResult>>(validationResults);
+            return await Task.FromResult<List<ValidationModel>>(validationResults);
         }
     }
 }

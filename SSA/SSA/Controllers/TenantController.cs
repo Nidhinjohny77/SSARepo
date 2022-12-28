@@ -39,7 +39,7 @@ namespace SSA.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("Profile/Edit")]
         public async Task<IActionResult> UpdateTenantProfileAsync([FromBody] TenantModel tenant)
         {
@@ -127,7 +127,7 @@ namespace SSA.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("Preferences/Edit")]
         public async Task<IActionResult> UpdateTenantPreferencesAsync([FromBody] TenantPreferenceModel tenantPreference)
         {

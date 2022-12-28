@@ -4,13 +4,13 @@ namespace Business.Interface.Validators
 {
     public interface IPropertyValidator
     {
-        Task<List<ValidationResult>> ValidatePropertyAsync(string loggedInUser, PropertyModel model);
-        Task<List<ValidationResult>> ValidatePropertyListingAsync(string loggedInUser, PropertyListingModel model);
-        Task<List<ValidationResult>> ValidatePropertyViewingAsync(string loggedInUser, PropertyViewingModel model);
+        Task<List<ValidationModel>> ValidatePropertyAsync(string loggedInUser, PropertyModel model);
+        Task<List<ValidationModel>> ValidatePropertyListingAsync(string loggedInUser, PropertyListingModel model);
+        Task<List<ValidationModel>> ValidatePropertyViewingAsync(string loggedInUser, PropertyViewingModel model);
 
-        Task<List<ValidationResult>> ValidatePropertyRentingAsync(string loggedInUser, PropertyRentingModel model);
+        Task<List<ValidationModel>> ValidatePropertyRentingAsync(string loggedInUser, PropertyRentingModel model);
 
-        Task<List<ValidationResult>> ValidatePropertyImageAsync(string loggedInUser, PropertyImageModel model);
+        Task<List<ValidationModel>> ValidatePropertyImageAsync(string loggedInUser, PropertyImageModel model);
 
 
     }

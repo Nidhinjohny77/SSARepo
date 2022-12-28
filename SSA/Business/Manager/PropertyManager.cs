@@ -45,13 +45,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(
-                            new BusinessException(new ValidationResult("Unable to save the property profile to database."))));
+                            new BusinessException(new ValidationModel("Unable to save the property profile to database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(
-                        new BusinessException(new ValidationResult("Unable to save the property profile to database."))));
+                        new BusinessException(new ValidationModel("Unable to save the property profile to database."))));
                 }
             }
             catch (Exception ex)
@@ -86,13 +86,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(
-                            new BusinessException(new ValidationResult("Unable to save the property listing profile to database."))));
+                            new BusinessException(new ValidationModel("Unable to save the property listing profile to database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(
-                        new BusinessException(new ValidationResult("Unable to save the property listing profile to database."))));
+                        new BusinessException(new ValidationModel("Unable to save the property listing profile to database."))));
                 }
             }
             catch (Exception ex)
@@ -127,13 +127,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<PropertyViewingModel>>(new Result<PropertyViewingModel>(
-                            new BusinessException(new ValidationResult("Unable to save the property viewing profile to database."))));
+                            new BusinessException(new ValidationModel("Unable to save the property viewing profile to database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<PropertyViewingModel>>(new Result<PropertyViewingModel>(
-                        new BusinessException(new ValidationResult("Unable to save the property viewing profile to database."))));
+                        new BusinessException(new ValidationModel("Unable to save the property viewing profile to database."))));
                 }
             }
             catch (Exception ex)
@@ -149,7 +149,7 @@ namespace Business.Manager
                 var existingImages = this.repository.GetAllPropertyImages().Where(x=>x.IsActive && x.PropertyUID==propertyUID).ToList<PropertyImage>();
                 if (!existingImages.Any())
                 {
-                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("The given property image doesn't have any pictures uploaded."))));
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationModel("The given property image doesn't have any pictures uploaded."))));
                 }
                 bool flag = false;
                 foreach (var item in existingImages)
@@ -166,13 +166,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<bool>>(new Result<bool>(
-                            new BusinessException(new ValidationResult("Unable to delete the property image from database."))));
+                            new BusinessException(new ValidationModel("Unable to delete the property image from database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(
-                        new BusinessException(new ValidationResult("Unable to delete the property image from database."))));
+                        new BusinessException(new ValidationModel("Unable to delete the property image from database."))));
                 }
             }
             catch (Exception ex)
@@ -188,7 +188,7 @@ namespace Business.Manager
                 var existingProperty = this.repository.GetAllProperties().Where(x =>x.UID == propertyUID).FirstOrDefault<Property>();
                 if (existingProperty==null)
                 {
-                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("The given property profile doesn't exists."))));
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationModel("The given property profile doesn't exists."))));
                 }
                 bool flag = await this.repository.DeletePropertyAsync(existingProperty);
 
@@ -201,13 +201,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<bool>>(new Result<bool>(
-                            new BusinessException(new ValidationResult("Unable to delete the property profile from database."))));
+                            new BusinessException(new ValidationModel("Unable to delete the property profile from database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(
-                        new BusinessException(new ValidationResult("Unable to delete the property profile from database."))));
+                        new BusinessException(new ValidationModel("Unable to delete the property profile from database."))));
                 }
             }
             catch (Exception ex)
@@ -223,7 +223,7 @@ namespace Business.Manager
                 var existingPropertyImage = this.repository.GetAllPropertyImages().Where(x => x.UID == propertyImageUID).FirstOrDefault<PropertyImage>();
                 if (existingPropertyImage == null)
                 {
-                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("The given property image doesn't have any pictures uploaded."))));
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationModel("The given property image doesn't have any pictures uploaded."))));
                 }
                 bool flag = await this.repository.DeletePropertyImageAsync(existingPropertyImage);
 
@@ -236,13 +236,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<bool>>(new Result<bool>(
-                            new BusinessException(new ValidationResult("Unable to delete the property image from database."))));
+                            new BusinessException(new ValidationModel("Unable to delete the property image from database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(
-                        new BusinessException(new ValidationResult("Unable to delete the property image from database."))));
+                        new BusinessException(new ValidationModel("Unable to delete the property image from database."))));
                 }
             }
             catch (Exception ex)
@@ -258,7 +258,7 @@ namespace Business.Manager
                 var existingPropertyListing = this.repository.GetAllPropertyListings().Where(x => x.UID == propertyListingUID).FirstOrDefault<PropertyListing>();
                 if (existingPropertyListing == null)
                 {
-                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("The given property listing doesn't exist."))));
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationModel("The given property listing doesn't exist."))));
                 }
                 bool flag = await this.repository.DeletePropertyListingAsync(existingPropertyListing);
 
@@ -271,13 +271,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<bool>>(new Result<bool>(
-                            new BusinessException(new ValidationResult("Unable to delete the property listing from database."))));
+                            new BusinessException(new ValidationModel("Unable to delete the property listing from database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(
-                        new BusinessException(new ValidationResult("Unable to delete the property listing from database."))));
+                        new BusinessException(new ValidationModel("Unable to delete the property listing from database."))));
                 }
             }
             catch (Exception ex)
@@ -293,7 +293,7 @@ namespace Business.Manager
                 var existingPropertyViewing = this.repository.GetAllPropertyViewings().Where(x => x.UID == propertyViewingUID).FirstOrDefault<PropertyViewing>();
                 if (existingPropertyViewing == null)
                 {
-                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("The given property viewing doesn't exist."))));
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationModel("The given property viewing doesn't exist."))));
                 }
                 bool flag = await this.repository.DeletePropertyViewingAsync(existingPropertyViewing);
 
@@ -306,13 +306,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<bool>>(new Result<bool>(
-                            new BusinessException(new ValidationResult("Unable to delete the property viewing from database."))));
+                            new BusinessException(new ValidationModel("Unable to delete the property viewing from database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(
-                        new BusinessException(new ValidationResult("Unable to delete the property viewing from database."))));
+                        new BusinessException(new ValidationModel("Unable to delete the property viewing from database."))));
                 }
             }
             catch (Exception ex)
@@ -501,7 +501,7 @@ namespace Business.Manager
                 var existingProperty = await this.repository.GetPropertyAsync(property.UID);
                 if (existingProperty == null)
                 {
-                    return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(new BusinessException(new ValidationResult("The Property profile doesn't exists."))));
+                    return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(new BusinessException(new ValidationModel("The Property profile doesn't exists."))));
                 }
                 var updatedPropertyEntity=this.mapper.Map<PropertyModel,Property>(property,existingProperty);
                 updatedPropertyEntity.LastUpdatedBy= loggedInUser;
@@ -516,13 +516,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(
-                            new BusinessException(new ValidationResult("Unable to update the property profile to database."))));
+                            new BusinessException(new ValidationModel("Unable to update the property profile to database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(
-                        new BusinessException(new ValidationResult("Unable to update the property profile to database."))));
+                        new BusinessException(new ValidationModel("Unable to update the property profile to database."))));
                 }
             }
             catch (Exception ex)
@@ -543,7 +543,7 @@ namespace Business.Manager
                 var existingPropertyListing = await this.repository.GetPropertyListingAsync(propertyListing.UID);
                 if (existingPropertyListing == null)
                 {
-                    return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(new BusinessException(new ValidationResult("The Property profile doesn't exists."))));
+                    return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(new BusinessException(new ValidationModel("The Property profile doesn't exists."))));
                 }
                 var updatedPropertyListingEntity = this.mapper.Map<PropertyListingModel,PropertyListing>(propertyListing,existingPropertyListing);
                 updatedPropertyListingEntity.LastUpdatedBy = loggedInUser;
@@ -558,13 +558,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(
-                            new BusinessException(new ValidationResult("Unable to update the property listing profile to database."))));
+                            new BusinessException(new ValidationModel("Unable to update the property listing profile to database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(
-                        new BusinessException(new ValidationResult("Unable to update the property listing profile to database."))));
+                        new BusinessException(new ValidationModel("Unable to update the property listing profile to database."))));
                 }
             }
             catch (Exception ex)
@@ -585,7 +585,7 @@ namespace Business.Manager
                 var existingPropertyViewing = await this.repository.GetPropertyViewingAsync(propertyViewingModel.UID);
                 if (existingPropertyViewing == null)
                 {
-                    return await Task.FromResult<Result<PropertyViewingModel>>(new Result<PropertyViewingModel>(new BusinessException(new ValidationResult("The Property profile doesn't exists."))));
+                    return await Task.FromResult<Result<PropertyViewingModel>>(new Result<PropertyViewingModel>(new BusinessException(new ValidationModel("The Property profile doesn't exists."))));
                 }
                 var updatedPropertyViewingEntity = this.mapper.Map<PropertyViewingModel,PropertyViewing>(propertyViewingModel, existingPropertyViewing);
                 updatedPropertyViewingEntity.LastUpdatedBy = loggedInUser;
@@ -600,13 +600,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<PropertyViewingModel>>(new Result<PropertyViewingModel>(
-                            new BusinessException(new ValidationResult("Unable to update the property viewing profile to database."))));
+                            new BusinessException(new ValidationModel("Unable to update the property viewing profile to database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<PropertyViewingModel>>(new Result<PropertyViewingModel>(
-                        new BusinessException(new ValidationResult("Unable to update the property viewing profile to database."))));
+                        new BusinessException(new ValidationModel("Unable to update the property viewing profile to database."))));
                 }
             }
             catch (Exception ex)
@@ -683,13 +683,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(
-                            new BusinessException(new ValidationResult("Unable to save the property renting profile to database."))));
+                            new BusinessException(new ValidationModel("Unable to save the property renting profile to database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(
-                        new BusinessException(new ValidationResult("Unable to save the property renting profile to database."))));
+                        new BusinessException(new ValidationModel("Unable to save the property renting profile to database."))));
                 }
             }
             catch (Exception ex)
@@ -709,7 +709,7 @@ namespace Business.Manager
                 var existingPropertyRenting = await this.repository.GetPropertyRentingAsync(propertyRentingModel.UID);
                 if (existingPropertyRenting == null)
                 {
-                    return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(new BusinessException(new ValidationResult("The Property profile doesn't exists."))));
+                    return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(new BusinessException(new ValidationModel("The Property profile doesn't exists."))));
                 }
                 var updatedPropertyRentingEntity = this.mapper.Map<PropertyRentingModel,PropertyRenting>(propertyRentingModel,existingPropertyRenting);
                 updatedPropertyRentingEntity.LastUpdatedBy= loggedInUser;
@@ -725,13 +725,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(
-                            new BusinessException(new ValidationResult("Unable to update the property renting profile to database."))));
+                            new BusinessException(new ValidationModel("Unable to update the property renting profile to database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<PropertyRentingModel>>(new Result<PropertyRentingModel>(
-                        new BusinessException(new ValidationResult("Unable to update the property renting profile to database."))));
+                        new BusinessException(new ValidationModel("Unable to update the property renting profile to database."))));
                 }
             }
             catch (Exception ex)
@@ -777,7 +777,7 @@ namespace Business.Manager
                 if(tenant == null)
                 {
                     return await Task.FromResult<Result<List<PropertyRentingModel>>>(new Result<List<PropertyRentingModel>>(
-                            new BusinessException(new ValidationResult("The given tenant profile doesn't exists."))));
+                            new BusinessException(new ValidationModel("The given tenant profile doesn't exists."))));
                 }
                 var propertyRentings = this.repository.GetAllPropertyRentings().Where(x => x.TenantUID == tenantUID).ToList<PropertyRenting>();
                 if (propertyRentings == null)
@@ -866,7 +866,7 @@ namespace Business.Manager
                 var existingPropertyRenting = this.repository.GetAllPropertyRentings().Where(x => x.UID == propertyRentingUID).FirstOrDefault<PropertyRenting>();
                 if (existingPropertyRenting == null)
                 {
-                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("The given property renting profile doesn't exists."))));
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationModel("The given property renting profile doesn't exists."))));
                 }
                 bool flag = await this.repository.DeletePropertyRentingAsync(existingPropertyRenting);
 
@@ -879,13 +879,13 @@ namespace Business.Manager
                     else
                     {
                         return await Task.FromResult<Result<bool>>(new Result<bool>(
-                            new BusinessException(new ValidationResult("Unable to delete the property renting profile from database."))));
+                            new BusinessException(new ValidationModel("Unable to delete the property renting profile from database."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(
-                        new BusinessException(new ValidationResult("Unable to delete the property renting profile from database."))));
+                        new BusinessException(new ValidationModel("Unable to delete the property renting profile from database."))));
                 }
             }
             catch (Exception ex)

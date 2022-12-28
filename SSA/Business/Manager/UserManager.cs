@@ -30,7 +30,7 @@ namespace Business.Manager
                 var existingUser=await this.repository.GetUserAsync(user.UserName);
                 if (existingUser != null)
                 {
-                    return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(new ValidationResult("Given user name exists."))));
+                    return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(new ValidationModel("Given user name exists."))));
                 }
                 var userEntity=this.mapper.Map<User>(user);
                 if(userEntity != null)
@@ -54,19 +54,19 @@ namespace Business.Manager
                         else
                         {
                             return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(
-                                new BusinessException(new ValidationResult("Unable to save new user."))));
+                                new BusinessException(new ValidationModel("Unable to save new user."))));
                         }
                     }
                     else
                     {
                         return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(
-                            new BusinessException(new ValidationResult("Unable to map given role as its not available."))));
+                            new BusinessException(new ValidationModel("Unable to map given role as its not available."))));
                     }
                 }
                 else
                 {
                     return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(
-                        new BusinessException(new ValidationResult("Unable to map new user."))));
+                        new BusinessException(new ValidationModel("Unable to map new user."))));
                 }
             }
             catch (Exception ex)
@@ -87,7 +87,7 @@ namespace Business.Manager
                 var entity = await this.repository.GetUserAsync(user.UserName);
                 if (entity == null)
                 {
-                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("User doesn't exists"))));
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationModel("User doesn't exists"))));
                 }
                 else
                 {
@@ -98,7 +98,7 @@ namespace Business.Manager
                     }
                     else
                     {
-                        return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationResult("Unable to save to database."))));
+                        return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationModel("Unable to save to database."))));
                     }
                 }
             }
@@ -115,7 +115,7 @@ namespace Business.Manager
                 var entity = await this.repository.GetUserByUIDAsync(userUID);
                 if (entity == null)
                 {
-                    return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(new ValidationResult("User doesn't exists"))));
+                    return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(new ValidationModel("User doesn't exists"))));
                 }
                 else
                 {
@@ -136,7 +136,7 @@ namespace Business.Manager
                 var entity = await this.repository.GetAllUsersAsync();
                 if (entity == null)
                 {
-                    return await Task.FromResult<Result<UserModel[]>>(new Result<UserModel[]>(new BusinessException(new ValidationResult("User doesn't exists"))));
+                    return await Task.FromResult<Result<UserModel[]>>(new Result<UserModel[]>(new BusinessException(new ValidationModel("User doesn't exists"))));
                 }
                 else
                 {
@@ -179,18 +179,18 @@ namespace Business.Manager
                         }
                         else
                         {
-                            return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(new ValidationResult("Unable to save user to database."))));
+                            return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(new ValidationModel("Unable to save user to database."))));
                         }
                     }
                     else
                     {
                         return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(
-                            new ValidationResult("Unable to map new role to user."))));
+                            new ValidationModel("Unable to map new role to user."))));
                     }
                 }
                 else
                 {
-                    return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(new ValidationResult("Unable to update user as it doesnt exists in database."))));
+                    return await Task.FromResult<Result<UserModel>>(new Result<UserModel>(new BusinessException(new ValidationModel("Unable to update user as it doesnt exists in database."))));
                 }
             }
             catch (Exception ex)
