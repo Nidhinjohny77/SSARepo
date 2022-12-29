@@ -27,7 +27,7 @@ namespace SSA.Controllers
                 {
                     return BadRequest(landlordProfileResult.Errors);
                 }
-                var landlordProfileUID = landlordProfileResult.Value.ProfileUID;
+                var landlordProfileUID = landlordProfileResult.Value.UID;
                 var result = await this.propertyManager.GetAllPropertyListingsAsync(this.User.UID, landlordProfileUID);
                 if (result.IsFaulted)
                 {

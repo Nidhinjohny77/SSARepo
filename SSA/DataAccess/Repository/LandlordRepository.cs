@@ -28,9 +28,9 @@ namespace DataAccess.Repository
             return this.context.Landlords.AsQueryable();
         }
 
-        public async  Task<Landlord> GetLandlordByProfileAsync(string profileUID)
+        public async  Task<Landlord> GetLandlordByProfileAsync(string landlordUID)
         {
-            return await this.context.Landlords.FirstOrDefaultAsync(x=>x.ProfileUID == profileUID);    
+            return await this.context.Landlords.FirstOrDefaultAsync(x=>x.UID == landlordUID);    
         }
 
 

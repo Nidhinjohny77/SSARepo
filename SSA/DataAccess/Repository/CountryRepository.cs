@@ -13,5 +13,10 @@ namespace DataAccess.Repository
         {
             return await this.context.Countries.Include(x=>x.Currency).ToArrayAsync();
         }
+
+        public IQueryable<Country> GetAllCountries()
+        {
+            return this.context.Countries.AsQueryable();
+        }
     }
 }

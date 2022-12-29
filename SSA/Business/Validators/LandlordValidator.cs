@@ -1,8 +1,14 @@
 ﻿
 namespace Business.Validators
 {
-    public class LandlordValidator : ILandlordValidator
+    public class LandlordValidator :ValidatorBase, ILandlordValidator
     {
+        private readonly IUnitOfWork uow;
+
+        public LandlordValidator(IUnitOfWork uow):base(uow)
+        {
+            this.uow = uow;
+        }
         public async Task<List<ValidationModel>> ValidateAsync(string loggedInUser, LandlordModel model)
         {
             var validationResults=new List<ValidationModel>();
@@ -19,17 +25,26 @@ namespace Business.Validators
             {
                 validationResults.Add(new ValidationModel("Address is a mandatory field."));
             }
-            if (string.IsNullOrEmpty(model.DOB))
+            DateOnly dob;
+            if (!IsValidDate(model.DOB,out dob))
             {
-                validationResults.Add(new ValidationModel("Date of birth is a mandatory field."));
+                validationResults.Add(new ValidationModel("DOB is not in correct format(dd/MM/YYYY)."));
+            }
+            else
+            {
+                if (IsFutureDateOfBirth(dob))
+                {
+                    validationResults.Add(new ValidationModel("DOB cannot be a value in future."));
+                }
             }
             if (string.IsNullOrEmpty(model.PhoneNumber))
             {
                 validationResults.Add(new ValidationModel("Phone Number is a mandatory field."));
             }
-            if (string.IsNullOrEmpty(model.CountryCode))
+
+            if (!IsCountryValid(model.CountryUID))
             {
-                validationResults.Add(new ValidationModel("CountryCode is a mandatory field."));
+                validationResults.Add(new ValidationModel("The given CountryUID is not a valid value."));
             }
             return await Task.FromResult<List<ValidationModel>>(validationResults);
         }

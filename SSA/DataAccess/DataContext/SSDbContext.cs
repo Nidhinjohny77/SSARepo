@@ -178,8 +178,9 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<StudentProfile>().HasOne(s => s.University).WithOne().HasForeignKey<StudentProfile>(s => s.UniversityUID).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Landlord>().ToTable("Landlord");
-            modelBuilder.Entity<Landlord>().HasKey(l=>l.ProfileUID);
+            modelBuilder.Entity<Landlord>().HasKey(l=>l.UID);
             modelBuilder.Entity<Landlord>().HasOne(s=>s.User).WithOne().HasForeignKey<Landlord>(s => s.UserUID);
+            modelBuilder.Entity<Landlord>().HasOne(s => s.Country).WithMany().HasForeignKey(s => s.CountryUID).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<ImageFile>().ToTable("ImageFile");
             modelBuilder.Entity<ImageFile>().HasKey(i => i.UID);

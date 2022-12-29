@@ -174,21 +174,22 @@ namespace SSA.Mapper
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
                 .ForMember(dest => dest.UniversityUID, opt => opt.MapFrom(src => src.UniversityUID));
             this.CreateMap<Landlord, LandlordModel>()
-                .ForMember(dest => dest.ProfileUID, opt => opt.MapFrom(src => src.ProfileUID))
+                .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
                 .ForMember(dest => dest.UserUID, opt => opt.MapFrom(src => src.UserUID))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
-                .ForMember(dest => dest.CountryCode, opt => opt.MapFrom(src => src.CountryCode))
+                .ForMember(dest => dest.CountryUID, opt => opt.MapFrom(src => src.CountryUID))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
-                .ForMember(dest => dest.DOB, opt => opt.MapFrom(src => src.DOB));
+                .ForMember(dest => dest.DOB, opt => opt.MapFrom(src => src.DOB.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)));                
             this.CreateMap<LandlordModel, Landlord>()
-                .ForMember(dest => dest.ProfileUID, opt => opt.Ignore())
+                .ForMember(dest => dest.UID, opt => opt.Ignore())
                 .ForMember(dest => dest.UserUID, opt => opt.MapFrom(src => src.UserUID))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
-                .ForMember(dest => dest.CountryCode, opt => opt.MapFrom(src => src.CountryCode))
+                .ForMember(dest => dest.CountryUID, opt => opt.MapFrom(src => src.CountryUID))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
-                .ForMember(dest => dest.DOB, opt => opt.MapFrom(src => src.DOB));
+                .ForMember(dest => dest.DOB, opt => opt.MapFrom(src => Convert.ToDateTime(src.DOB)));
+
             this.CreateMap<Property, PropertyModel>()
                 .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
                 .ForMember(dest => dest.LandlordProfileUID, opt => opt.MapFrom(src => src.LandlordProfileUID))

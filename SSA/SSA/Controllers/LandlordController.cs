@@ -18,7 +18,7 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
-        [Route("Landlord/Profile/Create")]
+        [Route("Profile/Create")]
         [Authorize(Policy = GlobalConstant.LandlordPolicy)]
         public async Task<IActionResult> CreateLandlordProfileAsync([FromBody] LandlordModel landlord)
         {
@@ -40,8 +40,8 @@ namespace SSA.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("Landlord/Profile/Edit")]
+        [HttpPut]
+        [Route("Profile/Edit")]
         [Authorize(Policy = GlobalConstant.LandlordPolicy)]
         public async Task<IActionResult> UpdateLandlordProfileAsync([FromBody] LandlordModel landlord)
         {
@@ -64,7 +64,7 @@ namespace SSA.Controllers
         }
 
         [HttpGet]
-        [Route("Landlord/Profile")]
+        [Route("Profile")]
         [Authorize(Policy = GlobalConstant.LandlordPolicy)]
         public async Task<IActionResult> GetLandlordProfileAsync()
         {
@@ -87,7 +87,7 @@ namespace SSA.Controllers
         }
 
         [HttpDelete]
-        [Route("Landlord/Profile")]
+        [Route("Profile")]
         [Authorize(Policy = GlobalConstant.LandlordPolicy)]
         public async Task<IActionResult> DeleteLandlordProfileAsync()
         {

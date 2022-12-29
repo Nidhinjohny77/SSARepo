@@ -6,7 +6,7 @@ namespace DataAccess.Interface
         Task<bool> AddLandlordAsync(Landlord landlord);
         Task<bool> UpdateLandlordAsync(Landlord landlord);
         Task<bool> DeleteLandlordAsync(Landlord landlord);
-        Task<Landlord> GetLandlordByProfileAsync(string profileUID);
+        Task<Landlord> GetLandlordByProfileAsync(string landlordUID);
         Task<Landlord> GetLandlordAsync(string userUID);
         IQueryable<Landlord> GetAllLandlords();
     }

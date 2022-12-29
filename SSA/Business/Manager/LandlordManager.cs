@@ -32,8 +32,8 @@ namespace Business.Manager
                 {
                     return await Task.FromResult<Result<LandlordModel>>(new Result<LandlordModel>(new BusinessException(new ValidationModel("The landlord profile already exists."))));
                 }
-                landlord.ProfileUID = Guid.NewGuid().ToString();
-                var newLandLordEntity=this.mapper.Map<Landlord>(landlord);                
+                var newLandLordEntity=this.mapper.Map<Landlord>(landlord);
+                newLandLordEntity.UID= Guid.NewGuid().ToString();
                 newLandLordEntity.CreatedBy= loggedInUser;
                 newLandLordEntity.CreatedDate= DateTime.Now;
                 newLandLordEntity.LastUpdatedBy= loggedInUser;
@@ -43,7 +43,8 @@ namespace Business.Manager
                 {
                     if(await this.uow.SaveChangesAsync() > 0)
                     {
-                        return await Task.FromResult <Result<LandlordModel>>(new Result<LandlordModel>(landlord));
+                        var addedModel = this.mapper.Map<LandlordModel>(newLandLordEntity);
+                        return await Task.FromResult <Result<LandlordModel>>(new Result<LandlordModel>(addedModel));
                     }
                     else
                     {
