@@ -16,19 +16,19 @@ namespace SSA.Controllers
         }
 
         [HttpGet]
-        [Route("Current/All")]
+        [Route("All")]
         [Authorize(Policy = GlobalConstant.LandlordPolicy)]
         public async Task<IActionResult> GetAllPropertyListingsAsync()
         {
             try
             {
-                var landlordProfileResult = await this.landlordManager.GetLandlordProfileAsync(this.User.UID);
-                if (landlordProfileResult.IsFaulted)
+                var landlord = await this.landlordManager.GetLandlordProfileAsync(this.User.UID);
+                if (landlord.IsFaulted)
                 {
-                    return BadRequest(landlordProfileResult.Errors);
+                    return BadRequest(landlord.Errors);
                 }
-                var landlordProfileUID = landlordProfileResult.Value.UID;
-                var result = await this.propertyManager.GetAllPropertyListingsAsync(this.User.UID, landlordProfileUID);
+                var landlordUID = landlord.Value.UID;
+                var result = await this.propertyManager.GetAllPropertyListingsAsync(this.User.UID, landlordUID);
                 if (result.IsFaulted)
                 {
                     return BadRequest(result.Errors);
@@ -45,7 +45,7 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
-        [Route("All")]
+        [Route("Filter/All")]
         public async Task<IActionResult> GetAllPropertyListingsAsync(PropertyListingFilterModel model)
         {
             try
@@ -90,6 +90,7 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
+        [Route("Create")]
         [Authorize(Policy = GlobalConstant.PropertyListingPolicy)]
         public async Task<IActionResult> CreatePropertyListingAsync(PropertyListingModel propertyListing)
         {
@@ -112,6 +113,7 @@ namespace SSA.Controllers
         }
 
         [HttpPut]
+        [Route("Edit")]
         [Authorize(Policy = GlobalConstant.PropertyListingPolicy)]
         public async Task<IActionResult> UpdatePropertyListingAsync(PropertyListingModel propertyListing)
         {
@@ -134,6 +136,7 @@ namespace SSA.Controllers
         }
 
         [HttpDelete]
+        [Route("Delete/{propertyListingUID}")]
         [Authorize(Policy = GlobalConstant.PropertyListingPolicy)]
         public async Task<IActionResult> DeletePropertyListingAsync(string propertyListingUID)
         {
@@ -155,7 +158,7 @@ namespace SSA.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("{propertyListingUID}/Attribute/All")]
         public async Task<IActionResult> GetAllPropertyListingAttributesByListingUIDAsync(string propertyListingUID)
         {
@@ -223,7 +226,7 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
-        [Route("Attribute")]
+        [Route("Attribute/Create")]
         [Authorize(Policy = GlobalConstant.PropertyListingPolicy)]
         public async Task<IActionResult> CreatePropertyListingAttributeAsync(PropertyListingAttributeModel propertyListingAttribute)
         {
@@ -246,7 +249,7 @@ namespace SSA.Controllers
         }
 
         [HttpPut]
-        [Route("Attribute")]
+        [Route("Attribute/Edit")]
         [Authorize(Policy = GlobalConstant.PropertyListingPolicy)]
         public async Task<IActionResult> UpdatePropertyListingAttributeAsync(PropertyListingAttributeModel propertyListingAttribute)
         {
@@ -269,7 +272,7 @@ namespace SSA.Controllers
         }
 
         [HttpDelete]
-        [Route("Attribute/{propertyListingAttributeUID}")]
+        [Route("Attribute/Delete/{propertyListingAttributeUID}")]
         [Authorize(Policy = GlobalConstant.PropertyListingPolicy)]
         public async Task<IActionResult> DeletePropertyListingAttributeAsync(string propertyListingAttributeUID)
         {

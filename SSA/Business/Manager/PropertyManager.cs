@@ -1,5 +1,7 @@
 ﻿
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Business.Manager
 {
     public class PropertyManager : IPropertyManager
@@ -113,6 +115,7 @@ namespace Business.Manager
                 }
                 var newPropertyListingEntity = this.mapper.Map<PropertyListing>(propertyListing);
                 newPropertyListingEntity.UID= Guid.NewGuid().ToString();
+                newPropertyListingEntity.ListedByUser = loggedInUser;
                 newPropertyListingEntity.CreatedBy = loggedInUser;
                 newPropertyListingEntity.CreatedDate= DateTime.Now;
                 newPropertyListingEntity.LastUpdatedBy= loggedInUser;
@@ -494,11 +497,11 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<List<PropertyListingModel>>> GetAllPropertyListingsAsync(string loggedInUser, string landlordProfileUID)
+        public async Task<Result<List<PropertyListingModel>>> GetAllPropertyListingsAsync(string loggedInUser, string landlordUID)
         {
             try
             {
-                var properties=this.repository.GetAllProperties().Where(x=>x.LandlordUID== landlordProfileUID).ToList<Property>();
+                var properties=this.repository.GetAllProperties().Where(x=>x.LandlordUID== landlordUID).Include(x=>x.Listings).ToList<Property>();
                 var propertyListings=new List<PropertyListing>();
                 foreach (var property in properties)
                 {
@@ -831,6 +834,7 @@ namespace Business.Manager
                     return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(new BusinessException(new ValidationModel("The Property profile doesn't exists."))));
                 }
                 var updatedPropertyListingEntity = this.mapper.Map<PropertyListingModel,PropertyListing>(propertyListing,existingPropertyListing);
+                updatedPropertyListingEntity.ListedByUser = loggedInUser;
                 updatedPropertyListingEntity.LastUpdatedBy = loggedInUser;
                 updatedPropertyListingEntity.LastUpdatedDate = DateTime.Now;    
                 var flag = await this.repository.UpdatePropertyListingAsync(updatedPropertyListingEntity);

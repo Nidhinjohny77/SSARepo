@@ -23,7 +23,7 @@ namespace Business.Interface
         Task<Result<bool>> DeletePropertyImageAsync(string loggedInUser, string propertyImageUID);
 
         Task<Result<PropertyListingModel>> CreatePropertyListingAsync(string loggedInUser, PropertyListingModel propertyListing);
-        Task<Result<List<PropertyListingModel>>> GetAllPropertyListingsAsync(string loggedInUser, string landlordProfileUID);
+        Task<Result<List<PropertyListingModel>>> GetAllPropertyListingsAsync(string loggedInUser, string landlordUID);
         Task<Result<List<PropertyListingModel>>> GetAllPropertyListingsByFilterAsync(string loggedInUser, PropertyListingFilterModel filter);
         Task<Result<PropertyListingModel>> GetPropertyListingByUIDAsync(string loggedInUser, string propertyListingUID);
         Task<Result<PropertyListingModel>> UpdatePropertyListing(string loggedInUser, PropertyListingModel propertyListing);

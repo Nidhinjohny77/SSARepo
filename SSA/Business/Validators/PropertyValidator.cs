@@ -175,14 +175,10 @@ namespace Business.Validators
                 }
             }
 
-            if (!Enum.IsDefined(typeof(ListingStatus), model.ListingStatus))
-            {
-                validationResults.Add(new ValidationModel("ListingStatus contains invalid value."));
-            }
-            if (!Enum.IsDefined(typeof(Agent), model.Listedby))
-            {
-                validationResults.Add(new ValidationModel("ListedBy contains invalid value."));
-            }
+            //if (!Enum.IsDefined(typeof(ListingStatus), model.ListingStatus))
+            //{
+            //    validationResults.Add(new ValidationModel("ListingStatus contains invalid value."));
+            //}
             if (model.ListingAmount<0)
             {
                 validationResults.Add(new ValidationModel("ListingAmount should have a valid amount(>0)."));
@@ -211,9 +207,9 @@ namespace Business.Validators
                 }
                 else
                 {
-                    var userUID = await this.landlordRepo.GetLandlordAsync(property.LandlordUID);
+                    var landlord = await this.landlordRepo.GetLandlordByProfileAsync(property.LandlordUID);
                     var role = this.GetRole(loggedInUser);
-                    if (userUID == null)
+                    if (landlord == null)
                     {
                         validationResults.Add(new ValidationModel("The landlord for the property whose listing attributes mentioned doesn't exists."));
                     }
@@ -221,7 +217,7 @@ namespace Business.Validators
                     {
                         if (
                             (!string.Equals(role, RoleConstant.Admin) && !string.Equals(role, RoleConstant.Consultant)) &&
-                             !string.Equals(loggedInUser, userUID)
+                             !string.Equals(loggedInUser, landlord.UserUID)
                             )
                         {
                             validationResults.Add(new ValidationModel("LoggedIn user doesnt match with landlord user given in model."));

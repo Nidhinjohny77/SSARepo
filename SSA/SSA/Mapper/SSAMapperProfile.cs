@@ -242,8 +242,6 @@ namespace SSA.Mapper
                 .ForMember(dest => dest.ListingDate, opt => opt.MapFrom(src => Convert.ToDateTime(src.ListingDate)))
                 .ForMember(dest => dest.ListingAmount, opt => opt.MapFrom(src => src.ListingAmount))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.Listedby, opt => opt.MapFrom(src => src.Listedby))
-                .ForMember(dest => dest.ListingStatus, opt => opt.MapFrom(src => src.ListingStatus))
                 .ForMember(dest => dest.IsCTIAvailableForSale, opt => opt.MapFrom(src => src.IsCTIAvailableForSale))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
             this.CreateMap<PropertyListingModel, PropertyListing>()
@@ -252,8 +250,6 @@ namespace SSA.Mapper
                 .ForMember(dest => dest.ListingDate, opt => opt.MapFrom(src => Convert.ToDateTime(src.ListingDate)))
                 .ForMember(dest => dest.ListingAmount, opt => opt.MapFrom(src => src.ListingAmount))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.Listedby, opt => opt.MapFrom(src => src.Listedby))
-                .ForMember(dest => dest.ListingStatus, opt => opt.MapFrom(src => src.ListingStatus))
                 .ForMember(dest => dest.IsCTIAvailableForSale, opt => opt.MapFrom(src => src.IsCTIAvailableForSale))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
             this.CreateMap<PropertyListingAttribute, PropertyListingAttributeModel>()

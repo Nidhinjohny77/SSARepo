@@ -9,8 +9,7 @@ namespace DataAccess.Entities
         public DateTime ListingDate { get; set; }
         public double ListingAmount { get; set; }
         public string Description { get; set; }
-        public int Listedby { get; set; }
-        public int ListingStatus { get; set; }
+        public string ListedByUser { get; set; }
         public bool IsCTIAvailableForSale { get; set; }
         public bool IsActive { get; set; }
         public string CreatedBy { get; set; }
