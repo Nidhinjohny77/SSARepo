@@ -135,7 +135,7 @@ namespace SSA.Controllers
         }
 
         [HttpGet]
-        [Route("Attribute/{propertyUID}")]
+        [Route("{propertyUID}/Attribute")]
         public async Task<IActionResult> GetPropertyAttributeAsync(string propertyUID)
         {
             try
@@ -201,7 +201,7 @@ namespace SSA.Controllers
         }
 
         [HttpDelete]
-        [Route("Attribute/Delete/{propertyAttributeUID}")]
+        [Route("Attribute/{propertyAttributeUID}/Delete")]
         public async Task<IActionResult> DeletePropertyAttributeAsync(string propertyAttributeUID)
         {
             try

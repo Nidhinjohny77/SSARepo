@@ -12,6 +12,8 @@ namespace DataModels.Models
         public string LandlordUID { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
+        public string PostCode { get; set; }
+        public int CountryUID { get; set; }
         public float Ratings { get; set; }
         public bool IsActive { get; set; }
     }

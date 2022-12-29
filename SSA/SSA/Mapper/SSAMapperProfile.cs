@@ -194,12 +194,16 @@ namespace SSA.Mapper
                 .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
                 .ForMember(dest => dest.LandlordUID, opt => opt.MapFrom(src => src.LandlordUID))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.PostCode, opt => opt.MapFrom(src => src.PostCode))
+                .ForMember(dest => dest.CountryUID, opt => opt.MapFrom(src => src.CountryUID))
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
             this.CreateMap<PropertyModel, Property>()
                 .ForMember(dest => dest.UID, opt => opt.Ignore())
                 .ForMember(dest => dest.LandlordUID,opt => opt.MapFrom(src => src.LandlordUID))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.PostCode, opt => opt.MapFrom(src => src.PostCode))
+                .ForMember(dest => dest.CountryUID, opt => opt.MapFrom(src => src.CountryUID))
                 .ForMember(dest => dest.Address,opt => opt.MapFrom(src => src.Address))
                 .ForMember(dest => dest.IsActive,opt => opt.MapFrom(src => src.IsActive));
             this.CreateMap<PropertyAttribute, PropertyAttributeModel>()

@@ -3,6 +3,11 @@
 
 SELECT * FROM [SSA].[dbo].[User]
 
+SELECT * FROM [SSA].[dbo].[Landlord]
+
+SELECT * FROM [SSA].[dbo].[Property]
+SELECT * FROM [SSA].[dbo].[PropertyAttribute]
+
 SELECT * FROM [SSA].[dbo].[Tenant]
 
 SELECT * FROM [SSA].[dbo].[TenantPreference]

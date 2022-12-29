@@ -73,6 +73,10 @@ namespace Business.Validators
             {
                 validationResults.Add(new ValidationModel("Address is a mandatory field."));
             }
+            if (!IsCountryValid(model.CountryUID))
+            {
+                validationResults.Add(new ValidationModel("CountryUID is a not having a valid value."));
+            }
             if (string.IsNullOrEmpty(model.Name))
             {
                 validationResults.Add(new ValidationModel("Name is a mandatory field."));
