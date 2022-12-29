@@ -17,7 +17,7 @@ namespace Business.Interface
         Task<Result<PropertyAttributeModel>> GetPropertyAttributeByPropertyAsync(string loggedInUser, string propertyUID);
         Task<Result<bool>> DeletePropertyAttributeAsync(string loggedInUser, string propertyAttributeUID);
 
-        Task<Result<bool>> CreatePropertyImageAsync(string loggedInUser, PropertyImageModel model);
+        Task<Result<PropertyImageModel>> CreatePropertyImageAsync(string loggedInUser, PropertyImageModel model);
         Task<Result<PropertyImageModel[]>> GetAllPropertyImagesAsync(string loggedInUser, string propertyUID);
         Task<Result<bool>> DeleteAllPropertyImagesAsync(string loggedInUser, string propertyUID);
         Task<Result<bool>> DeletePropertyImageAsync(string loggedInUser, string propertyImageUID);

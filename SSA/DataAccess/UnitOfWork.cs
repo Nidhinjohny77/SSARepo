@@ -13,8 +13,7 @@ namespace DataAccess
         public IUniversityRepository UniversityRepository => new UniversityRepository(this.context);
         public IUserRepository UserRepository => new UserRepository(this.context);
         public ILandlordRepository LandlordRepository => new LandlordRepository(this.context);
-        public IPropertyRepository PropertyRepository => new PropertyRepository(this.context);  
-        public IImageFileRepository ImageFileRepository => new ImageFileRepository(this.context);   
+        public IPropertyRepository PropertyRepository => new PropertyRepository(this.context);   
         public IRolesRepository RolesRepository => new RolesRepository(this.context);
         public ICountryRepository CountryRepository => new CountryRepository(this.context);
         public ITenantRepository TenantRepository => new TenantRepository(this.context);

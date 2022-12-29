@@ -10,15 +10,13 @@ namespace Business.Manager
         private readonly IPropertyRepository repository;
         private readonly IMapper mapper;
         private readonly IPropertyValidator validator;
-        private readonly IImageFileValidator imageValidator;
 
-        public PropertyManager(IUnitOfWork uow,IMapper mapper,IPropertyValidator validator,IImageFileValidator imageValidator)
+        public PropertyManager(IUnitOfWork uow,IMapper mapper,IPropertyValidator validator)
         {
             this.uow = uow;
             this.repository = this.uow.PropertyRepository;
             this.mapper = mapper;
             this.validator = validator;
-            this.imageValidator = imageValidator;
         }
         public async Task<Result<PropertyModel>> CreatePropertyAsync(string loggedInUser, PropertyModel property)
         {
@@ -946,7 +944,7 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<bool>> CreatePropertyImageAsync(string loggedInUser, PropertyImageModel model)
+        public async Task<Result<PropertyImageModel>> CreatePropertyImageAsync(string loggedInUser, PropertyImageModel model)
         {
             try
             {
@@ -955,11 +953,10 @@ namespace Business.Manager
 
                 if (validationResults.Any())
                 {
-                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(validationResults)));
+                    return await Task.FromResult<Result<PropertyImageModel>>(new Result<PropertyImageModel>(new BusinessException(validationResults)));
                 }
                 var propertyImagingEntity = this.mapper.Map<PropertyImage>(model);
                 propertyImagingEntity.UID = Guid.NewGuid().ToString();
-                propertyImagingEntity.ImageFileUID = model.ImageFileUID;
                 propertyImagingEntity.CreatedBy = loggedInUser;
                 propertyImagingEntity.CreatedDate = DateTime.Now;
                 propertyImagingEntity.LastUpdatedBy = loggedInUser;
@@ -969,21 +966,25 @@ namespace Business.Manager
                 {
                     if (await this.uow.SaveChangesAsync() > 0)
                     {
-                        return await Task.FromResult<Result<bool>>(new Result<bool>(true));
+                        var addedModel=this.mapper.Map<PropertyImageModel>(propertyImagingEntity);
+                        return await Task.FromResult<Result<PropertyImageModel>>(new Result<PropertyImageModel>(
+                            addedModel));
                     }
                     else
                     {
-                        return await Task.FromResult<Result<bool>>(new Result<bool>(false));
+                        return await Task.FromResult<Result<PropertyImageModel>>(new Result<PropertyImageModel>(
+                            new BusinessException(new ValidationModel("Unable to save the property image."))));
                     }
                 }
                 else
                 {
-                    return await Task.FromResult<Result<bool>>(new Result<bool>(false));
+                    return await Task.FromResult<Result<PropertyImageModel>>(new Result<PropertyImageModel>(
+                     new BusinessException(new ValidationModel("Unable to save the property image."))));
                 }
             }
             catch (Exception ex)
             {
-                return await Task.FromResult<Result<bool>>(new Result<bool>(ex));
+                return await Task.FromResult<Result<PropertyImageModel>>(new Result<PropertyImageModel>(ex));
             }
         }
 

@@ -101,7 +101,7 @@ namespace SSA.StartUp
             services.AddScoped<IStudentValidator, StudentValidator>();
             services.AddScoped<ILandlordValidator, LandlordValidator>();
             services.AddScoped<IPropertyValidator, PropertyValidator>();
-            services.AddScoped<IImageFileValidator, ImageFileValidator>();
+            //services.AddScoped<IImageFileValidator, ImageFileValidator>();
             services.AddScoped<ITenantValidator, TenantValidator>();
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<IStudentManager, StudentManager>();

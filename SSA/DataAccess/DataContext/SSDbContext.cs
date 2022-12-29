@@ -182,8 +182,6 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<Landlord>().HasOne(s=>s.User).WithOne().HasForeignKey<Landlord>(s => s.UserUID);
             modelBuilder.Entity<Landlord>().HasOne(s => s.Country).WithMany().HasForeignKey(s => s.CountryUID).OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<ImageFile>().ToTable("ImageFile");
-            modelBuilder.Entity<ImageFile>().HasKey(i => i.UID);
 
             modelBuilder.Entity<Property>().ToTable("Property");
             modelBuilder.Entity<Property>().HasKey(p => p.UID);
@@ -200,7 +198,6 @@ namespace DataAccess.DataContext
 
             modelBuilder.Entity<PropertyImage>().ToTable("PropertyImage");
             modelBuilder.Entity<PropertyImage>().HasKey(pi => pi.UID);
-            modelBuilder.Entity<PropertyImage>().HasOne(p => p.ImageFile).WithOne().HasForeignKey<PropertyImage>(p => p.ImageFileUID);
             modelBuilder.Entity<PropertyImage>().HasOne<Property>().WithMany(p => p.Images).HasForeignKey(pi => pi.PropertyUID);
 
             modelBuilder.Entity<PropertyListing>().ToTable("PropertyListing");
@@ -256,7 +253,7 @@ namespace DataAccess.DataContext
         
         public DbSet<StudentProfile> Students { get; set; }
         public DbSet<Landlord> Landlords { get; set; }
-        public DbSet<ImageFile> ImageFiles { get; set; }
+        //public DbSet<ImageFile> ImageFiles { get; set; }
         public DbSet<Property> Properties { get; set; } 
         public DbSet<PropertyAttribute> PropertyAttributes { get; set; }
         public DbSet<PropertyImage> PropertyImages { get; set; }   
