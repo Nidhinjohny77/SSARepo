@@ -47,7 +47,7 @@ namespace SSA.Controllers
 
 
         [HttpGet]
-        [Route("Get")]
+        [Route("{propertyUID}")]
         public async Task<IActionResult> GetPropertyAsync(string propertyUID)
         {
             try
@@ -69,6 +69,7 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
+        [Route("Create")]
         public async Task<IActionResult> CreatePropertyAsync(PropertyModel property)
         {
             try
@@ -90,6 +91,7 @@ namespace SSA.Controllers
         }
 
         [HttpPut]
+        [Route("Edit")]
         public async Task<IActionResult> UpdatePropertyAsync(PropertyModel property)
         {
             try
@@ -111,6 +113,7 @@ namespace SSA.Controllers
         }
 
         [HttpDelete]
+        [Route("Delete/{propertyUID}")]
         public async Task<IActionResult> DeletePropertyAsync(string propertyUID)
         {
             try
@@ -154,7 +157,7 @@ namespace SSA.Controllers
         }
 
         [HttpPost]
-        [Route("Attribute")]
+        [Route("Attribute/Create")]
         public async Task<IActionResult> CreatePropertyAttributeAsync(PropertyAttributeModel propertyAttribute)
         {
             try
@@ -176,7 +179,7 @@ namespace SSA.Controllers
         }
 
         [HttpPut]
-        [Route("Attribute")]
+        [Route("Attribute/Edit")]
         public async Task<IActionResult> UpdatePropertyAttributeAsync(PropertyAttributeModel propertyAttribute)
         {
             try
@@ -198,7 +201,7 @@ namespace SSA.Controllers
         }
 
         [HttpDelete]
-        [Route("Attribute/{propertyAttributeUID}")]
+        [Route("Attribute/Delete/{propertyAttributeUID}")]
         public async Task<IActionResult> DeletePropertyAttributeAsync(string propertyAttributeUID)
         {
             try

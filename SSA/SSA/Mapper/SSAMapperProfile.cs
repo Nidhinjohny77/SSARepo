@@ -192,13 +192,13 @@ namespace SSA.Mapper
 
             this.CreateMap<Property, PropertyModel>()
                 .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
-                .ForMember(dest => dest.LandlordProfileUID, opt => opt.MapFrom(src => src.LandlordProfileUID))
+                .ForMember(dest => dest.LandlordUID, opt => opt.MapFrom(src => src.LandlordUID))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
             this.CreateMap<PropertyModel, Property>()
                 .ForMember(dest => dest.UID, opt => opt.Ignore())
-                .ForMember(dest => dest.LandlordProfileUID,opt => opt.MapFrom(src => src.LandlordProfileUID))
+                .ForMember(dest => dest.LandlordUID,opt => opt.MapFrom(src => src.LandlordUID))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Address,opt => opt.MapFrom(src => src.Address))
                 .ForMember(dest => dest.IsActive,opt => opt.MapFrom(src => src.IsActive));

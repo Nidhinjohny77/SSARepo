@@ -45,14 +45,14 @@ namespace Business.Validators
             {
                 validationResults.Add(new ValidationModel("Invalid LoggedIn user."));
             }
-            var landLord = await this.landlordRepo.GetLandlordByProfileAsync(model.LandlordProfileUID);
+            var landLord = await this.landlordRepo.GetLandlordByProfileAsync(model.LandlordUID);
             if (landLord == null)
             {
                 validationResults.Add(new ValidationModel("The given landlord profile doesn't exists."));
             }
             else 
             {
-                var user=await this.userRepo.GetUserAsync(landLord.UserUID);
+                var user=await this.userRepo.GetUserByUIDAsync(landLord.UserUID);
                 if(user == null)
                 {
                     validationResults.Add(new ValidationModel("The given landlord user doesn't exists."));
@@ -77,7 +77,7 @@ namespace Business.Validators
             {
                 validationResults.Add(new ValidationModel("Name is a mandatory field."));
             }
-            if (string.IsNullOrEmpty(model.LandlordProfileUID))
+            if (string.IsNullOrEmpty(model.LandlordUID))
             {
                 validationResults.Add(new ValidationModel("Lanlord profile UID is a mandatory field."));
             }
@@ -145,14 +145,14 @@ namespace Business.Validators
             }
             else
             {
-                var landLord = await this.landlordRepo.GetLandlordByProfileAsync(property.LandlordProfileUID);
+                var landLord = await this.landlordRepo.GetLandlordByProfileAsync(property.LandlordUID);
                 if (landLord == null)
                 {
                     validationResults.Add(new ValidationModel("The given landlord profile doesn't exists."));
                 }
                 else
                 {
-                    var user = await this.userRepo.GetUserAsync(landLord.UserUID);
+                    var user = await this.userRepo.GetUserByUIDAsync(landLord.UserUID);
                     if (user == null)
                     {
                         validationResults.Add(new ValidationModel("The given landlord user doesn't exists."));
@@ -207,7 +207,7 @@ namespace Business.Validators
                 }
                 else
                 {
-                    var userUID = await this.landlordRepo.GetLandlordAsync(property.LandlordProfileUID);
+                    var userUID = await this.landlordRepo.GetLandlordAsync(property.LandlordUID);
                     var role = this.GetRole(loggedInUser);
                     if (userUID == null)
                     {
@@ -298,7 +298,7 @@ namespace Business.Validators
                     }
                     else
                     {
-                        var landLord = await this.landlordRepo.GetLandlordByProfileAsync(property.LandlordProfileUID);
+                        var landLord = await this.landlordRepo.GetLandlordByProfileAsync(property.LandlordUID);
                         if (landLord == null)
                         {
                             validationResults.Add(new ValidationModel("The given landlord profile doesn't exists."));
@@ -311,7 +311,7 @@ namespace Business.Validators
                             }
                             else
                             {
-                                var user = await this.userRepo.GetUserAsync(landLord.UserUID);
+                                var user = await this.userRepo.GetUserByUIDAsync(landLord.UserUID);
                                 if (user == null)
                                 {
                                     validationResults.Add(new ValidationModel("The given landlord user doesn't exists."));
@@ -396,7 +396,7 @@ namespace Business.Validators
                     }
                     else
                     {
-                        var landLord = await this.landlordRepo.GetLandlordByProfileAsync(property.LandlordProfileUID);
+                        var landLord = await this.landlordRepo.GetLandlordByProfileAsync(property.LandlordUID);
                         if (landLord == null)
                         {
                             validationResults.Add(new ValidationModel("The given landlord profile doesn't exists."));
@@ -409,7 +409,7 @@ namespace Business.Validators
                             }
                             else
                             {
-                                var user = await this.userRepo.GetUserAsync(landLord.UserUID);
+                                var user = await this.userRepo.GetUserByUIDAsync(landLord.UserUID);
                                 if (user == null)
                                 {
                                     validationResults.Add(new ValidationModel("The given landlord user doesn't exists."));
@@ -481,14 +481,14 @@ namespace Business.Validators
             }
             else
             {
-                var landLord = await this.landlordRepo.GetLandlordByProfileAsync(property.LandlordProfileUID);
+                var landLord = await this.landlordRepo.GetLandlordByProfileAsync(property.LandlordUID);
                 if (landLord == null)
                 {
                     validationResults.Add(new ValidationModel("The given landlord profile doesn't exists."));
                 }
                 else
                 {
-                    var user = await this.userRepo.GetUserAsync(landLord.UserUID);
+                    var user = await this.userRepo.GetUserByUIDAsync(landLord.UserUID);
                     if (user == null)
                     {
                         validationResults.Add(new ValidationModel("The given landlord user doesn't exists."));

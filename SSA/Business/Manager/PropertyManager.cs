@@ -498,7 +498,7 @@ namespace Business.Manager
         {
             try
             {
-                var properties=this.repository.GetAllProperties().Where(x=>x.LandlordProfileUID== landlordProfileUID).ToList<Property>();
+                var properties=this.repository.GetAllProperties().Where(x=>x.LandlordUID== landlordProfileUID).ToList<Property>();
                 var propertyListings=new List<PropertyListing>();
                 foreach (var property in properties)
                 {
@@ -552,7 +552,7 @@ namespace Business.Manager
             try
             {
                 var viewings = new List<PropertyViewing>();
-                var property = this.repository.GetAllProperties().Where(x => x.LandlordProfileUID == landlordUID).FirstOrDefault();
+                var property = this.repository.GetAllProperties().Where(x => x.LandlordUID == landlordUID).FirstOrDefault();
                 if (property != null)
                 {
                     var listings = property.Listings;
@@ -601,7 +601,7 @@ namespace Business.Manager
             try
             {
 
-                var properties = this.repository.GetAllProperties().Where(x => x.LandlordProfileUID == landlordProfileUID && x.IsActive).ToList<Property>();
+                var properties = this.repository.GetAllProperties().Where(x => x.LandlordUID == landlordProfileUID && x.IsActive).ToList<Property>();
                 if (properties == null)
                 {
                     properties = new List<Property>();
@@ -619,8 +619,7 @@ namespace Business.Manager
         {
             try
             {
-
-                var property = this.repository.GetAllProperties().Where(x => x.UID == propertyUID && x.IsActive).ToList<Property>();
+                var property = this.repository.GetAllProperties().Where(x => x.UID == propertyUID && x.IsActive).FirstOrDefault();
                 var model = this.mapper.Map<PropertyModel>(property);
                 return await Task.FromResult<Result<PropertyModel>>(new Result<PropertyModel>(model));
             }
@@ -1072,7 +1071,7 @@ namespace Business.Manager
             try
             {
                 var propertyRentings = new List<PropertyRenting>();
-                var properties = this.repository.GetAllProperties().Where(x => x.LandlordProfileUID == landlordProfileUID && x.IsActive).ToList<Property>();
+                var properties = this.repository.GetAllProperties().Where(x => x.LandlordUID == landlordProfileUID && x.IsActive).ToList<Property>();
                 if (properties != null)
                 {
                     foreach (var property in properties)

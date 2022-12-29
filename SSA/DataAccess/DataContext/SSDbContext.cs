@@ -187,7 +187,7 @@ namespace DataAccess.DataContext
 
             modelBuilder.Entity<Property>().ToTable("Property");
             modelBuilder.Entity<Property>().HasKey(p => p.UID);
-            modelBuilder.Entity<Property>().HasOne(p=>p.Landlord).WithOne().HasForeignKey<Property>(p => p.LandlordProfileUID);
+            modelBuilder.Entity<Property>().HasOne(p=>p.Landlord).WithOne().HasForeignKey<Property>(p => p.LandlordUID);
 
             modelBuilder.Entity<PropertyAttribute>().ToTable("PropertyAttribute");
             modelBuilder.Entity<PropertyAttribute>().HasKey(pa=>pa.UID);
