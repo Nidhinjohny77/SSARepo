@@ -16,17 +16,17 @@ namespace DataAccess.Entities
         public bool IsSmokingAllowed { get; set; }
         public bool IsPartyingAllowed { get; set; }
         public bool IsParkingAvailable { get; set; }
-        public int TenantTypeUID { get; set; }
+        public int TenancyTypeUID { get; set; }
         public int? AvailableParkingSlots { get; set; }
         public bool IsActive { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string LastUpdatedBy { get; set; }
-        public string LastUpdatedDate { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
 
         public PropertyListing PropertyListing { get; set; }
         public PropertyAttribute PropertyAttribute { get; set; }
-        public TenancyType TenantType { get; set; }  
+        public TenancyType TenancyType { get; set; }  
         
     }
 }

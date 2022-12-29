@@ -15,7 +15,7 @@ namespace DataAccess.Entities
         public bool? IsSharingPrefered { get; set; }
         public bool? IsAttachedBathroomPrefered { get; set; }
         public bool? IsRentIncludingBillsPrefered { get; set; }       
-        public int? PreferedTenancyPeriod { get; set; }
+        public int? PreferedTenancyPeriodInMonths { get; set; }
         public string? PreferedLocations { get; set; }
         public double? StartRangeAmount { get; set; }
         public double? EndRangeAmount { get; set; }

@@ -17,7 +17,7 @@ namespace DataModels.Models
         public bool IsSmokingAllowed { get; set; }
         public bool IsPartyingAllowed { get; set; }
         public bool IsParkingAvailable { get; set; }
-        public int TenantTypeUID { get; set; }
+        public int TenancyTypeUID { get; set; }
         public int AvailableParkingSlots { get; set; }
         public bool IsActive { get; set; }
     }

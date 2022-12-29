@@ -17,6 +17,12 @@ namespace DataAccess.Repository
             return await Task.FromResult(entry.State == EntityState.Added);
         }
 
+        public async Task<bool> AddPropertyAttributeAsync(PropertyAttribute propertyAttribute)
+        {
+            var entry = this.context.PropertyAttributes.Add(propertyAttribute);
+            return await Task.FromResult(entry.State == EntityState.Added);
+        }
+
         public async Task<bool> AddPropertyImageAsync(PropertyImage image)
         {
             var entry = this.context.PropertyImages.Add(image);
@@ -26,6 +32,12 @@ namespace DataAccess.Repository
         public async Task<bool> AddPropertyListingAsync(PropertyListing listing)
         {
             var entry = this.context.PropertyListings.Add(listing);
+            return await Task.FromResult(entry.State == EntityState.Added);
+        }
+
+        public async Task<bool> AddPropertyListingAttributeAsync(PropertyListingAttribute listingAttribute)
+        {
+            var entry = this.context.PropertyListingAttributes.Add(listingAttribute);
             return await Task.FromResult(entry.State == EntityState.Added);
         }
 
@@ -53,6 +65,12 @@ namespace DataAccess.Repository
             return await Task.FromResult(entry.State == EntityState.Deleted);
         }
 
+        public async Task<bool> DeletePropertyAttributeAsync(PropertyAttribute propertyAttribute)
+        {
+            var entry = this.context.PropertyAttributes.Remove(propertyAttribute);
+            return await Task.FromResult(entry.State == EntityState.Deleted);
+        }
+
         public async Task<bool> DeletePropertyImageAsync(PropertyImage image)
         {
             var entry = this.context.PropertyImages.Remove(image);
@@ -62,6 +80,12 @@ namespace DataAccess.Repository
         public async Task<bool> DeletePropertyListingAsync(PropertyListing listing)
         {
             var entry = this.context.PropertyListings.Remove(listing);
+            return await Task.FromResult(entry.State == EntityState.Deleted);
+        }
+
+        public async Task<bool> DeletePropertyListingAttributeAsync(PropertyListingAttribute listingAttribute)
+        {
+            var entry = this.context.PropertyListingAttributes.Remove(listingAttribute);
             return await Task.FromResult(entry.State == EntityState.Deleted);
         }
 
@@ -88,6 +112,11 @@ namespace DataAccess.Repository
             return this.context.Properties.AsQueryable();
         }
 
+        public IQueryable<PropertyAttribute> GetAllPropertyAttributes()
+        {
+            return this.context.PropertyAttributes.AsQueryable();
+        }
+
         public IQueryable<PropertyImage> GetAllPropertyImages()
         {
             return this.context.PropertyImages.AsQueryable();
@@ -96,6 +125,11 @@ namespace DataAccess.Repository
         public IQueryable<PropertyListing> GetAllPropertyListings()
         {
             return this.context.PropertyListings.AsQueryable();
+        }
+
+        public IQueryable<PropertyListingAttribute> GetAllPropertyListingAttributes()
+        {
+            return this.context.PropertyListingAttributes.AsQueryable();
         }
 
         public IQueryable<PropertyRenting> GetAllPropertyRentings()
@@ -115,7 +149,17 @@ namespace DataAccess.Repository
 
         public async Task<Property> GetPropertyAsync(string propertyUID)
         {
-            return await this.context.Properties.FirstOrDefaultAsync(p => p.UID == propertyUID);    
+            return await this.context.Properties.Where(p => p.UID == propertyUID).FirstOrDefaultAsync();    
+        }
+
+        public async Task<PropertyAttribute> GetPropertyAttributeAsync(string propertyAttributeUID)
+        {
+            return await this.context.PropertyAttributes.Where(p => p.UID == propertyAttributeUID).FirstOrDefaultAsync();
+        }
+
+        public async Task<PropertyAttribute> GetPropertyAttributeByPropertyAsync(string propertyUID)
+        {
+            return await this.context.PropertyAttributes.Where(x=>x.PropertyUID== propertyUID).FirstOrDefaultAsync();
         }
 
         public async Task<PropertyImage> GetPropertyImageAsync(string propertyImageUID)
@@ -125,7 +169,16 @@ namespace DataAccess.Repository
 
         public async Task<PropertyListing> GetPropertyListingAsync(string listingUID)
         {
-            return await this.context.PropertyListings.FirstOrDefaultAsync(p => p.UID == listingUID);
+            return await this.context.PropertyListings.Where(p => p.UID == listingUID).FirstOrDefaultAsync();
+        }
+        public async Task<PropertyListingAttribute> GetPropertyListingAttributeAsync(string listingAttributeUID)
+        {
+            return await this.context.PropertyListingAttributes.Where(p => p.UID == listingAttributeUID).FirstOrDefaultAsync();
+        }
+
+        public async Task<PropertyListingAttribute> GetPropertyListingAttributeByListingAsync(string listingUID)
+        {
+            return await this.context.PropertyListingAttributes.Where(p => p.PropertyListingUID == listingUID).FirstOrDefaultAsync();
         }
 
         public async Task<PropertyRenting> GetPropertyRentingAsync(string rentingUID)
@@ -144,6 +197,12 @@ namespace DataAccess.Repository
             return await Task.FromResult(entry.State == EntityState.Modified);
         }
 
+        public async Task<bool> UpdatePropertyAttributeAsync(PropertyAttribute propertyAttribute)
+        {
+            var entry = this.context.PropertyAttributes.Update(propertyAttribute);
+            return await Task.FromResult(entry.State == EntityState.Modified);
+        }
+
         public async Task<bool> UpdatePropertyImageAsync(PropertyImage image)
         {
             var entry = this.context.PropertyImages.Update(image);
@@ -153,6 +212,12 @@ namespace DataAccess.Repository
         public async Task<bool> UpdatePropertyListingAsync(PropertyListing listing)
         {
             var entry = this.context.PropertyListings.Update(listing);
+            return await Task.FromResult(entry.State == EntityState.Modified);
+        }
+
+        public async Task<bool> UpdatePropertyListingAttributeAsync(PropertyListingAttribute listingAttribute)
+        {
+            var entry = this.context.PropertyListingAttributes.Update(listingAttribute);
             return await Task.FromResult(entry.State == EntityState.Modified);
         }
 

@@ -130,5 +130,93 @@ namespace SSA.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpGet]
+        [Route("Attribute/{propertyUID}")]
+        public async Task<IActionResult> GetPropertyAttributeAsync(string propertyUID)
+        {
+            try
+            {
+                var result = await this.propertyManager.GetPropertyAttributeByPropertyAsync(this.User.UID, propertyUID);
+                if (result.IsFaulted)
+                {
+                    return BadRequest(result.Errors);
+                }
+                else
+                {
+                    return Ok(result.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        [Route("Attribute")]
+        public async Task<IActionResult> CreatePropertyAttributeAsync(PropertyAttributeModel propertyAttribute)
+        {
+            try
+            {
+                var result = await this.propertyManager.CreatePropertyAttributeAsync(this.User.UID, propertyAttribute);
+                if (result.IsFaulted)
+                {
+                    return BadRequest(result.Errors);
+                }
+                else
+                {
+                    return Ok(result.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPut]
+        [Route("Attribute")]
+        public async Task<IActionResult> UpdatePropertyAttributeAsync(PropertyAttributeModel propertyAttribute)
+        {
+            try
+            {
+                var result = await this.propertyManager.UpdatePropertyAttributeAsync(this.User.UID, propertyAttribute);
+                if (result.IsFaulted)
+                {
+                    return BadRequest(result.Errors);
+                }
+                else
+                {
+                    return Ok(result.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete]
+        [Route("Attribute/{propertyAttributeUID}")]
+        public async Task<IActionResult> DeletePropertyAttributeAsync(string propertyAttributeUID)
+        {
+            try
+            {
+                var result = await this.propertyManager.DeletePropertyAttributeAsync(this.User.UID, propertyAttributeUID);
+                if (result.IsFaulted)
+                {
+                    return BadRequest(result.Errors);
+                }
+                else
+                {
+                    return Ok(result.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

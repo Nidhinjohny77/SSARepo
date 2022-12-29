@@ -10,6 +10,7 @@ namespace DataAccess.Entities
         public int BedroomCount { get; set; }
         public int BathroomCount { get; set; }
         public int FloorCount { get; set; }
+        public int MaxOccupantCount { get; set; }
         public float? TotalAreaInSqFT { get; set; }
         public bool IsBackyardAvailable { get; set; }
         public bool IsGarageAvailable { get; set; }
@@ -19,7 +20,7 @@ namespace DataAccess.Entities
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string LastUpdatedBy { get; set; }
-        public string LastUpdatedDate { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
 
         public Property Property { get; set; }
         public PropertyType PropertyType { get; set; }

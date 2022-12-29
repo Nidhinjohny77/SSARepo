@@ -166,7 +166,7 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<TenantPreference>().Property(tp => tp.IsSharingPrefered).IsRequired(false);
             modelBuilder.Entity<TenantPreference>().Property(tp => tp.IsAttachedBathroomPrefered).IsRequired(false);
             modelBuilder.Entity<TenantPreference>().Property(tp => tp.IsRentIncludingBillsPrefered).IsRequired(false);
-            modelBuilder.Entity<TenantPreference>().Property(tp => tp.PreferedTenancyPeriod).IsRequired(false);
+            modelBuilder.Entity<TenantPreference>().Property(tp => tp.PreferedTenancyPeriodInMonths).IsRequired(false);
             modelBuilder.Entity<TenantPreference>().Property(tp => tp.StartRangeAmount).IsRequired(false);
             modelBuilder.Entity<TenantPreference>().Property(tp => tp.EndRangeAmount).IsRequired(false);
 
@@ -207,8 +207,8 @@ namespace DataAccess.DataContext
 
             modelBuilder.Entity<PropertyListingAttribute>().ToTable("PropertyListingAttribute");
             modelBuilder.Entity<PropertyListingAttribute>().HasKey(pla => pla.UID);
-            modelBuilder.Entity<PropertyListingAttribute>().HasOne(pla => pla.TenantType).WithOne()
-                                                            .HasForeignKey<PropertyListingAttribute>(pla => pla.TenantTypeUID);
+            modelBuilder.Entity<PropertyListingAttribute>().HasOne(pla => pla.TenancyType).WithOne()
+                                                            .HasForeignKey<PropertyListingAttribute>(pla => pla.TenancyTypeUID);
             modelBuilder.Entity<PropertyListingAttribute>().HasOne(pla => pla.PropertyListing).WithOne(pl=>pl.PropertyListingAttribute)
                                                             .HasForeignKey<PropertyListingAttribute>(pla => pla.PropertyListingUID).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<PropertyListingAttribute>().HasOne(pla => pla.PropertyAttribute).WithMany()

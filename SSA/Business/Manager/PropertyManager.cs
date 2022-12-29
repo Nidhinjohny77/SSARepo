@@ -60,6 +60,48 @@ namespace Business.Manager
             }
         }
 
+        public async Task<Result<PropertyAttributeModel>> CreatePropertyAttributeAsync(string loggedInUser, PropertyAttributeModel propertyAttribute)
+        {
+            try
+            {
+                var validationResults = await this.validator.ValidatePropertyAttributeAsync(loggedInUser, propertyAttribute);
+                if (validationResults.Any())
+                {
+                    return await Task.FromResult<Result<PropertyAttributeModel>>(new Result<PropertyAttributeModel>(new BusinessException(validationResults)));
+                }
+
+                var newEntity = this.mapper.Map<PropertyAttribute>(propertyAttribute);
+                newEntity.UID = Guid.NewGuid().ToString();
+                newEntity.CreatedBy = loggedInUser;
+                newEntity.CreatedDate = DateTime.Now;
+                newEntity.LastUpdatedBy = loggedInUser;
+                newEntity.LastUpdatedDate = DateTime.Now;
+                var flag = await this.repository.AddPropertyAttributeAsync(newEntity);
+                if (flag)
+                {
+                    if (await this.uow.SaveChangesAsync() > 0)
+                    {
+                        var newModel = this.mapper.Map<PropertyAttributeModel>(newEntity);
+                        return await Task.FromResult<Result<PropertyAttributeModel>>(new Result<PropertyAttributeModel>(newModel));
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<PropertyAttributeModel>>(new Result<PropertyAttributeModel>(
+                            new BusinessException(new ValidationModel("Unable to save the property attribute profile to database."))));
+                    }
+                }
+                else
+                {
+                    return await Task.FromResult<Result<PropertyAttributeModel>>(new Result<PropertyAttributeModel>(
+                        new BusinessException(new ValidationModel("Unable to save the property attribute profile to database."))));
+                }
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyAttributeModel>>(new Result<PropertyAttributeModel>(ex));
+            }
+        }
+
         public async Task<Result<PropertyListingModel>> CreatePropertyListingAsync(string loggedInUser, PropertyListingModel propertyListing)
         {
             try
@@ -98,6 +140,49 @@ namespace Business.Manager
             catch (Exception ex)
             {
                 return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(ex));
+            }
+        }
+
+        public async Task<Result<PropertyListingAttributeModel>> CreatePropertyListingAttributeAsync(string loggedInUser, PropertyListingAttributeModel propertyListingAttribute)
+        {
+            try
+            {
+                var validationResults = await this.validator.ValidatePropertyListingAttributeAsync(loggedInUser, propertyListingAttribute);
+                if (validationResults.Any())
+                {
+                    return await Task.FromResult<Result<PropertyListingAttributeModel>>(new Result<PropertyListingAttributeModel>(
+                        new BusinessException(validationResults)));
+                }
+
+                var newEntity = this.mapper.Map<PropertyListingAttribute>(propertyListingAttribute);
+                newEntity.UID = Guid.NewGuid().ToString();
+                newEntity.CreatedBy = loggedInUser;
+                newEntity.CreatedDate = DateTime.Now;
+                newEntity.LastUpdatedBy = loggedInUser;
+                newEntity.LastUpdatedDate = DateTime.Now;
+                var flag = await this.repository.AddPropertyListingAttributeAsync(newEntity);
+                if (flag)
+                {
+                    if (await this.uow.SaveChangesAsync() > 0)
+                    {
+                        var newModel = this.mapper.Map<PropertyListingAttributeModel>(newEntity);
+                        return await Task.FromResult<Result<PropertyListingAttributeModel>>(new Result<PropertyListingAttributeModel>(newModel));
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<PropertyListingAttributeModel>>(new Result<PropertyListingAttributeModel>(
+                            new BusinessException(new ValidationModel("Unable to save the property listing attribute profile to database."))));
+                    }
+                }
+                else
+                {
+                    return await Task.FromResult<Result<PropertyListingAttributeModel>>(new Result<PropertyListingAttributeModel>(
+                        new BusinessException(new ValidationModel("Unable to save the property listing attribute profile to database."))));
+                }
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyListingAttributeModel>>(new Result<PropertyListingAttributeModel>(ex));
             }
         }
 
@@ -216,6 +301,41 @@ namespace Business.Manager
             }
         }
 
+        public async Task<Result<bool>> DeletePropertyAttributeAsync(string loggedInUser, string propertyAttributeUID)
+        {
+            try
+            {
+                var existingEntity = await this.repository.GetPropertyAttributeAsync(propertyAttributeUID);
+                if (existingEntity == null)
+                {
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationModel("The given property attribute doesn't exists."))));
+                }
+                bool flag = await this.repository.DeletePropertyAttributeAsync(existingEntity);
+
+                if (flag)
+                {
+                    if (await this.uow.SaveChangesAsync() > 0)
+                    {
+                        return await Task.FromResult<Result<bool>>(new Result<bool>(true));
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<bool>>(new Result<bool>(
+                            new BusinessException(new ValidationModel("Unable to delete the property attribute from database."))));
+                    }
+                }
+                else
+                {
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(
+                        new BusinessException(new ValidationModel("Unable to delete the property attribute from database."))));
+                }
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<bool>>(new Result<bool>(ex));
+            }
+        }
+
         public async Task<Result<bool>> DeletePropertyImageAsync(string loggedInUser, string propertyImageUID)
         {
             try
@@ -278,6 +398,41 @@ namespace Business.Manager
                 {
                     return await Task.FromResult<Result<bool>>(new Result<bool>(
                         new BusinessException(new ValidationModel("Unable to delete the property listing from database."))));
+                }
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<bool>>(new Result<bool>(ex));
+            }
+        }
+
+        public async Task<Result<bool>> DeletePropertyListingAttributeAsync(string loggedInUser, string propertyListingAttributeUID)
+        {
+            try
+            {
+                var existingEntity = await this.repository.GetPropertyListingAttributeAsync(propertyListingAttributeUID);
+                if (existingEntity == null)
+                {
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(new BusinessException(new ValidationModel("The given property listing attribute doesn't exists."))));
+                }
+                bool flag = await this.repository.DeletePropertyListingAttributeAsync(existingEntity);
+
+                if (flag)
+                {
+                    if (await this.uow.SaveChangesAsync() > 0)
+                    {
+                        return await Task.FromResult<Result<bool>>(new Result<bool>(true));
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<bool>>(new Result<bool>(
+                            new BusinessException(new ValidationModel("Unable to delete the property listing attribute from database."))));
+                    }
+                }
+                else
+                {
+                    return await Task.FromResult<Result<bool>>(new Result<bool>(
+                        new BusinessException(new ValidationModel("Unable to delete the property listing attribute from database."))));
                 }
             }
             catch (Exception ex)
@@ -475,6 +630,50 @@ namespace Business.Manager
             }
         }
 
+        public async Task<Result<PropertyAttributeModel>> GetPropertyAttributeByUIDAsync(string loggedInUser, string propertyAttributeUID)
+        {
+            try
+            {
+
+                var entity = this.repository.GetAllPropertyAttributes().Where(x => x.UID == propertyAttributeUID && x.IsActive).FirstOrDefault();
+                var model = this.mapper.Map<PropertyAttributeModel>(entity);
+                return await Task.FromResult<Result<PropertyAttributeModel>>(new Result<PropertyAttributeModel>(model));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyAttributeModel>>(new Result<PropertyAttributeModel>(ex));
+            }
+        }
+
+        public async Task<Result<PropertyAttributeModel>> GetPropertyAttributeByPropertyAsync(string loggedInUser, string propertyUID)
+        {
+            try
+            {
+                var entity = this.repository.GetAllPropertyAttributes().Where(x => x.PropertyUID == propertyUID && x.IsActive).FirstOrDefault();
+                var model = this.mapper.Map<PropertyAttributeModel>(entity);
+                return await Task.FromResult<Result<PropertyAttributeModel>>(new Result<PropertyAttributeModel>(model));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyAttributeModel>>(new Result<PropertyAttributeModel>(ex));
+            }
+        }
+
+        public async Task<Result<PropertyAttributeModel[]>> GetAllPropertyAttributesByPropertyAsync(string loggedInUser, string propertyUID)
+        {
+            try
+            {
+
+                var entities = this.repository.GetAllPropertyAttributes().Where(x => x.PropertyUID == propertyUID).ToArray();
+                var model = this.mapper.Map<PropertyAttributeModel[]>(entities);
+                return await Task.FromResult<Result<PropertyAttributeModel[]>>(new Result<PropertyAttributeModel[]>(model));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyAttributeModel[]>>(new Result<PropertyAttributeModel[]>(ex));
+            }
+        }
+
         public async Task<Result<PropertyListingModel>> GetPropertyListingByUIDAsync(string loggedInUser, string propertyListingUID)
         {
             try
@@ -486,6 +685,51 @@ namespace Business.Manager
             catch (Exception ex)
             {
                 return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(ex));
+            }
+        }
+
+        public async Task<Result<PropertyListingAttributeModel>> GetPropertyListingAttributeAsync(string loggedInUser, string propertyListingAttributeUID)
+        {
+            try
+            {
+
+                var entity = this.repository.GetAllPropertyListingAttributes().Where(x => x.UID == propertyListingAttributeUID && x.IsActive).FirstOrDefault();
+                var model = this.mapper.Map<PropertyListingAttributeModel>(entity);
+                return await Task.FromResult<Result<PropertyListingAttributeModel>>(new Result<PropertyListingAttributeModel>(model));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyListingAttributeModel>>(new Result<PropertyListingAttributeModel>(ex));
+            }
+        }
+
+        public async Task<Result<PropertyListingAttributeModel>> GetPropertyListingAttributeByListingUIDAsync(string loggedInUser, string propertyListingUID)
+        {
+            try
+            {
+
+                var entity = this.repository.GetAllPropertyListingAttributes().Where(x => x.PropertyListingUID == propertyListingUID && x.IsActive).FirstOrDefault();
+                var model = this.mapper.Map<PropertyListingAttributeModel>(entity);
+                return await Task.FromResult<Result<PropertyListingAttributeModel>>(new Result<PropertyListingAttributeModel>(model));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyListingAttributeModel>>(new Result<PropertyListingAttributeModel>(ex));
+            }
+        }
+
+        public async Task<Result<PropertyListingAttributeModel[]>> GetAllPropertyListingAttributesByListingUIDAsync(string loggedInUser, string propertyListingUID)
+        {
+            try
+            {
+
+                var entities = this.repository.GetAllPropertyListingAttributes().Where(x => x.PropertyListingUID == propertyListingUID).ToArray();
+                var model = this.mapper.Map<PropertyListingAttributeModel[]>(entities);
+                return await Task.FromResult<Result<PropertyListingAttributeModel[]>>(new Result<PropertyListingAttributeModel[]>(model));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyListingAttributeModel[]>>(new Result<PropertyListingAttributeModel[]>(ex));
             }
         }
 
@@ -531,6 +775,48 @@ namespace Business.Manager
             }
         }
 
+        public async Task<Result<PropertyAttributeModel>> UpdatePropertyAttributeAsync(string loggedInUser, PropertyAttributeModel propertyAttribute)
+        {
+            try
+            {
+                var validationResults = await this.validator.ValidatePropertyAttributeAsync(loggedInUser, propertyAttribute);
+                if (validationResults.Any())
+                {
+                    return await Task.FromResult<Result<PropertyAttributeModel>>(new Result<PropertyAttributeModel>(new BusinessException(validationResults)));
+                }
+                var existingEntity = await this.repository.GetPropertyAttributeAsync(propertyAttribute.UID);
+                if (existingEntity == null)
+                {
+                    return await Task.FromResult<Result<PropertyAttributeModel>>(new Result<PropertyAttributeModel>(new BusinessException(new ValidationModel("The Property profile doesn't exists."))));
+                }
+                var updatedEntity = this.mapper.Map<PropertyAttributeModel, PropertyAttribute>(propertyAttribute, existingEntity);
+                updatedEntity.LastUpdatedBy = loggedInUser;
+                updatedEntity.LastUpdatedDate = DateTime.Now;
+                var flag = await this.repository.UpdatePropertyAttributeAsync(updatedEntity);
+                if (flag)
+                {
+                    if (await this.uow.SaveChangesAsync() > 0)
+                    {
+                        return await Task.FromResult<Result<PropertyAttributeModel>>(new Result<PropertyAttributeModel>(propertyAttribute));
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<PropertyAttributeModel>>(new Result<PropertyAttributeModel>(
+                            new BusinessException(new ValidationModel("Unable to update the property attribute to database."))));
+                    }
+                }
+                else
+                {
+                    return await Task.FromResult<Result<PropertyAttributeModel>>(new Result<PropertyAttributeModel>(
+                        new BusinessException(new ValidationModel("Unable to update the property attribute to database."))));
+                }
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyAttributeModel>>(new Result<PropertyAttributeModel>(ex));
+            }
+        }
+
         public async Task<Result<PropertyListingModel>> UpdatePropertyListing(string loggedInUser, PropertyListingModel propertyListing)
         {
             try
@@ -570,6 +856,48 @@ namespace Business.Manager
             catch (Exception ex)
             {
                 return await Task.FromResult<Result<PropertyListingModel>>(new Result<PropertyListingModel>(ex));
+            }
+        }
+
+        public async Task<Result<PropertyListingAttributeModel>> UpdatePropertyListingAttributeAsync(string loggedInUser, PropertyListingAttributeModel propertyListingAttribute)
+        {
+            try
+            {
+                var validationResults = await this.validator.ValidatePropertyListingAttributeAsync(loggedInUser, propertyListingAttribute);
+                if (validationResults.Any())
+                {
+                    return await Task.FromResult<Result<PropertyListingAttributeModel>>(new Result<PropertyListingAttributeModel>(new BusinessException(validationResults)));
+                }
+                var existingEntity = await this.repository.GetPropertyListingAttributeAsync(propertyListingAttribute.UID);
+                if (existingEntity == null)
+                {
+                    return await Task.FromResult<Result<PropertyListingAttributeModel>>(new Result<PropertyListingAttributeModel>(new BusinessException(new ValidationModel("The Property profile doesn't exists."))));
+                }
+                var updatedEntity = this.mapper.Map<PropertyListingAttributeModel, PropertyListingAttribute>(propertyListingAttribute, existingEntity);
+                updatedEntity.LastUpdatedBy = loggedInUser;
+                updatedEntity.LastUpdatedDate = DateTime.Now;
+                var flag = await this.repository.UpdatePropertyListingAttributeAsync(updatedEntity);
+                if (flag)
+                {
+                    if (await this.uow.SaveChangesAsync() > 0)
+                    {
+                        return await Task.FromResult<Result<PropertyListingAttributeModel>>(new Result<PropertyListingAttributeModel>(propertyListingAttribute));
+                    }
+                    else
+                    {
+                        return await Task.FromResult<Result<PropertyListingAttributeModel>>(new Result<PropertyListingAttributeModel>(
+                            new BusinessException(new ValidationModel("Unable to update the property listing attribute to database."))));
+                    }
+                }
+                else
+                {
+                    return await Task.FromResult<Result<PropertyListingAttributeModel>>(new Result<PropertyListingAttributeModel>(
+                        new BusinessException(new ValidationModel("Unable to update the property listing attribute to database."))));
+                }
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyListingAttributeModel>>(new Result<PropertyListingAttributeModel>(ex));
             }
         }
 

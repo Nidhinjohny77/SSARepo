@@ -10,6 +10,13 @@ namespace Business.Interface
         Task<Result<PropertyModel>> GetPropertyByUIDAsync(string loggedInUser, string propertyUID);
         Task<Result<bool>> DeletePropertyAsync(string loggedInUser, string propertyUID);
 
+        Task<Result<PropertyAttributeModel>> CreatePropertyAttributeAsync(string loggedInUser, PropertyAttributeModel propertyAttribute);
+        Task<Result<PropertyAttributeModel>> UpdatePropertyAttributeAsync(string loggedInUser, PropertyAttributeModel propertyAttribute);
+        Task<Result<PropertyAttributeModel[]>> GetAllPropertyAttributesByPropertyAsync(string loggedInUser, string propertyUID);
+        Task<Result<PropertyAttributeModel>> GetPropertyAttributeByUIDAsync(string loggedInUser, string propertyAttributeUID);
+        Task<Result<PropertyAttributeModel>> GetPropertyAttributeByPropertyAsync(string loggedInUser, string propertyUID);
+        Task<Result<bool>> DeletePropertyAttributeAsync(string loggedInUser, string propertyAttributeUID);
+
         Task<Result<bool>> CreatePropertyImageAsync(string loggedInUser, PropertyImageModel model);
         Task<Result<PropertyImageModel[]>> GetAllPropertyImagesAsync(string loggedInUser, string propertyUID);
         Task<Result<bool>> DeleteAllPropertyImagesAsync(string loggedInUser, string propertyUID);
@@ -21,6 +28,13 @@ namespace Business.Interface
         Task<Result<PropertyListingModel>> GetPropertyListingByUIDAsync(string loggedInUser, string propertyListingUID);
         Task<Result<PropertyListingModel>> UpdatePropertyListing(string loggedInUser, PropertyListingModel propertyListing);
         Task<Result<bool>> DeletePropertyListingAsync(string loggedInUser, string propertyListingUID);
+
+        Task<Result<PropertyListingAttributeModel>> CreatePropertyListingAttributeAsync(string loggedInUser, PropertyListingAttributeModel propertyListingAttribute);
+        Task<Result<PropertyListingAttributeModel>> GetPropertyListingAttributeAsync(string loggedInUser, string propertyListingAttributeUID);
+        Task<Result<PropertyListingAttributeModel>> GetPropertyListingAttributeByListingUIDAsync(string loggedInUser, string propertyListingUID);
+        Task<Result<PropertyListingAttributeModel[]>> GetAllPropertyListingAttributesByListingUIDAsync(string loggedInUser, string propertyListingUID);
+        Task<Result<PropertyListingAttributeModel>> UpdatePropertyListingAttributeAsync(string loggedInUser, PropertyListingAttributeModel propertyListingAttribute);
+        Task<Result<bool>> DeletePropertyListingAttributeAsync(string loggedInUser, string propertyListingAttributeUID);
 
         Task<Result<PropertyViewingModel>> CreatePropertyViewing(string loggedInUser, PropertyViewingModel propertyViewingModel);
         Task<Result<PropertyViewingModel>> UpdatePropertyViewingAsync(string loggedInUser, PropertyViewingModel propertyViewingModel);

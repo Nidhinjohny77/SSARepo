@@ -9,6 +9,13 @@ namespace DataAccess.Interface
         Task<Property> GetPropertyAsync(string propertyUID);
         IQueryable<Property> GetAllProperties();
 
+        Task<bool> AddPropertyAttributeAsync(PropertyAttribute propertyAttribute);
+        Task<bool> DeletePropertyAttributeAsync(PropertyAttribute propertyAttribute);
+        Task<bool> UpdatePropertyAttributeAsync(PropertyAttribute propertyAttribute);
+        Task<PropertyAttribute> GetPropertyAttributeAsync(string propertyAttributeUID);
+        Task<PropertyAttribute> GetPropertyAttributeByPropertyAsync(string propertyUID);
+        IQueryable<PropertyAttribute> GetAllPropertyAttributes();
+
         Task<bool> AddPropertyImageAsync(PropertyImage image);
         Task<bool> UpdatePropertyImageAsync(PropertyImage image);
         Task<bool> DeletePropertyImageAsync(PropertyImage image);
@@ -20,6 +27,13 @@ namespace DataAccess.Interface
         Task<bool> UpdatePropertyListingAsync(PropertyListing listing);
         Task<PropertyListing> GetPropertyListingAsync(string listingUID);
         IQueryable<PropertyListing> GetAllPropertyListings();
+
+        Task<bool> AddPropertyListingAttributeAsync(PropertyListingAttribute listingAttribute);
+        Task<bool> DeletePropertyListingAttributeAsync(PropertyListingAttribute listingAttribute);
+        Task<bool> UpdatePropertyListingAttributeAsync(PropertyListingAttribute listingAttribute);
+        Task<PropertyListingAttribute> GetPropertyListingAttributeAsync(string listingAttributeUID);
+        Task<PropertyListingAttribute> GetPropertyListingAttributeByListingAsync(string listingUID);
+        IQueryable<PropertyListingAttribute> GetAllPropertyListingAttributes();
 
         Task<bool> AddPropertyViewingAsync(PropertyViewing viewing);
         Task<bool> DeletePropertyViewingAsync(PropertyViewing viewing);
