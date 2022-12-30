@@ -5,3 +5,5 @@ SELECT * FROM [SSA].[dbo].[University]
 
 SELECT * FROM [SSA].[dbo].[PropertyType]
 SELECT * FROM [SSA].[dbo].[FurnishType]
+SELECT * FROM [SSA].[dbo].[ImageType]
+SELECT * FROM [SSA].[dbo].[ImageFileType]

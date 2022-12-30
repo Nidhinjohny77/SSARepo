@@ -12,5 +12,7 @@ namespace Business.Interface
         Task<PropertyTypeModel[]> GetAllPropertyTypesAsync();
         Task<TenancyTypeModel[]> GetAllTenancyTypesAsync();
         Task<UniversityModel[]> GetAllUniversitiesAsync();
+        Task<ImageType[]> GetAllImageTypesAsync();
+        Task<ImageFileType[]> GetAllImageFileTypesAsync();
     }
 }

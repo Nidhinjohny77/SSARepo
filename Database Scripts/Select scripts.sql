@@ -10,8 +10,9 @@ SELECT * FROM [SSA].[dbo].[PropertyAttribute]
 SELECT * FROM [SSA].[dbo].[PropertyListing]
 SELECT * FROM [SSA].[dbo].[PropertyListingAttribute]
 
-SELECT * FROM [SSA].[dbo].[ImageFile]
 SELECT * FROM [SSA].[dbo].[PropertyImage]
+
+--DELETE FROM [SSA].[dbo].[PropertyImage]
 
 SELECT * FROM [SSA].[dbo].[Tenant]
 

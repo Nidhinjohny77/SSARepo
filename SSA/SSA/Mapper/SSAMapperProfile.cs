@@ -194,13 +194,15 @@ namespace SSA.Mapper
                 .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
                 .ForMember(dest => dest.PropertyUID, opt => opt.MapFrom(src => src.PropertyUID))
                 .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.FileName))
-                .ForMember(dest => dest.FileType, opt => opt.MapFrom(src => src.FileType))
+                .ForMember(dest => dest.ImageTypeUID, opt => opt.MapFrom(src => src.ImageTypeUID))
+                .ForMember(dest => dest.ImageFileTypeUID, opt => opt.MapFrom(src => src.ImageFileTypeUID))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
             this.CreateMap<PropertyImageModel, PropertyImage>()
                 .ForMember(dest => dest.UID, opt => opt.Ignore())
                 .ForMember(dest => dest.PropertyUID, opt => opt.MapFrom(src => src.PropertyUID))
+                .ForMember(dest => dest.ImageTypeUID, opt => opt.MapFrom(src => src.ImageTypeUID))
                 .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.FileName))
-                .ForMember(dest => dest.FileType, opt => opt.MapFrom(src => src.FileType))
+                .ForMember(dest => dest.ImageFileTypeUID, opt => opt.MapFrom(src => src.ImageFileTypeUID))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
             this.CreateMap<Property, PropertyModel>()

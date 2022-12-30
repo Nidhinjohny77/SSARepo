@@ -9,20 +9,25 @@ namespace SSA.Controllers
     public class ImageFileController : SSAControllerBase
     {
         private readonly IWebHostEnvironment hostEnvironment;
+        private readonly IMasterDataManager masterDataManager;
         private readonly IPropertyManager propertyManager;
-        private readonly IMapper mapper;
 
-        public ImageFileController(IWebHostEnvironment hostEnvironment,IPropertyManager propertyManager,IMapper mapper)
+        public ImageFileController(IWebHostEnvironment hostEnvironment,IMasterDataManager masterDataManager,IPropertyManager propertyManager)
         {
             this.hostEnvironment = hostEnvironment;
+            this.masterDataManager = masterDataManager;
             this.propertyManager = propertyManager;
-            this.mapper = mapper;
         }
 
         [HttpPost]
-        [Route("Uplaod")]
-        public async Task<IActionResult> UploadFile([FromBody]PropertyImageModel propertyImage)
+        [Route("Upload")]
+        public async Task<IActionResult> UploadFile([FromForm]string propertyUID, [FromForm] string fileName, [FromForm] int fileTypeUID)
         {
+            var propertyImage = new PropertyImageModel();
+            propertyImage.PropertyUID = propertyUID;
+            propertyImage.FileName = fileName;
+            propertyImage.ImageFileTypeUID = fileTypeUID;
+            propertyImage.IsActive = true;
             var result = await this.propertyManager.CreatePropertyImageAsync(this.User.UID, propertyImage);
             if (result.IsFaulted)
             {
@@ -31,6 +36,7 @@ namespace SSA.Controllers
             else
             {
                 var savedImage = result.Value;
+                var fileType=this.masterDataManager.GetAllImageFileTypesAsync().Result.FirstOrDefault(x=>x.UID==savedImage.ImageFileTypeUID);
                 var httpRequest = this.HttpContext.Request;
                 if (httpRequest.Form.Files.Count > 0)
                 {
@@ -38,7 +44,7 @@ namespace SSA.Controllers
                     {
                         if (file.Length > 0)
                         {
-                            var filePath = savedImage.UID + savedImage.FileType;
+                            var filePath = savedImage.UID +"."+ fileType;
                             using (var fileStream = new FileStream(filePath, FileMode.Create))
                             {
                                 await file.CopyToAsync(fileStream);

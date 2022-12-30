@@ -85,5 +85,15 @@ namespace Business.Manager
             var result = this.mapper.Map<UniversityModel[]>(entities);
             return await Task.FromResult<UniversityModel[]>(result);
         }
+
+        public async Task<ImageType[]> GetAllImageTypesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ImageFileType[]> GetAllImageFileTypesAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
