@@ -26,7 +26,7 @@ namespace FileServices.Manager
             }
             else
             {
-                using(var fs=new FileStream(uploadDirectoryPath, FileMode.Open))
+                using(var fs=new FileStream(uploadDirectoryPath, FileMode.Create))
                 {
                     await fileStream.CopyToAsync(fs);
                 }
@@ -49,7 +49,7 @@ namespace FileServices.Manager
                 {
                     fs.CopyToAsync(stream);
                 }
-
+                stream.Position = 0;
                 return await Task.FromResult<Stream>(stream);
             }
         }

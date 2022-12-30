@@ -499,7 +499,7 @@ namespace Business.Manager
         {
             try
             {
-                var existingPropertyImage = this.repository.GetAllPropertyImages().Where(x => x.PropertyUID == propertyImageUID).FirstOrDefault();
+                var existingPropertyImage = this.repository.GetAllPropertyImages().Where(x => x.UID == propertyImageUID).FirstOrDefault();
                 var model = this.mapper.Map<PropertyImageModel>(existingPropertyImage);
                 return await Task.FromResult<Result<PropertyImageModel>>(new Result<PropertyImageModel>(model));
             }

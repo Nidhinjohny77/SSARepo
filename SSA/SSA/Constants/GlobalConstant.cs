@@ -27,5 +27,8 @@ namespace SSA.Constants
         public const string UniversityRole = "University";
         public const string ConsultantRole = "Consultant";
 
+        public const string Local = "Local";
+        public const string Azure = "Azure";
+
     }
 }

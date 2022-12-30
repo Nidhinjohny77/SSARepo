@@ -109,7 +109,16 @@ namespace SSA.StartUp
             services.AddScoped<IPropertyManager, PropertyManager>();
             services.AddScoped<IMasterDataManager, MasterDataManager>();
             services.AddScoped<ITenantManager, TenantManager>();
-            services.AddScoped<IFileService,LocalFileServiceManager>();
+            var fileStorageServiceType = configManager.GetSection("FileServiceHost").Value;
+            if (fileStorageServiceType == GlobalConstant.Azure)
+            {
+                services.AddScoped<IFileService, AzureFileStorageService>();
+            }
+            else
+            {
+                services.AddScoped<IFileService, LocalFileServiceManager>();
+            }
+            
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddTransient<TokenManagerMiddleware>();
         }

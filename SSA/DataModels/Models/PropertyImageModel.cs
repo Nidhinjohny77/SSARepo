@@ -4,7 +4,7 @@ namespace DataModels.Models
 {
     public class PropertyImageModel
     {
-        public string UID { get; set; }
+        public string? UID { get; set; }
         public string PropertyUID { get; set; }
         public int ImageTypeUID { get; set; }
         public int FileTypeUID { get; set; }

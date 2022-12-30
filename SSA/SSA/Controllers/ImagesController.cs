@@ -3,17 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SSA.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Property/[controller]")]
     [ApiController]
     [Authorize(Policy =GlobalConstant.LandlordPolicy)]
-    public class ImageFileController : SSAControllerBase
+    public class ImagesController : SSAControllerBase
     {
         private readonly IWebHostEnvironment hostEnvironment;
         private readonly IMasterDataManager masterDataManager;
         private readonly IPropertyManager propertyManager;
         private readonly IFileService fileService;
 
-        public ImageFileController(IWebHostEnvironment hostEnvironment,IMasterDataManager masterDataManager,IPropertyManager propertyManager,
+        public ImagesController(IWebHostEnvironment hostEnvironment,IMasterDataManager masterDataManager,IPropertyManager propertyManager,
             IFileService fileService)
         {
             this.hostEnvironment = hostEnvironment;
@@ -22,9 +22,11 @@ namespace SSA.Controllers
             this.fileService = fileService;
         }
 
+        //[FromForm]string propertyUID, [FromForm] string fileName, [FromForm] int fileTypeUID
+
         [HttpPost]
         [Route("Upload")]
-        public async Task<IActionResult> UploadFile([FromForm]string propertyUID, [FromForm] string fileName, [FromForm] int fileTypeUID)
+        public async Task<IActionResult> UploadFile([FromForm] PropertyImageModel propertyImage)
         {
             try
             {
@@ -34,11 +36,6 @@ namespace SSA.Controllers
                     var file = httpRequest.Form.Files.FirstOrDefault();
                     if (file.Length > 0)
                     {
-                        var propertyImage = new PropertyImageModel();
-                        propertyImage.PropertyUID = propertyUID;
-                        propertyImage.FileName = fileName;
-                        propertyImage.FileTypeUID = fileTypeUID;
-                        propertyImage.IsActive = true;
                         var result = await this.propertyManager.CreatePropertyImageAsync(this.User.UID, propertyImage);
                         if (result.IsFaulted)
                         {
@@ -47,23 +44,40 @@ namespace SSA.Controllers
                         else
                         {
                             var savedImage = result.Value;
-                            var fileType = this.masterDataManager.GetAllFileTypesAsync().Result.FirstOrDefault(x => x.UID == savedImage.FileTypeUID);
+                            var fileType = this.masterDataManager.GetAllFileTypesAsync().Result.FirstOrDefault(x => x.UID == savedImage.FileTypeUID).Name;
                             var filePath = savedImage.UID + "." + fileType;
-                            var stream = new MemoryStream();
-                            file.CopyTo(stream);
-                            var flag = await this.fileService.UploadFileAsync(filePath, stream);
-                            if (flag)
+
+                            try
                             {
-                                return StatusCode(StatusCodes.Status201Created);
+                                var stream = new MemoryStream();
+                                file.CopyTo(stream);
+                                stream.Position = 0;
+                                var flag = await this.fileService.UploadFileAsync(filePath, stream);
+                                if (flag)
+                                {
+                                    return StatusCode(StatusCodes.Status201Created);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                var deleteResult=await this.propertyManager.DeletePropertyImageAsync(this.User.UID, savedImage.UID);
+                                if (deleteResult.IsFaulted)
+                                {
+                                    return StatusCode(StatusCodes.Status500InternalServerError,deleteResult.Errors);
+                                }
+                                else
+                                {
+                                    StatusCode(StatusCodes.Status304NotModified,new ValidationModel("The upload request failed and the database entry is rolled back."));
+                                }
                             }
                         }
         
                     }
-                    return StatusCode(StatusCodes.Status304NotModified);
+                    return StatusCode(StatusCodes.Status304NotModified,new ValidationModel("The request failed as the file content is empty."));
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status304NotModified);
+                    return StatusCode(StatusCodes.Status304NotModified, new ValidationModel("The request failed as no files are send to upload."));
                 }
             }
             catch (Exception ex)
@@ -74,12 +88,12 @@ namespace SSA.Controllers
         }
 
         [HttpGet]
-        [Route("{propertyImageUID}")]
-        public async Task<IActionResult> GetFile([FromBody] string propertyImageUID)
+        [Route("{imageUID}")]
+        public async Task<IActionResult> GetFile(string imageUID)
         {
             try
             {
-                var result = await this.propertyManager.GetPropertyImageAsync(this.User.UID, propertyImageUID);
+                var result = await this.propertyManager.GetPropertyImageAsync(this.User.UID, imageUID);
                 if (result.IsFaulted)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest);
