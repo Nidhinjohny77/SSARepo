@@ -30,6 +30,10 @@ namespace DataAccess
 
         public IFurnishTypeRepository FurnishTypeRepository => new FurnishTypeRepository(this.context);
 
+        public IFileTypeRepository FileTypeRepository => new FileTypeRepository(this.context);
+
+        public IImageTypeRepository ImageTypeRepository => new ImageTypeRepository(this.context);
+
         public void Dispose()
         {
             this.context.Dispose();

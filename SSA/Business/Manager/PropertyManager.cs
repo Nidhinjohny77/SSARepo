@@ -495,6 +495,20 @@ namespace Business.Manager
             }
         }
 
+        public async Task<Result<PropertyImageModel>> GetPropertyImageAsync(string loggedInUser, string propertyImageUID)
+        {
+            try
+            {
+                var existingPropertyImage = this.repository.GetAllPropertyImages().Where(x => x.PropertyUID == propertyImageUID).FirstOrDefault();
+                var model = this.mapper.Map<PropertyImageModel>(existingPropertyImage);
+                return await Task.FromResult<Result<PropertyImageModel>>(new Result<PropertyImageModel>(model));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<Result<PropertyImageModel>>(new Result<PropertyImageModel>(ex));
+            }
+        }
+
         public async Task<Result<List<PropertyListingModel>>> GetAllPropertyListingsAsync(string loggedInUser, string landlordUID)
         {
             try

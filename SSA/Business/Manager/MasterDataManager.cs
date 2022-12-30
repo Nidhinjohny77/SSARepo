@@ -15,6 +15,8 @@ namespace Business.Manager
         private readonly IItemRepository itemRepository;
         private readonly IUniversityRepository universityRepository;
         private readonly IFurnishTypeRepository furnishTypeRepository;
+        private readonly IFileTypeRepository fileTypeRepository;
+        private readonly IImageTypeRepository imageTypeRepository;
 
         public MasterDataManager(IUnitOfWork uow,IMapper mapper)
         {
@@ -29,6 +31,8 @@ namespace Business.Manager
             this.itemRepository = this.uow.ItemRepository;
             this.universityRepository = this.uow.UniversityRepository;
             this.furnishTypeRepository = this.uow.FurnishTypeRepository;
+            this.fileTypeRepository = this.uow.FileTypeRepository;
+            this.imageTypeRepository=this.uow.ImageTypeRepository;
         }
         public async Task<CountryModel[]> GetAllCountriesAsync()
         {
@@ -86,14 +90,18 @@ namespace Business.Manager
             return await Task.FromResult<UniversityModel[]>(result);
         }
 
-        public async Task<ImageType[]> GetAllImageTypesAsync()
+        public async Task<ImageTypeModel[]> GetAllImageTypesAsync()
         {
-            throw new NotImplementedException();
+           var entities= await this.imageTypeRepository.GetAllImageTypesAsync();
+            var model=this.mapper.Map<ImageTypeModel[]>(entities);
+            return await Task.FromResult<ImageTypeModel[]>(model);
         }
 
-        public async Task<ImageFileType[]> GetAllImageFileTypesAsync()
+        public async Task<FileTypeModel[]> GetAllFileTypesAsync()
         {
-            throw new NotImplementedException();
+            var entities = await this.fileTypeRepository.GetAllFileTypesAsync();
+            var model = this.mapper.Map<FileTypeModel[]>(entities);
+            return await Task.FromResult<FileTypeModel[]>(model);
         }
     }
 }

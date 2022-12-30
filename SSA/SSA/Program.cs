@@ -4,6 +4,7 @@ using SSA.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//builder
 // Add services to the container.
 
 builder.Services.AddControllers();

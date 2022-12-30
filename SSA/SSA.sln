@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Business\Business.csproj", "{C36B47E3-0E72-482D-8940-0849DBB3F74B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataModels", "DataModels\DataModels.csproj", "{67574911-83A7-4623-9B34-DA040EFC513B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataModels", "DataModels\DataModels.csproj", "{67574911-83A7-4623-9B34-DA040EFC513B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileServices", "FileServices\FileServices.csproj", "{2967400C-029A-4E6A-81F1-25EC1F1E7E02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{67574911-83A7-4623-9B34-DA040EFC513B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67574911-83A7-4623-9B34-DA040EFC513B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67574911-83A7-4623-9B34-DA040EFC513B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2967400C-029A-4E6A-81F1-25EC1F1E7E02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2967400C-029A-4E6A-81F1-25EC1F1E7E02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2967400C-029A-4E6A-81F1-25EC1F1E7E02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2967400C-029A-4E6A-81F1-25EC1F1E7E02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -18,6 +18,8 @@ namespace DataAccess.Interface
         ITenancyTypeRepository TenancyTypeRepository { get; }
         ICurrencyRepository CurrencyRepository { get; }
         IFurnishTypeRepository FurnishTypeRepository { get; }
+        IFileTypeRepository FileTypeRepository { get; }
+        IImageTypeRepository ImageTypeRepository { get; }
         Task<int> SaveChangesAsync();
     }
 }

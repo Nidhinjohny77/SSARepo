@@ -149,9 +149,9 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<ImageType>().HasData(new ImageType() { UID = 2, Name = "Full" });
 
             //Master Table #11
-            modelBuilder.Entity<ImageFileType>().ToTable("ImageFileType");
-            modelBuilder.Entity<ImageFileType>().HasKey(ift => ift.UID);
-            modelBuilder.Entity<ImageFileType>().HasData(new ImageFileType() { UID = 1, Name = "jpeg" });
+            modelBuilder.Entity<FileType>().ToTable("FileType");
+            modelBuilder.Entity<FileType>().HasKey(ift => ift.UID);
+            modelBuilder.Entity<FileType>().HasData(new FileType() { UID = 1, Name = "jpeg",Description="this type is used for storing images." });
 
 
             modelBuilder.Entity<User>().ToTable("User");
@@ -209,7 +209,7 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<PropertyImage>().ToTable("PropertyImage");
             modelBuilder.Entity<PropertyImage>().HasKey(pi => pi.UID);
             modelBuilder.Entity<PropertyImage>().HasOne(pi => pi.ImageType).WithMany().HasForeignKey(pi => pi.ImageTypeUID);
-            modelBuilder.Entity<PropertyImage>().HasOne(pi => pi.ImageFileType).WithMany().HasForeignKey(pi => pi.ImageFileTypeUID);
+            modelBuilder.Entity<PropertyImage>().HasOne(pi => pi.FileType).WithMany().HasForeignKey(pi => pi.FileTypeUID);
             modelBuilder.Entity<PropertyImage>().HasOne(pi=>pi.Property).WithMany(p => p.Images).HasForeignKey(pi => pi.PropertyUID).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<PropertyListing>().ToTable("PropertyListing");
@@ -267,7 +267,7 @@ namespace DataAccess.DataContext
         public DbSet<Landlord> Landlords { get; set; }
 
         public DbSet<ImageType> ImageTypes { get; set; }
-        public DbSet<ImageFileType> ImageFileTypes { get; set; }
+        public DbSet<FileType> FileTypes { get; set; }
         public DbSet<Property> Properties { get; set; } 
         public DbSet<PropertyAttribute> PropertyAttributes { get; set; }
         public DbSet<PropertyImage> PropertyImages { get; set; }   

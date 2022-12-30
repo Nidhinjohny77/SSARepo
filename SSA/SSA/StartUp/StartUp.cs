@@ -109,6 +109,7 @@ namespace SSA.StartUp
             services.AddScoped<IPropertyManager, PropertyManager>();
             services.AddScoped<IMasterDataManager, MasterDataManager>();
             services.AddScoped<ITenantManager, TenantManager>();
+            services.AddScoped<IFileService,LocalFileServiceManager>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddTransient<TokenManagerMiddleware>();
         }

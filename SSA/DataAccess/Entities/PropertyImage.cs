@@ -7,7 +7,7 @@ namespace DataAccess.Entities
         public string PropertyUID { get; set; }
         public string FileName { get; set; }
         public int ImageTypeUID { get; set; }
-        public int ImageFileTypeUID { get; set; }
+        public int FileTypeUID { get; set; }
         public bool IsActive { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -16,7 +16,7 @@ namespace DataAccess.Entities
 
         public Property Property { get; set; }
         public ImageType ImageType { get; set; }    
-        public ImageFileType ImageFileType { get; set; }
+        public FileType FileType { get; set; }
 
     }
 }

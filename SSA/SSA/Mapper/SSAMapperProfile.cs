@@ -17,6 +17,18 @@ namespace SSA.Mapper
                 .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
 
+            this.CreateMap<ImageType, ImageTypeModel>()
+                .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+            this.CreateMap<ImageTypeModel, ImageType>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+
+            this.CreateMap<FileType, FileTypeModel>()
+                .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+            this.CreateMap<FileTypeModel, FileType>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+
             this.CreateMap<ItemType, ItemTypeModel>()
                 .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
@@ -195,14 +207,14 @@ namespace SSA.Mapper
                 .ForMember(dest => dest.PropertyUID, opt => opt.MapFrom(src => src.PropertyUID))
                 .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.FileName))
                 .ForMember(dest => dest.ImageTypeUID, opt => opt.MapFrom(src => src.ImageTypeUID))
-                .ForMember(dest => dest.ImageFileTypeUID, opt => opt.MapFrom(src => src.ImageFileTypeUID))
+                .ForMember(dest => dest.FileTypeUID, opt => opt.MapFrom(src => src.FileTypeUID))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
             this.CreateMap<PropertyImageModel, PropertyImage>()
                 .ForMember(dest => dest.UID, opt => opt.Ignore())
                 .ForMember(dest => dest.PropertyUID, opt => opt.MapFrom(src => src.PropertyUID))
                 .ForMember(dest => dest.ImageTypeUID, opt => opt.MapFrom(src => src.ImageTypeUID))
                 .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.FileName))
-                .ForMember(dest => dest.ImageFileTypeUID, opt => opt.MapFrom(src => src.ImageFileTypeUID))
+                .ForMember(dest => dest.FileTypeUID, opt => opt.MapFrom(src => src.FileTypeUID))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
             this.CreateMap<Property, PropertyModel>()
