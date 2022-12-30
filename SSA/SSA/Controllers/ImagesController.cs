@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SSA.Controllers
 {
-    [Route("api/Property/[controller]")]
+    //[Route("api/Property/[controller]")]
     [ApiController]
     [Authorize(Policy =GlobalConstant.LandlordPolicy)]
     public class ImagesController : SSAControllerBase
@@ -25,7 +25,7 @@ namespace SSA.Controllers
         //[FromForm]string propertyUID, [FromForm] string fileName, [FromForm] int fileTypeUID
 
         [HttpPost]
-        [Route("Upload")]
+        [Route("api/Property/Images/Upload")]
         public async Task<IActionResult> UploadFile([FromForm] PropertyImageModel propertyImage)
         {
             try
@@ -88,7 +88,7 @@ namespace SSA.Controllers
         }
 
         [HttpGet]
-        [Route("{imageUID}")]
+        [Route("api/Property/Images/{imageUID}")]
         [Authorize(Policy = GlobalConstant.AllUsersPolicy)]
         public async Task<IActionResult> GetFile(string imageUID)
         {
@@ -105,6 +105,7 @@ namespace SSA.Controllers
                     if (propertyImage != null)
                     {
                         var fileType = this.masterDataManager.GetAllFileTypesAsync().Result.FirstOrDefault(x=>x.UID==propertyImage.FileTypeUID).Name;
+                        var imageType=this.masterDataManager.GetAllImageTypesAsync().Result.FirstOrDefault(x=>x.UID==propertyImage.ImageTypeUID).Name;
                         var filePath = propertyImage.UID + "." + fileType;
                         var stream = await this.fileService.GetFileAsync(filePath);
                         if (stream != null)
@@ -114,8 +115,10 @@ namespace SSA.Controllers
                             var bytes=stream.ToArray();
                             var base64Encoded=Convert.ToBase64String(bytes);
                             var image = new ImageModel();
+                            image.ImageTypeUID=propertyImage.ImageTypeUID;
                             image.FileName = propertyImage.FileName;
                             image.Image = base64Encoded;
+                            image.ImageType = imageType;
                             return Ok(image);
                         }
                         else
@@ -128,6 +131,51 @@ namespace SSA.Controllers
                         return StatusCode(StatusCodes.Status204NoContent);
                     }
 
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("api/Property/{propertyUID}/Images")]
+        [Authorize(Policy = GlobalConstant.AllUsersPolicy)]
+        public async Task<IActionResult> GetAllFiles(string propertyUID)
+        {
+            try
+            {
+                var result= await this.propertyManager.GetAllPropertyImagesAsync(this.User.UID,propertyUID);
+                var imageTypes=await this.masterDataManager.GetAllImageTypesAsync();
+                var fileTypes=await this.masterDataManager.GetAllFileTypesAsync();  
+                if (result.IsFaulted)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest);
+                }
+                else
+                {
+                    var propImages = result.Value;
+                    var images=new List<ImageModel>();
+                    foreach (var item in propImages)
+                    {
+                        var fileType=fileTypes.FirstOrDefault(x=>x.UID==item.FileTypeUID).Name;
+                        var imageType=imageTypes.FirstOrDefault(x=>x.UID== item.ImageTypeUID).Name;
+                        var filePath = item.UID + "." + fileType;
+                        var fileName=item.FileName+ "." + fileType;
+                        var stream = await this.fileService.GetFileAsync(filePath);
+                        var bytes = stream.ToArray();
+                        var base64Encoded = Convert.ToBase64String(bytes);
+                        var image = new ImageModel()
+                        {
+                            FileName = fileName,
+                            ImageTypeUID = item.ImageTypeUID,
+                            ImageType= imageType,
+                            Image = base64Encoded
+                        };
+                        images.Add(image);
+                    }
+                    return Ok(images);
                 }
             }
             catch (Exception ex)
