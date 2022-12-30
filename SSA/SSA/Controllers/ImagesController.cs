@@ -89,6 +89,7 @@ namespace SSA.Controllers
 
         [HttpGet]
         [Route("{imageUID}")]
+        [Authorize(Policy = GlobalConstant.AllUsersPolicy)]
         public async Task<IActionResult> GetFile(string imageUID)
         {
             try
@@ -108,8 +109,14 @@ namespace SSA.Controllers
                         var stream = await this.fileService.GetFileAsync(filePath);
                         if (stream != null)
                         {
+                           
                             var fileContentType = "image/" + fileType;
-                            return File(stream, fileContentType);
+                            var bytes=stream.ToArray();
+                            var base64Encoded=Convert.ToBase64String(bytes);
+                            var image = new ImageModel();
+                            image.FileName = propertyImage.FileName;
+                            image.Image = base64Encoded;
+                            return Ok(image);
                         }
                         else
                         {

@@ -35,13 +35,13 @@ namespace FileServices.Manager
             }
         }
 
-        public async Task<Stream> GetFileAsync(string fileName)
+        public async Task<MemoryStream> GetFileAsync(string fileName)
         {
             MemoryStream stream=new MemoryStream();
             var uploadDirectoryPath = this.configuration.GetSection("UploadDirectory").Value + "/" + fileName;
             if (uploadDirectoryPath == null)
             {
-                return await Task.FromResult<Stream>(null);
+                return await Task.FromResult<MemoryStream>(null);
             }
             else
             {
@@ -50,7 +50,7 @@ namespace FileServices.Manager
                     fs.CopyToAsync(stream);
                 }
                 stream.Position = 0;
-                return await Task.FromResult<Stream>(stream);
+                return await Task.FromResult<MemoryStream>(stream);
             }
         }
     }

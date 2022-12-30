@@ -9,7 +9,7 @@ namespace FileServices.Manager
         {
             this.configuration = configuration;
         }
-        public Task<Stream> GetFileAsync(string fileName)
+        public Task<MemoryStream> GetFileAsync(string fileName)
         {
             throw new NotImplementedException();
         }

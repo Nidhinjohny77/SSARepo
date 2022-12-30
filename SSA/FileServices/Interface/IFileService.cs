@@ -6,6 +6,6 @@ namespace FileServices.Interface
     {
         Task<bool> UploadFileAsync(string fileName,Stream fileStream);
 
-        Task<Stream> GetFileAsync(string fileName);
+        Task<MemoryStream> GetFileAsync(string fileName);
     }
 }
