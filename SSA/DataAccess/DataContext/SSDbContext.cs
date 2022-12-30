@@ -237,11 +237,11 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<PropertyRenting>().HasOne(pr=>pr.PropertyListing).WithMany(pl => pl.Rentings).HasForeignKey(pr => pr.PropertyListingUID);
             modelBuilder.Entity<PropertyRenting>().HasOne(pr => pr.Tenant).WithMany().HasForeignKey(pr => pr.TenantUID).OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<CurrentTenantItem>().ToTable("CurrentTenantItem");
-            modelBuilder.Entity<CurrentTenantItem>().HasKey(cti => cti.UID);
-            modelBuilder.Entity<CurrentTenantItem>().HasOne(cti=>cti.PropertyRenting).WithMany().HasForeignKey(cti => cti.PropertyRentingUID);
-            modelBuilder.Entity<CurrentTenantItem>().HasOne(cti => cti.Item).WithOne().HasForeignKey<CurrentTenantItem>(cti => cti.ItemUID);
-            modelBuilder.Entity<CurrentTenantItem>().HasOne(cti => cti.Currency).WithOne().HasForeignKey<CurrentTenantItem>(cti => cti.CurrencyUID);
+            modelBuilder.Entity<TenantItem>().ToTable("TenantItem");
+            modelBuilder.Entity<TenantItem>().HasKey(cti => cti.UID);
+            modelBuilder.Entity<TenantItem>().HasOne(cti=>cti.PropertyRenting).WithMany().HasForeignKey(cti => cti.PropertyRentingUID);
+            modelBuilder.Entity<TenantItem>().HasOne(cti => cti.Item).WithOne().HasForeignKey<TenantItem>(cti => cti.ItemUID);
+            modelBuilder.Entity<TenantItem>().HasOne(cti => cti.Currency).WithOne().HasForeignKey<TenantItem>(cti => cti.CurrencyUID);
 
             modelBuilder.Entity<PropertyReview>().ToTable("PropertyReview");
             modelBuilder.Entity<PropertyReview>().HasKey(pr => pr.UID);

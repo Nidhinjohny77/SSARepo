@@ -20,6 +20,7 @@ namespace DataAccess.Interface
         IFurnishTypeRepository FurnishTypeRepository { get; }
         IFileTypeRepository FileTypeRepository { get; }
         IImageTypeRepository ImageTypeRepository { get; }
+        ITenantItemRepository TenantItemRepository { get; }
         Task<int> SaveChangesAsync();
     }
 }

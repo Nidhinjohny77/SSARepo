@@ -1,7 +1,7 @@
 ﻿
 namespace DataAccess.Entities
 {
-    public class CurrentTenantItem
+    public class TenantItem
     {
         public string UID { get; set; }
         public string PropertyRentingUID { get; set; }

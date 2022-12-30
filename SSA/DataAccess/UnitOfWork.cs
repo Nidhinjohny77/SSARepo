@@ -34,6 +34,8 @@ namespace DataAccess
 
         public IImageTypeRepository ImageTypeRepository => new ImageTypeRepository(this.context);
 
+        public ITenantItemRepository TenantItemRepository => new TenantItemRepository(this.context);
+
         public void Dispose()
         {
             this.context.Dispose();
