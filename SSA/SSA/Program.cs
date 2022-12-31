@@ -4,7 +4,17 @@ using SSA.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        name: "AllowSpecificOrigins",
+        policy =>
+        {
+            //policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+           policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+        });
+    //options.AddDefaultPolicy(policy=>policy.AllowAnyOrigin());
+});
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -22,9 +32,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
-
+app.UseCors("AllowSpecificOrigins");
 app.UseAuthentication();
 app.UseMiddleware<TokenManagerMiddleware>();
 app.UseAuthorization();
