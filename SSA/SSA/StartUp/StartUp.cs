@@ -112,11 +112,16 @@ namespace SSA.StartUp
             var fileStorageServiceType = configManager.GetSection("FileServiceHost").Value;
             if (fileStorageServiceType == GlobalConstant.Azure)
             {
-                services.AddScoped<IFileService, AzureFileStorageService>();
+                services.AddScoped<IFileService, AzureFileStorageService>((provider) =>
+                {
+                    var storageAccountConnectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTION");
+                    return new AzureFileStorageService(storageAccountConnectionString);
+                });
             }
             else
             {
                 services.AddScoped<IFileService, LocalFileServiceManager>();
+
             }
             
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
