@@ -56,7 +56,7 @@ namespace SSA.Controllers
                     return BadRequest(result.Errors);
                 }
                 else
-                {
+                {               
                     return Ok(result.Value);
                 }
             }

@@ -27,5 +27,13 @@ namespace FileServices.Manager
             fileStream.Close();
             return await Task.FromResult<bool>(response.GetRawResponse().Status==201);
         }
+
+        public async Task<string> GetBase64FileAsync(string fileName)
+        {
+            var stream=await GetFileAsync(fileName);
+            var bytes = stream.ToArray();
+            var base64Encoded = Convert.ToBase64String(bytes);
+            return await Task.FromResult<string>(base64Encoded);
+        }
     }
 }

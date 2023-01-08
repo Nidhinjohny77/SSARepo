@@ -10,13 +10,17 @@ namespace Business.Manager
         private readonly IPropertyRepository repository;
         private readonly IMapper mapper;
         private readonly IPropertyValidator validator;
+        private readonly IFileService fileService;
+        private readonly IMasterDataManager masterDataManager;
 
-        public PropertyManager(IUnitOfWork uow,IMapper mapper,IPropertyValidator validator)
+        public PropertyManager(IUnitOfWork uow,IMapper mapper,IPropertyValidator validator,IFileService fileService,IMasterDataManager masterDataManager)
         {
             this.uow = uow;
             this.repository = this.uow.PropertyRepository;
             this.mapper = mapper;
             this.validator = validator;
+            this.fileService = fileService;
+            this.masterDataManager = masterDataManager;
         }
         public async Task<Result<PropertyModel>> CreatePropertyAsync(string loggedInUser, PropertyModel property)
         {
@@ -532,11 +536,13 @@ namespace Business.Manager
             }
         }
 
-        public async Task<Result<List<PropertyListingModel>>> GetAllPropertyListingsByFilterAsync(string loggedInUser, PropertyListingFilterModel filter)
+        public async Task<Result<List<PropertyDataModel>>> GetAllPropertyListingsByFilterAsync(string loggedInUser, PropertyListingFilterModel filter)
         {
             try
             {
-                var propertyListingsQuery = this.repository.GetAllPropertyListings().Include(x => x.Property).Include(x => x.Property.PropertyAttribute).Include(x => x.PropertyListingAttribute).AsQueryable();
+                var propertyListingsQuery = this.repository.GetAllPropertyListings().Include(x => x.Property)
+                    .Include(x => x.Property.PropertyAttribute).Include(x=>x.Property.Images)
+                    .Include(x => x.PropertyListingAttribute).AsQueryable();
                 if (filter != null)
                 {
                     if (!string.IsNullOrEmpty(filter.Location))
@@ -569,12 +575,32 @@ namespace Business.Manager
                     }
                 }
                 var propertyListings=propertyListingsQuery.ToList();
-                var model = this.mapper.Map<List<PropertyListingModel>>(propertyListings);
-                return await Task.FromResult<Result<List<PropertyListingModel>>>(new Result<List<PropertyListingModel>>(model));
+                var models = this.mapper.Map<List<PropertyDataModel>>(propertyListings);
+                if (models != null)
+                {
+                    var imageTypes = await this.masterDataManager.GetAllImageTypesAsync();
+                    var fileTypes = await this.masterDataManager.GetAllFileTypesAsync();
+                    foreach (var model in models)
+                    {
+                        var fileType = fileTypes.FirstOrDefault(x => x.UID == model.ThumbNailImageData.FileTypeUID).Name;
+                        var imageType = imageTypes.FirstOrDefault(x => x.UID == model.ThumbNailImageData.ImageTypeUID).Name;
+                        var filePath = model.ThumbNailImageData.UID + "." + fileType;
+                        var fileName = model.ThumbNailImageData.FileName + "." + fileType;
+                        var base64Encoded = await this.fileService.GetBase64FileAsync(filePath);
+                        model.ThumbNailImage = new ImageModel()
+                        {
+                            FileName = fileName,
+                            ImageTypeUID = model.ThumbNailImageData.ImageTypeUID,
+                            ImageType = imageType,
+                            Image = base64Encoded
+                        };
+                    }
+                }
+                return await Task.FromResult<Result<List<PropertyDataModel>>>(new Result<List<PropertyDataModel>>(models));
             }
             catch (Exception ex)
             {
-                return await Task.FromResult<Result<List<PropertyListingModel>>>(new Result<List<PropertyListingModel>>(ex));
+                return await Task.FromResult<Result<List<PropertyDataModel>>>(new Result<List<PropertyDataModel>>(ex));
             }
         }
 

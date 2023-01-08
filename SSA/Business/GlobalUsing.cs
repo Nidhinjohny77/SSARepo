@@ -12,3 +12,4 @@ global using Business.Common;
 global using System.ComponentModel.DataAnnotations;
 global using Business.Interface.Validators;
 global using Business.Validators;
+global using FileServices.Interface;

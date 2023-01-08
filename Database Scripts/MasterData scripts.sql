@@ -7,3 +7,12 @@ SELECT * FROM [SSA].[dbo].[PropertyType]
 SELECT * FROM [SSA].[dbo].[FurnishType]
 SELECT * FROM [SSA].[dbo].[ImageType]
 SELECT * FROM [SSA].[dbo].[FileType]
+
+
+
+--INSERT INTO [dbo].[FileType]
+--           ([Name]
+--           ,[Description])
+--     VALUES
+--           ('jpg'
+--           ,'an image format')

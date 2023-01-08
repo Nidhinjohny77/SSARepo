@@ -266,7 +266,7 @@ namespace SSA.Mapper
             this.CreateMap<PropertyListing, PropertyListingModel>()
                 .ForMember(dest => dest.UID, opt => opt.MapFrom(src => src.UID))
                 .ForMember(dest => dest.PropertyUID, opt => opt.MapFrom(src => src.PropertyUID))
-                .ForMember(dest => dest.ListingDate, opt => opt.MapFrom(src => Convert.ToDateTime(src.ListingDate)))
+                .ForMember(dest => dest.ListingDate, opt => opt.MapFrom(src => src.ListingDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(dest => dest.ListingAmount, opt => opt.MapFrom(src => src.ListingAmount))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.IsCTIAvailableForSale, opt => opt.MapFrom(src => src.IsCTIAvailableForSale))
@@ -338,6 +338,23 @@ namespace SSA.Mapper
                 .ForMember(x=>x.ReviewRating,opt=>opt.MapFrom(src=>src.ReviewRating))
                 .ForMember(x=>x.ReviewDate,opt=>opt.MapFrom(src=>src.ReviewDate))
                 .ForMember(x=>x.ReviewDescription,opt=>opt.MapFrom(src=>src.ReviewDescription));
+
+            this.CreateMap<PropertyListing, PropertyDataModel>()
+                .ForMember(dest => dest.PropertyListingUID, opt => opt.MapFrom(src => src.UID))
+                .ForMember(dest => dest.PropertyUID, opt => opt.MapFrom(src => src.PropertyUID))
+                .ForMember(dest => dest.AvailableDate, opt => opt.MapFrom(src => src.ListingDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.ListingAmount))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.BedRoomCount, opt => opt.MapFrom(src => src.PropertyListingAttribute.AvailableBedroomCount))
+                .ForMember(dest => dest.BathRoomCount, opt => opt.MapFrom(src => src.PropertyListingAttribute.AvailableBathroomCount))
+                .ForMember(dest => dest.IsParkingAvailable, opt => opt.MapFrom(src => src.PropertyListingAttribute.IsParkingAvailable))
+                .ForMember(dest => dest.IsPetsAllowed, opt => opt.MapFrom(src => src.PropertyListingAttribute.IsPetsAllowed))
+                .ForMember(dest => dest.AvailableParkingSlots, opt => opt.MapFrom(src => src.PropertyListingAttribute.AvailableParkingSlots))
+                .ForMember(dest => dest.IsPartyingAllowed, opt => opt.MapFrom(src => src.PropertyListingAttribute.IsPartyingAllowed))
+                .ForMember(dest => dest.IsSmokingAllowed, opt => opt.MapFrom(src => src.PropertyListingAttribute.IsSmokingAllowed))
+                .ForMember(dest => dest.AllowedOccupantCount, opt => opt.MapFrom(src => src.PropertyListingAttribute.AllowedOccupantCount))
+                .ForMember(dest => dest.ThumbNailImageData, opt => opt.MapFrom(src => src.Property.Images.FirstOrDefault(x=>x.ImageTypeUID==1)))
+                .ForMember(dest => dest.IsSharingAllowed, opt => opt.MapFrom(src => src.PropertyListingAttribute.IsSharingAllowed));
         }
     }
 }
