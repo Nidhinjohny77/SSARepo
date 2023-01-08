@@ -25,9 +25,14 @@ builder.Services.AddSwaggerGen();
 StartUp.Configure(builder.Configuration,builder.Services);
 
 var app = builder.Build();
-
+var isProductionSwaggerEnabled = StartUp.GetEnvironmentVariable("PRODUCTION_ENABLE_SWAGGER");
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+else if(!string.IsNullOrEmpty(isProductionSwaggerEnabled) && isProductionSwaggerEnabled=="1")
 {
     app.UseSwagger();
     app.UseSwaggerUI();

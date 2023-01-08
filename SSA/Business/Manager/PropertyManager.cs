@@ -536,7 +536,7 @@ namespace Business.Manager
         {
             try
             {
-                var propertyListingsQuery = this.repository.GetAllPropertyListings();
+                var propertyListingsQuery = this.repository.GetAllPropertyListings().Include(x => x.Property).Include(x => x.Property.PropertyAttribute).Include(x => x.PropertyListingAttribute).AsQueryable();
                 if (filter != null)
                 {
                     if (!string.IsNullOrEmpty(filter.Location))
@@ -550,6 +550,22 @@ namespace Business.Manager
                     if (filter.EndRent != null)
                     {
                         propertyListingsQuery = propertyListingsQuery.Where(x => x.ListingAmount <= filter.EndRent);
+                    }
+                    if(filter.BathRoomCount.HasValue)
+                    {
+                        propertyListingsQuery= propertyListingsQuery.Where(x=>x.PropertyListingAttribute.AvailableBathroomCount>=filter.BathRoomCount.Value);
+                    }
+                    if (filter.BedroomCount.HasValue)
+                    {
+                        propertyListingsQuery = propertyListingsQuery.Where(x => x.PropertyListingAttribute.AvailableBedroomCount >= filter.BedroomCount.Value);
+                    }
+                    if (filter.FurnishTypeUID.HasValue)
+                    {
+                        propertyListingsQuery = propertyListingsQuery.Where(x => x.Property.PropertyAttribute.FurnishTypeUID >= filter.FurnishTypeUID.Value);
+                    }
+                    if (filter.PropertyTypeUID.HasValue)
+                    {
+                        propertyListingsQuery = propertyListingsQuery.Where(x => x.Property.PropertyAttribute.PropertyTypeUID >= filter.PropertyTypeUID.Value);
                     }
                 }
                 var propertyListings=propertyListingsQuery.ToList();
