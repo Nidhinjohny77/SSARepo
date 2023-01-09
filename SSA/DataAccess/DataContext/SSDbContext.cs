@@ -1,5 +1,7 @@
 ﻿
 
+using System.Globalization;
+
 namespace DataAccess.DataContext
 {
     public class SSDbContext:DbContext
@@ -157,6 +159,7 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<User>().HasKey(u => u.UID);
             modelBuilder.Entity<User>(entity => entity.HasOne(p => p.Role));
+            
 
             modelBuilder.Entity<Tenant>().ToTable("Tenant");
             modelBuilder.Entity<Tenant>().HasKey(t=>t.UID);
@@ -203,6 +206,7 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<PropertyAttribute>().HasOne(pa => pa.Property).WithOne(p => p.PropertyAttribute).HasForeignKey<PropertyAttribute>(pa => pa.PropertyUID);
             modelBuilder.Entity<PropertyAttribute>().HasOne(pa=>pa.PropertyType).WithOne().HasForeignKey<PropertyAttribute>(pa=>pa.PropertyTypeUID);
             modelBuilder.Entity<PropertyAttribute>().HasOne(pa=>pa.FurnishType).WithOne().HasForeignKey<PropertyAttribute>(pa => pa.FurnishTypeUID);
+            modelBuilder.Entity<PropertyAttribute>().Property(pa => pa.FurnishType).IsRequired(false);
             modelBuilder.Entity<PropertyAttribute>().Property(pa=>pa.TotalAreaInSqFT).IsRequired(false);
             modelBuilder.Entity<PropertyAttribute>().Property(pa => pa.ParkingSlotCount).IsRequired(false);
 
@@ -247,6 +251,9 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<PropertyReview>().HasKey(pr => pr.UID);
             modelBuilder.Entity<PropertyReview>().HasOne<Property>().WithMany(p => p.Reviews).HasForeignKey(pr => pr.PropertyUID);
 
+            PopulateStudentData(modelBuilder);
+            PopulateLandlordData(modelBuilder);
+            
         }
 
         public DbSet<PropertyType> PropertyTypes { get; set; }
@@ -275,6 +282,510 @@ namespace DataAccess.DataContext
         public DbSet<PropertyListingAttribute> PropertyListingAttributes { get; set; }
         public DbSet<PropertyViewing> PropertyViewings { get; set; }   
         public DbSet<PropertyRenting> PropertyRentings { get; set; }   
-        public DbSet<PropertyReview> PropertyReviews { get; set; }   
+        public DbSet<PropertyReview> PropertyReviews { get; set; }
+
+
+        private void PopulateLandlordData(ModelBuilder modelBuilder)
+        {
+            var uniqueUID = new Guid().ToString();
+            var user1 = new User()
+            {
+                UID = uniqueUID,
+                FirstName = "Nora",
+                LastName = "Tom",
+                UserName = "nora",
+                Password = "rege",
+                UserType = 0,
+                Email = "nora.sde@gmail.com",
+                IsActive = true,
+                RoleUID = 3,
+                CreatedBy = uniqueUID,
+                LastUpdatedBy = uniqueUID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var landlord1 = new Landlord()
+            {
+                UID = new Guid().ToString(),
+                UserUID = uniqueUID,
+                Address = "46,Lothian Road, Middlesborough",
+                CountryUID = 1,
+                DOB = Convert.ToDateTime("26/07/1988", CultureInfo.InvariantCulture),
+                PhoneNumber="07773636363",
+                IsActive=true,
+                CreatedBy= uniqueUID,
+                LastUpdatedBy= uniqueUID,
+                CreatedDate= DateTime.Now,
+                LastUpdatedDate= DateTime.Now
+            };
+            modelBuilder.Entity<User>().HasData(user1);
+            modelBuilder.Entity<Landlord>().HasData(landlord1);
+
+            var uniqueUID1 = new Guid().ToString();
+            var user2 = new User()
+            {
+                UID = uniqueUID1,
+                FirstName = "Renjith",
+                LastName = "M",
+                UserName = "renjith",
+                Password = "rege",
+                UserType = 0,
+                Email = "renjith.sde@gmail.com",
+                IsActive = true,
+                RoleUID = 3,
+                CreatedBy = uniqueUID1,
+                LastUpdatedBy = uniqueUID1,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var landlord2 = new Landlord()
+            {
+                UID = new Guid().ToString(),
+                UserUID = user2.UID,
+                Address = "34,Parliament Road, Middlesborough",
+                CountryUID = 1,
+                DOB = Convert.ToDateTime("26/07/1994", CultureInfo.InvariantCulture),
+                PhoneNumber = "07773636363",
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            modelBuilder.Entity<User>().HasData(user2);
+            modelBuilder.Entity<Landlord>().HasData(landlord2);
+
+            var p1 = new Property()
+            {
+                UID = new Guid().ToString(),
+                LandlordUID = landlord2.UID,
+                Name = "House 1",
+                PostCode = "TS1 2HR",
+                Address = "Oxford Street, Middlesbrough TS1",
+                CountryUID = 1,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var pa1 = new PropertyAttribute()
+            {
+                UID = new Guid().ToString(),
+                PropertyUID = p1.UID,
+                PropertyTypeUID = 5,
+                FurnishTypeUID = 1,
+                BedroomCount = 4,
+                BathroomCount = 2,
+                FloorCount = 2,
+                MaxOccupantCount = 5,
+                ParkingSlotCount = 2,
+                TotalAreaInSqFT = 1200,
+                IsGarageAvailable = true,
+                IsParkingSlotAvailable = true,
+                IsBackyardAvailable = true,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var pl1 = new PropertyListing()
+            {
+                UID = new Guid().ToString(),
+                PropertyUID = p1.UID,
+                ListedByUser = user2.UID,
+                ListingDate = DateTime.Now,
+                Description= "4 bed terraced house to rent",
+                ListingAmount = 2850,
+                IsCTIAvailableForSale = false,
+                IsActive=true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var pla1 = new PropertyListingAttribute()
+            {
+                UID = new Guid().ToString(),
+                PropertyAttributeUID = pa1.UID,
+                PropertyListingUID = pl1.UID,
+                TenancyTypeUID = 10,
+                Landmark = "0.5 miles Middlesbrough",
+                AllowedOccupantCount = 5,
+                AvailableBedroomCount = 4,
+                AvailableBathroomCount = 2,
+                AvailableParkingSlots = 2,
+                IsNew=true,
+                IsStudentFriendly=true,
+                IsChildrenAllowed = true,
+                IsParkingAvailable = true,
+                IsPartyingAllowed = true,
+                IsSharingAllowed = true,
+                IsPetsAllowed = true,
+                IsSmokingAllowed = true,
+                IsUnisex = true,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            modelBuilder.Entity<Property>().HasData(p1);
+            modelBuilder.Entity<PropertyAttribute>().HasData(pa1);
+            modelBuilder.Entity<PropertyListing>().HasData(pl1);
+            modelBuilder.Entity<PropertyListingAttribute>().HasData(pla1);
+
+
+
+            var p2 = new Property()
+            {
+                UID = new Guid().ToString(),
+                LandlordUID = landlord2.UID,
+                Name = "House 2",
+                PostCode = "TS2 2HR",
+                Address = "Kings Street, Middlesbrough TS2",
+                CountryUID = 1,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var pa2 = new PropertyAttribute()
+            {
+                UID = new Guid().ToString(),
+                PropertyUID = p2.UID,
+                PropertyTypeUID = 5,
+                FurnishTypeUID = 1,
+                BedroomCount = 2,
+                BathroomCount = 2,
+                FloorCount = 1,
+                MaxOccupantCount = 3,
+                ParkingSlotCount = 1,
+                TotalAreaInSqFT = 700,
+                IsGarageAvailable = true,
+                IsParkingSlotAvailable = true,
+                IsBackyardAvailable = true,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var pl2 = new PropertyListing()
+            {
+                UID = new Guid().ToString(),
+                PropertyUID = p2.UID,
+                ListedByUser = user2.UID,
+                ListingDate = DateTime.Now,
+                Description = "2 BHK house to rent",
+                ListingAmount = 1350,
+                IsCTIAvailableForSale = false,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var pla2 = new PropertyListingAttribute()
+            {
+                UID = new Guid().ToString(),
+                PropertyAttributeUID = pa2.UID,
+                PropertyListingUID = pl2.UID,
+                TenancyTypeUID = 10,
+                Landmark = "0.5 miles Middlesbrough",
+                AllowedOccupantCount = 3,
+                AvailableBedroomCount = 2,
+                AvailableBathroomCount = 2,
+                AvailableParkingSlots = 1,
+                IsNew=false,
+                IsStudentFriendly=true,
+                IsChildrenAllowed = true,
+                IsParkingAvailable = true,
+                IsPartyingAllowed = true,
+                IsSharingAllowed = true,
+                IsPetsAllowed = true,
+                IsSmokingAllowed = true,
+                IsUnisex = true,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            modelBuilder.Entity<Property>().HasData(p2);
+            modelBuilder.Entity<PropertyAttribute>().HasData(pa2);
+            modelBuilder.Entity<PropertyListing>().HasData(pl2);
+            modelBuilder.Entity<PropertyListingAttribute>().HasData(pla2);
+
+            var p3 = new Property()
+            {
+                UID = new Guid().ToString(),
+                LandlordUID = landlord2.UID,
+                Name = "House 3",
+                PostCode = "TS3 2HR",
+                Address = "Numens Street, Middlesbrough TS3",
+                CountryUID = 1,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var pa3 = new PropertyAttribute()
+            {
+                UID = new Guid().ToString(),
+                PropertyUID = p3.UID,
+                PropertyTypeUID = 5,
+                FurnishTypeUID = 1,
+                BedroomCount = 1,
+                BathroomCount = 1,
+                FloorCount = 1,
+                MaxOccupantCount = 2,
+                ParkingSlotCount = 1,
+                TotalAreaInSqFT = 600,
+                IsGarageAvailable = true,
+                IsParkingSlotAvailable = true,
+                IsBackyardAvailable = true,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var pl3 = new PropertyListing()
+            {
+                UID = new Guid().ToString(),
+                PropertyUID = p3.UID,
+                ListedByUser = user2.UID,
+                ListingDate = DateTime.Now,
+                Description = "1 BHK Appartmet to rent",
+                ListingAmount = 1250,
+                IsCTIAvailableForSale = false,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var pla3 = new PropertyListingAttribute()
+            {
+                UID = new Guid().ToString(),
+                PropertyAttributeUID = pa3.UID,
+                PropertyListingUID = pl3.UID,
+                TenancyTypeUID = 10,
+                Landmark = "0.5 miles Middlesbrough",
+                AllowedOccupantCount = 2,
+                AvailableBedroomCount = 1,
+                AvailableBathroomCount = 1,
+                AvailableParkingSlots = 1,
+                IsNew = false,
+                IsStudentFriendly = true,
+                IsChildrenAllowed = true,
+                IsParkingAvailable = true,
+                IsPartyingAllowed = true,
+                IsSharingAllowed = true,
+                IsPetsAllowed = true,
+                IsSmokingAllowed = true,
+                IsUnisex = true,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            modelBuilder.Entity<Property>().HasData(p3);
+            modelBuilder.Entity<PropertyAttribute>().HasData(pa3);
+            modelBuilder.Entity<PropertyListing>().HasData(pl3);
+            modelBuilder.Entity<PropertyListingAttribute>().HasData(pla3);
+
+            var p4 = new Property()
+            {
+                UID = new Guid().ToString(),
+                LandlordUID = landlord2.UID,
+                Name = "House 4",
+                PostCode = "DS4 2HR",
+                Address = "Edward Pease Way, West Park Garden Village, Darlington",
+                CountryUID = 1,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var pa4 = new PropertyAttribute()
+            {
+                UID = new Guid().ToString(),
+                PropertyUID = p4.UID,
+                PropertyTypeUID = 5,
+                FurnishTypeUID = 1,
+                BedroomCount = 6,
+                BathroomCount = 3,
+                FloorCount = 3,
+                MaxOccupantCount = 12,
+                ParkingSlotCount = 3,
+                TotalAreaInSqFT = 2600,
+                IsGarageAvailable = true,
+                IsParkingSlotAvailable = true,
+                IsBackyardAvailable = true,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var pl4 = new PropertyListing()
+            {
+                UID = new Guid().ToString(),
+                PropertyUID = p4.UID,
+                ListedByUser = user2.UID,
+                ListingDate = DateTime.Now,
+                Description = "The Orchard at West Park",
+                ListingAmount = 2950,
+                IsCTIAvailableForSale = false,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var pla4 = new PropertyListingAttribute()
+            {
+                UID = new Guid().ToString(),
+                PropertyAttributeUID = pa4.UID,
+                PropertyListingUID = pl4.UID,
+                TenancyTypeUID = 10,
+                Landmark = "0.5 miles Middlesbrough",
+                AllowedOccupantCount = 12,
+                AvailableBedroomCount = 6,
+                AvailableBathroomCount = 3,
+                AvailableParkingSlots = 3,
+                IsNew = true,
+                IsStudentFriendly = false,
+                IsChildrenAllowed = true,
+                IsParkingAvailable = true,
+                IsPartyingAllowed = true,
+                IsSharingAllowed = true,
+                IsPetsAllowed = true,
+                IsSmokingAllowed = true,
+                IsUnisex = true,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            modelBuilder.Entity<Property>().HasData(p4);
+            modelBuilder.Entity<PropertyAttribute>().HasData(pa4);
+            modelBuilder.Entity<PropertyListing>().HasData(pl4);
+            modelBuilder.Entity<PropertyListingAttribute>().HasData(pla4);
+
+            var p5 = new Property()
+            {
+                UID = new Guid().ToString(),
+                LandlordUID = landlord2.UID,
+                Name = "House 5",
+                PostCode = "TS5 2HR",
+                Address = "Bennard Street, Middlesbrough TS5",
+                CountryUID = 1,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var pa5 = new PropertyAttribute()
+            {
+                UID = new Guid().ToString(),
+                PropertyUID = p5.UID,
+                PropertyTypeUID = 5,
+                FurnishTypeUID = 1,
+                BedroomCount = 4,
+                BathroomCount = 2,
+                FloorCount = 2,
+                MaxOccupantCount = 8,
+                ParkingSlotCount = 2,
+                TotalAreaInSqFT = 2000,
+                IsGarageAvailable = true,
+                IsParkingSlotAvailable = true,
+                IsBackyardAvailable = true,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var pl5 = new PropertyListing()
+            {
+                UID = new Guid().ToString(),
+                PropertyUID = p5.UID,
+                ListedByUser = user2.UID,
+                ListingDate = DateTime.Now,
+                Description = "4 bed terraced house to rent",
+                ListingAmount = 1850,
+                IsCTIAvailableForSale = false,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            var pla5 = new PropertyListingAttribute()
+            {
+                UID = new Guid().ToString(),
+                PropertyAttributeUID = pa5.UID,
+                PropertyListingUID = pl5.UID,
+                TenancyTypeUID = 10,
+                Landmark = "0.5 miles Middlesbrough",
+                AllowedOccupantCount = 12,
+                AvailableBedroomCount = 4,
+                AvailableBathroomCount = 2,
+                AvailableParkingSlots = 2,
+                IsNew = true,
+                IsStudentFriendly = true,
+                IsChildrenAllowed = true,
+                IsParkingAvailable = true,
+                IsPartyingAllowed = true,
+                IsSharingAllowed = true,
+                IsPetsAllowed = true,
+                IsSmokingAllowed = true,
+                IsUnisex = true,
+                IsActive = true,
+                CreatedBy = user2.UID,
+                LastUpdatedBy = user2.UID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            modelBuilder.Entity<Property>().HasData(p5);
+            modelBuilder.Entity<PropertyAttribute>().HasData(pa5);
+            modelBuilder.Entity<PropertyListing>().HasData(pl5);
+            modelBuilder.Entity<PropertyListingAttribute>().HasData(pla5);
+
+
+        }
+
+        private void PopulateStudentData(ModelBuilder modelBuilder)
+        {
+            List<User> _users = new List<User>();
+            var uniqueUID = new Guid().ToString();
+            var user1 = new User()
+            {
+                UID = uniqueUID,
+                FirstName = "Nidhin",
+                LastName = "Johny",
+                UserName = "nidhin",
+                Password = "johny",
+                UserType = 0,
+                Email = "nidhin.sde@gmail.com",
+                IsActive = true,
+                RoleUID = 2,
+                CreatedBy = uniqueUID,
+                LastUpdatedBy = uniqueUID,
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now
+            };
+            modelBuilder.Entity<User>().HasData(user1);
+        }
     }
 }

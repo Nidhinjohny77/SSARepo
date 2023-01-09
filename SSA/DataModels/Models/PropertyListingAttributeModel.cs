@@ -7,10 +7,14 @@ namespace DataModels.Models
         public string UID { get; set; }
         public string PropertyListingUID { get; set; }
         public string PropertyAttributeUID { get; set; }
+        public string AvailableDate { get; set; }
+        public string Landmark { get; set; }
         public int AvailableBedroomCount { get; set; }
         public int AvailableBathroomCount { get; set; }
         public int AllowedOccupantCount { get; set; }
         public bool IsSharingAllowed { get; set; }
+        public bool IsNew { get; set; }
+        public bool IsStudentFriendly { get; set; }
         public bool IsUnisex { get; set; }
         public bool IsPetsAllowed { get; set; }
         public bool IsChildrenAllowed { get; set; }
