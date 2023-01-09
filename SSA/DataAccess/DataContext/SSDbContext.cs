@@ -204,9 +204,9 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<PropertyAttribute>().ToTable("PropertyAttribute");
             modelBuilder.Entity<PropertyAttribute>().HasKey(pa=>pa.UID);
             modelBuilder.Entity<PropertyAttribute>().HasOne(pa => pa.Property).WithOne(p => p.PropertyAttribute).HasForeignKey<PropertyAttribute>(pa => pa.PropertyUID);
-            modelBuilder.Entity<PropertyAttribute>().HasOne(pa=>pa.PropertyType).WithOne().HasForeignKey<PropertyAttribute>(pa=>pa.PropertyTypeUID);
-            modelBuilder.Entity<PropertyAttribute>().HasOne(pa=>pa.FurnishType).WithOne().HasForeignKey<PropertyAttribute>(pa => pa.FurnishTypeUID);
-            modelBuilder.Entity<PropertyAttribute>().Property(pa => pa.FurnishType).IsRequired(false);
+            modelBuilder.Entity<PropertyAttribute>().HasOne(pa=>pa.PropertyType).WithMany().HasForeignKey(pa=>pa.PropertyTypeUID);
+            //modelBuilder.Entity<PropertyAttribute>().HasOne(pa=>pa.FurnishType).WithMany().HasForeignKey(pa => pa.FurnishTypeUID);
+            //modelBuilder.Entity<PropertyAttribute>().Property(pa => pa.FurnishType).IsRequired(false);
             modelBuilder.Entity<PropertyAttribute>().Property(pa=>pa.TotalAreaInSqFT).IsRequired(false);
             modelBuilder.Entity<PropertyAttribute>().Property(pa => pa.ParkingSlotCount).IsRequired(false);
 
@@ -253,7 +253,7 @@ namespace DataAccess.DataContext
 
             PopulateStudentData(modelBuilder);
             PopulateLandlordData(modelBuilder);
-            
+
         }
 
         public DbSet<PropertyType> PropertyTypes { get; set; }
@@ -287,7 +287,8 @@ namespace DataAccess.DataContext
 
         private void PopulateLandlordData(ModelBuilder modelBuilder)
         {
-            var uniqueUID = new Guid().ToString();
+            var culture = CultureInfo.GetCultureInfo("en-GB");
+            var uniqueUID = Guid.NewGuid().ToString();
             var user1 = new User()
             {
                 UID = uniqueUID,
@@ -306,11 +307,11 @@ namespace DataAccess.DataContext
             };
             var landlord1 = new Landlord()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 UserUID = uniqueUID,
                 Address = "46,Lothian Road, Middlesborough",
                 CountryUID = 1,
-                DOB = Convert.ToDateTime("26/07/1988", CultureInfo.InvariantCulture),
+                DOB = Convert.ToDateTime("26/07/1988", culture.DateTimeFormat),
                 PhoneNumber="07773636363",
                 IsActive=true,
                 CreatedBy= uniqueUID,
@@ -321,7 +322,7 @@ namespace DataAccess.DataContext
             modelBuilder.Entity<User>().HasData(user1);
             modelBuilder.Entity<Landlord>().HasData(landlord1);
 
-            var uniqueUID1 = new Guid().ToString();
+            var uniqueUID1 = Guid.NewGuid().ToString();
             var user2 = new User()
             {
                 UID = uniqueUID1,
@@ -340,11 +341,11 @@ namespace DataAccess.DataContext
             };
             var landlord2 = new Landlord()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 UserUID = user2.UID,
                 Address = "34,Parliament Road, Middlesborough",
                 CountryUID = 1,
-                DOB = Convert.ToDateTime("26/07/1994", CultureInfo.InvariantCulture),
+                DOB = Convert.ToDateTime("26/07/1994", culture.DateTimeFormat),
                 PhoneNumber = "07773636363",
                 IsActive = true,
                 CreatedBy = user2.UID,
@@ -357,7 +358,7 @@ namespace DataAccess.DataContext
 
             var p1 = new Property()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 LandlordUID = landlord2.UID,
                 Name = "House 1",
                 PostCode = "TS1 2HR",
@@ -371,7 +372,7 @@ namespace DataAccess.DataContext
             };
             var pa1 = new PropertyAttribute()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 PropertyUID = p1.UID,
                 PropertyTypeUID = 5,
                 FurnishTypeUID = 1,
@@ -392,7 +393,7 @@ namespace DataAccess.DataContext
             };
             var pl1 = new PropertyListing()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 PropertyUID = p1.UID,
                 ListedByUser = user2.UID,
                 ListingDate = DateTime.Now,
@@ -407,7 +408,7 @@ namespace DataAccess.DataContext
             };
             var pla1 = new PropertyListingAttribute()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 PropertyAttributeUID = pa1.UID,
                 PropertyListingUID = pl1.UID,
                 TenancyTypeUID = 10,
@@ -440,7 +441,7 @@ namespace DataAccess.DataContext
 
             var p2 = new Property()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 LandlordUID = landlord2.UID,
                 Name = "House 2",
                 PostCode = "TS2 2HR",
@@ -454,7 +455,7 @@ namespace DataAccess.DataContext
             };
             var pa2 = new PropertyAttribute()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 PropertyUID = p2.UID,
                 PropertyTypeUID = 5,
                 FurnishTypeUID = 1,
@@ -475,7 +476,7 @@ namespace DataAccess.DataContext
             };
             var pl2 = new PropertyListing()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 PropertyUID = p2.UID,
                 ListedByUser = user2.UID,
                 ListingDate = DateTime.Now,
@@ -490,7 +491,7 @@ namespace DataAccess.DataContext
             };
             var pla2 = new PropertyListingAttribute()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 PropertyAttributeUID = pa2.UID,
                 PropertyListingUID = pl2.UID,
                 TenancyTypeUID = 10,
@@ -521,7 +522,7 @@ namespace DataAccess.DataContext
 
             var p3 = new Property()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 LandlordUID = landlord2.UID,
                 Name = "House 3",
                 PostCode = "TS3 2HR",
@@ -535,7 +536,7 @@ namespace DataAccess.DataContext
             };
             var pa3 = new PropertyAttribute()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 PropertyUID = p3.UID,
                 PropertyTypeUID = 5,
                 FurnishTypeUID = 1,
@@ -556,7 +557,7 @@ namespace DataAccess.DataContext
             };
             var pl3 = new PropertyListing()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 PropertyUID = p3.UID,
                 ListedByUser = user2.UID,
                 ListingDate = DateTime.Now,
@@ -571,7 +572,7 @@ namespace DataAccess.DataContext
             };
             var pla3 = new PropertyListingAttribute()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 PropertyAttributeUID = pa3.UID,
                 PropertyListingUID = pl3.UID,
                 TenancyTypeUID = 10,
@@ -602,7 +603,7 @@ namespace DataAccess.DataContext
 
             var p4 = new Property()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 LandlordUID = landlord2.UID,
                 Name = "House 4",
                 PostCode = "DS4 2HR",
@@ -616,7 +617,7 @@ namespace DataAccess.DataContext
             };
             var pa4 = new PropertyAttribute()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 PropertyUID = p4.UID,
                 PropertyTypeUID = 5,
                 FurnishTypeUID = 1,
@@ -637,7 +638,7 @@ namespace DataAccess.DataContext
             };
             var pl4 = new PropertyListing()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 PropertyUID = p4.UID,
                 ListedByUser = user2.UID,
                 ListingDate = DateTime.Now,
@@ -652,7 +653,7 @@ namespace DataAccess.DataContext
             };
             var pla4 = new PropertyListingAttribute()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 PropertyAttributeUID = pa4.UID,
                 PropertyListingUID = pl4.UID,
                 TenancyTypeUID = 10,
@@ -683,7 +684,7 @@ namespace DataAccess.DataContext
 
             var p5 = new Property()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 LandlordUID = landlord2.UID,
                 Name = "House 5",
                 PostCode = "TS5 2HR",
@@ -697,7 +698,7 @@ namespace DataAccess.DataContext
             };
             var pa5 = new PropertyAttribute()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 PropertyUID = p5.UID,
                 PropertyTypeUID = 5,
                 FurnishTypeUID = 1,
@@ -718,7 +719,7 @@ namespace DataAccess.DataContext
             };
             var pl5 = new PropertyListing()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 PropertyUID = p5.UID,
                 ListedByUser = user2.UID,
                 ListingDate = DateTime.Now,
@@ -733,7 +734,7 @@ namespace DataAccess.DataContext
             };
             var pla5 = new PropertyListingAttribute()
             {
-                UID = new Guid().ToString(),
+                UID = Guid.NewGuid().ToString(),
                 PropertyAttributeUID = pa5.UID,
                 PropertyListingUID = pl5.UID,
                 TenancyTypeUID = 10,
@@ -767,8 +768,7 @@ namespace DataAccess.DataContext
 
         private void PopulateStudentData(ModelBuilder modelBuilder)
         {
-            List<User> _users = new List<User>();
-            var uniqueUID = new Guid().ToString();
+            var uniqueUID = Guid.NewGuid().ToString();
             var user1 = new User()
             {
                 UID = uniqueUID,

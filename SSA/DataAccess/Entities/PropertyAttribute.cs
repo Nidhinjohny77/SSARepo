@@ -24,6 +24,6 @@ namespace DataAccess.Entities
 
         public Property Property { get; set; }
         public PropertyType PropertyType { get; set; }
-        public FurnishType FurnishType { get; set; }
+        //public FurnishType FurnishType { get; set; }
     }
 }

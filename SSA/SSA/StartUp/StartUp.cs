@@ -87,7 +87,10 @@ namespace SSA.StartUp
         private static void ConfigureDependency(IServiceCollection services, ConfigurationManager configManager)
         {
             
-            services.AddDbContext<SSDbContext>(options => options.UseSqlServer(GetEnvironmentVariable("DBConnection")));
+            services.AddDbContext<SSDbContext>(options => 
+            { options.UseSqlServer(GetEnvironmentVariable("DBConnection"));
+                options.EnableSensitiveDataLogging(); 
+            });
             services.AddScoped<IAuthHandler,JWTAuthHandler>();
             services.AddScoped<IAuthenticationManager,AuthenticationManager>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
