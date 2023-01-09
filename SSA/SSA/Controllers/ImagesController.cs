@@ -107,13 +107,9 @@ namespace SSA.Controllers
                         var fileType = this.masterDataManager.GetAllFileTypesAsync().Result.FirstOrDefault(x=>x.UID==propertyImage.FileTypeUID).Name;
                         var imageType=this.masterDataManager.GetAllImageTypesAsync().Result.FirstOrDefault(x=>x.UID==propertyImage.ImageTypeUID).Name;
                         var filePath = propertyImage.UID + "." + fileType;
-                        var stream = await this.fileService.GetFileAsync(filePath);
-                        if (stream != null)
+                        var base64Encoded = await this.fileService.GetBase64FileAsync(filePath);
+                        if (!string.IsNullOrEmpty(base64Encoded))
                         {
-                           
-                            var fileContentType = "image/" + fileType;
-                            var bytes=stream.ToArray();
-                            var base64Encoded=Convert.ToBase64String(bytes);
                             var image = new ImageModel();
                             image.ImageTypeUID=propertyImage.ImageTypeUID;
                             image.FileName = propertyImage.FileName;

@@ -9,7 +9,6 @@ SELECT * FROM [SSA].[dbo].[Property]
 SELECT * FROM [SSA].[dbo].[PropertyAttribute]
 SELECT * FROM [SSA].[dbo].[PropertyListing]
 SELECT * FROM [SSA].[dbo].[PropertyListingAttribute]
-
 SELECT * FROM [SSA].[dbo].[PropertyImage]
 
 --DELETE FROM [SSA].[dbo].[PropertyImage]
