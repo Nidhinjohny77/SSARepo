@@ -582,18 +582,21 @@ namespace Business.Manager
                     var fileTypes = await this.masterDataManager.GetAllFileTypesAsync();
                     foreach (var model in models)
                     {
-                        var fileType = fileTypes.FirstOrDefault(x => x.UID == model.ThumbNailImageData.FileTypeUID).Name;
-                        var imageType = imageTypes.FirstOrDefault(x => x.UID == model.ThumbNailImageData.ImageTypeUID).Name;
-                        var filePath = model.ThumbNailImageData.UID + "." + fileType;
-                        var fileName = model.ThumbNailImageData.FileName + "." + fileType;
-                        var base64Encoded = await this.fileService.GetBase64FileAsync(filePath);
-                        model.ThumbNailImage = new ImageModel()
+                        if (model.ThumbNailImageData != null)
                         {
-                            FileName = fileName,
-                            ImageTypeUID = model.ThumbNailImageData.ImageTypeUID,
-                            ImageType = imageType,
-                            Image = base64Encoded
-                        };
+                            var fileType = fileTypes.FirstOrDefault(x => x.UID == model.ThumbNailImageData.FileTypeUID).Name;
+                            var imageType = imageTypes.FirstOrDefault(x => x.UID == model.ThumbNailImageData.ImageTypeUID).Name;
+                            var filePath = model.ThumbNailImageData.UID + "." + fileType;
+                            var fileName = model.ThumbNailImageData.FileName + "." + fileType;
+                            var base64Encoded = await this.fileService.GetBase64FileAsync(filePath);
+                            model.ThumbNailImage = new ImageModel()
+                            {
+                                FileName = fileName,
+                                ImageTypeUID = model.ThumbNailImageData.ImageTypeUID,
+                                ImageType = imageType,
+                                Image = base64Encoded
+                            };
+                        }
                     }
                 }
                 return await Task.FromResult<Result<List<PropertyDataModel>>>(new Result<List<PropertyDataModel>>(models));
