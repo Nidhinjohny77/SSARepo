@@ -39,7 +39,7 @@ namespace SSA.Controllers
                         var result = await this.propertyManager.CreatePropertyImageAsync(this.User.UID, propertyImage);
                         if (result.IsFaulted)
                         {
-                            return StatusCode(StatusCodes.Status400BadRequest);
+                            return StatusCode(StatusCodes.Status400BadRequest,result.Errors);
                         }
                         else
                         {
