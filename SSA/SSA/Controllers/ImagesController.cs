@@ -97,7 +97,7 @@ namespace SSA.Controllers
                 var result = await this.propertyManager.GetPropertyImageAsync(this.User.UID, imageUID);
                 if (result.IsFaulted)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest);
+                    return StatusCode(StatusCodes.Status400BadRequest,result.Errors);
                 }
                 else
                 {
@@ -147,7 +147,7 @@ namespace SSA.Controllers
                 var fileTypes=await this.masterDataManager.GetAllFileTypesAsync();  
                 if (result.IsFaulted)
                 {
-                    return StatusCode(StatusCodes.Status400BadRequest);
+                    return StatusCode(StatusCodes.Status400BadRequest,result.Errors);
                 }
                 else
                 {
