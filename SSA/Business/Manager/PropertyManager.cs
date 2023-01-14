@@ -586,6 +586,7 @@ namespace Business.Manager
                         {
                             var fileType = fileTypes.FirstOrDefault(x => x.UID == model.ThumbNailImageData.FileTypeUID).Name;
                             var imageType = imageTypes.FirstOrDefault(x => x.UID == model.ThumbNailImageData.ImageTypeUID).Name;
+                            var dataType = string.Format("data:image/{0};base64", fileType);
                             var filePath = model.ThumbNailImageData.UID + "." + fileType;
                             var fileName = model.ThumbNailImageData.FileName + "." + fileType;
                             var base64Encoded = await this.fileService.GetBase64FileAsync(filePath);
@@ -594,7 +595,7 @@ namespace Business.Manager
                                 FileName = fileName,
                                 ImageTypeUID = model.ThumbNailImageData.ImageTypeUID,
                                 ImageType = imageType,
-                                Image = base64Encoded
+                                Image = dataType + "," + base64Encoded
                             };
                         }
                     }

@@ -104,8 +104,10 @@ namespace SSA.Controllers
                     var propertyImage=result.Value;
                     if (propertyImage != null)
                     {
+                        
                         var fileType = this.masterDataManager.GetAllFileTypesAsync().Result.FirstOrDefault(x=>x.UID==propertyImage.FileTypeUID).Name;
                         var imageType=this.masterDataManager.GetAllImageTypesAsync().Result.FirstOrDefault(x=>x.UID==propertyImage.ImageTypeUID).Name;
+                        var dataType = string.Format("data:image/{0};base64", fileType);
                         var filePath = propertyImage.UID + "." + fileType;
                         var base64Encoded = await this.fileService.GetBase64FileAsync(filePath);
                         if (!string.IsNullOrEmpty(base64Encoded))
@@ -113,7 +115,7 @@ namespace SSA.Controllers
                             var image = new ImageModel();
                             image.ImageTypeUID=propertyImage.ImageTypeUID;
                             image.FileName = propertyImage.FileName;
-                            image.Image = base64Encoded;
+                            image.Image = dataType+","+base64Encoded;
                             image.ImageType = imageType;
                             return Ok(image);
                         }
@@ -157,6 +159,7 @@ namespace SSA.Controllers
                     {
                         var fileType=fileTypes.FirstOrDefault(x=>x.UID==item.FileTypeUID).Name;
                         var imageType=imageTypes.FirstOrDefault(x=>x.UID== item.ImageTypeUID).Name;
+                        var dataType = string.Format("data:image/{0};base64", fileType);
                         var filePath = item.UID + "." + fileType;
                         var fileName=item.FileName+ "." + fileType;
                         var stream = await this.fileService.GetFileAsync(filePath);
@@ -167,7 +170,7 @@ namespace SSA.Controllers
                             FileName = fileName,
                             ImageTypeUID = item.ImageTypeUID,
                             ImageType= imageType,
-                            Image = base64Encoded
+                            Image = dataType+","+base64Encoded
                         };
                         images.Add(image);
                     }

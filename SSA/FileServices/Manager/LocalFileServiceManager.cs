@@ -47,7 +47,7 @@ namespace FileServices.Manager
             {
                 using (var fs = new FileStream(uploadDirectoryPath, FileMode.Open))
                 {
-                    fs.CopyToAsync(stream);
+                    await fs.CopyToAsync(stream);
                 }
                 stream.Position = 0;
                 return await Task.FromResult<MemoryStream>(stream);
