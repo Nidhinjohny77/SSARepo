@@ -576,12 +576,14 @@ namespace Business.Manager
                 }
                 var propertyListings=propertyListingsQuery.ToList();
                 var models = this.mapper.Map<List<PropertyDataModel>>(propertyListings);
+                var furnishTypes = this.uow.FurnishTypeRepository.GetAllFurnishTypes().ToList();
                 if (models != null)
                 {
                     var imageTypes = await this.masterDataManager.GetAllImageTypesAsync();
                     var fileTypes = await this.masterDataManager.GetAllFileTypesAsync();
                     foreach (var model in models)
                     {
+                        model.FurnishType = furnishTypes.Find(x => x.UID == model.FurnishTypeUID).Description;
                         if (model.ThumbNailImageData != null)
                         {
                             var fileType = fileTypes.FirstOrDefault(x => x.UID == model.ThumbNailImageData.FileTypeUID).Name;

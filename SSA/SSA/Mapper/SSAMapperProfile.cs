@@ -350,20 +350,28 @@ namespace SSA.Mapper
             this.CreateMap<PropertyListing, PropertyDataModel>()
                 .ForMember(dest => dest.PropertyListingUID, opt => opt.MapFrom(src => src.UID))
                 .ForMember(dest => dest.PropertyUID, opt => opt.MapFrom(src => src.PropertyUID))
-                .ForMember(dest => dest.AvailableDate, opt => opt.MapFrom(src => src.ListingDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)))
-                .ForMember(dest => dest.ListingDate, opt => opt.MapFrom(src => src.CreatedDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)))
-                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.ListingAmount))
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Property.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.BedRoomCount, opt => opt.MapFrom(src => src.PropertyListingAttribute.AvailableBedroomCount))
-                .ForMember(dest => dest.BathRoomCount, opt => opt.MapFrom(src => src.PropertyListingAttribute.AvailableBathroomCount))
-                .ForMember(dest => dest.IsParkingAvailable, opt => opt.MapFrom(src => src.PropertyListingAttribute.IsParkingAvailable))
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Property.Address))
+                .ForMember(dest => dest.Landmark, opt => opt.MapFrom(src => src.PropertyListingAttribute.Landmark))
+                .ForMember(dest => dest.IsNew, opt => opt.MapFrom(src => src.PropertyListingAttribute.IsNew))
                 .ForMember(dest => dest.IsPetsAllowed, opt => opt.MapFrom(src => src.PropertyListingAttribute.IsPetsAllowed))
-                .ForMember(dest => dest.AvailableParkingSlots, opt => opt.MapFrom(src => src.PropertyListingAttribute.AvailableParkingSlots))
+                .ForMember(dest => dest.IsParkingAvailable, opt => opt.MapFrom(src => src.PropertyListingAttribute.IsParkingAvailable))
                 .ForMember(dest => dest.IsPartyingAllowed, opt => opt.MapFrom(src => src.PropertyListingAttribute.IsPartyingAllowed))
                 .ForMember(dest => dest.IsSmokingAllowed, opt => opt.MapFrom(src => src.PropertyListingAttribute.IsSmokingAllowed))
+                .ForMember(dest => dest.IsSharingAllowed, opt => opt.MapFrom(src => src.PropertyListingAttribute.IsSharingAllowed))
+                .ForMember(dest => dest.AvailableDate, opt => opt.MapFrom(src => src.ListingDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(dest => dest.ListingDate, opt => opt.MapFrom(src => src.CreatedDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(dest => dest.BedRoomCount, opt => opt.MapFrom(src => src.PropertyListingAttribute.AvailableBedroomCount))
+                .ForMember(dest => dest.BathRoomCount, opt => opt.MapFrom(src => src.PropertyListingAttribute.AvailableBathroomCount))
+                .ForMember(dest => dest.AvailableParkingSlots, opt => opt.MapFrom(src => src.PropertyListingAttribute.AvailableParkingSlots))
                 .ForMember(dest => dest.AllowedOccupantCount, opt => opt.MapFrom(src => src.PropertyListingAttribute.AllowedOccupantCount))
-                .ForMember(dest => dest.ThumbNailImageData, opt => opt.MapFrom(src => src.Property.Images.FirstOrDefault(x=>x.ImageTypeUID==1)))
-                .ForMember(dest => dest.IsSharingAllowed, opt => opt.MapFrom(src => src.PropertyListingAttribute.IsSharingAllowed));
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.ListingAmount))
+                .ForMember(dest => dest.PropertyTypeUID, opt => opt.MapFrom(src => src.Property.PropertyAttribute.PropertyTypeUID))
+                .ForMember(dest => dest.PropertyType, opt => opt.MapFrom(src => src.Property.PropertyAttribute.PropertyType.Description))
+                .ForMember(dest => dest.FurnishTypeUID, opt => opt.MapFrom(src => src.Property.PropertyAttribute.FurnishTypeUID))
+                .ForMember(dest => dest.ThumbNailImageData, opt => opt.MapFrom(src => src.Property.Images.FirstOrDefault(x => x.ImageTypeUID == 1)));
+                
         }
     }
 }

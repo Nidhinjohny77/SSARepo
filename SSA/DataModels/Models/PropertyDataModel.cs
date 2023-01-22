@@ -24,6 +24,10 @@ namespace DataModels.Models
         public int AvailableParkingSlots { get; set; }
         public int AllowedOccupantCount { get; set; }
         public double Price { get; set; }
+        public int FurnishTypeUID { get; set; }
+        public string FurnishType { get; set; }
+        public string PropertyType { get; set; }
+        public int PropertyTypeUID { get; set; }
         public ImageModel ThumbNailImage { get; set; }
 
         public PropertyImageModel ThumbNailImageData { get; set; }
