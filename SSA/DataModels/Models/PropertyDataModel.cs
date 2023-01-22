@@ -18,6 +18,7 @@ namespace DataModels.Models
         public bool IsSmokingAllowed { get; set; }
         public bool IsSharingAllowed { get; set; }
         public string AvailableDate { get; set; }
+        public string ListingDate { get; set; }
         public int BedRoomCount { get; set; }
         public int BathRoomCount { get; set; }
         public int AvailableParkingSlots { get; set; }

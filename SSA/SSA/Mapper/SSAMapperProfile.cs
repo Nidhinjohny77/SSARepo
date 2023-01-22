@@ -351,6 +351,7 @@ namespace SSA.Mapper
                 .ForMember(dest => dest.PropertyListingUID, opt => opt.MapFrom(src => src.UID))
                 .ForMember(dest => dest.PropertyUID, opt => opt.MapFrom(src => src.PropertyUID))
                 .ForMember(dest => dest.AvailableDate, opt => opt.MapFrom(src => src.ListingDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(dest => dest.ListingDate, opt => opt.MapFrom(src => src.CreatedDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.ListingAmount))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.BedRoomCount, opt => opt.MapFrom(src => src.PropertyListingAttribute.AvailableBedroomCount))
