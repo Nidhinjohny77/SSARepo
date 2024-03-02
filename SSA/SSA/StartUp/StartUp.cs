@@ -88,7 +88,7 @@ namespace SSA.StartUp
         {
             
             services.AddDbContext<SSDbContext>(options => 
-            { options.UseSqlServer(GetEnvironmentVariable("DBConnection"));
+            { options.UseSqlServer(configManager.GetConnectionString("DBConnection"));
                 options.EnableSensitiveDataLogging(); 
             });
             services.AddScoped<IAuthHandler,JWTAuthHandler>();
@@ -117,13 +117,18 @@ namespace SSA.StartUp
             {
                 services.AddScoped<IFileService, AzureFileStorageService>((provider) =>
                 {
-                    var storageAccountConnectionString = GetEnvironmentVariable("AZURE_STORAGE_CONNECTION");
+                    var storageAccountConnectionString = configManager.GetSection("AZURE_STORAGE_CONNECTION").Value;
                     return new AzureFileStorageService(storageAccountConnectionString);
                 });
             }
             else
             {
-                services.AddScoped<IFileService, LocalFileServiceManager>();
+                
+                services.AddScoped<IFileService, LocalFileServiceManager>((provider) =>
+                {
+                    var uploadDirPath = configManager.GetSection("UploadDirectory").Value;
+                    return new LocalFileServiceManager(uploadDirPath);
+                });
 
             }
             
@@ -134,11 +139,6 @@ namespace SSA.StartUp
         private static void ConfigureDistributedCache(IServiceCollection services)
         {
             services.AddDistributedMemoryCache();
-        }
-
-        public static string GetEnvironmentVariable(string name)
-        {
-            return Environment.GetEnvironmentVariable(name)??string.Empty;
         }
 
     }

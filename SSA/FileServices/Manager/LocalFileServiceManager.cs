@@ -4,11 +4,11 @@ namespace FileServices.Manager
 {
     public class LocalFileServiceManager:IFileService
     {
-        private readonly IConfiguration configuration;
+        private readonly string uploadDirectory;
 
-        public LocalFileServiceManager(IConfiguration configuration)
+        public LocalFileServiceManager(string uploadDirectory)
         {
-            this.configuration = configuration;
+            this.uploadDirectory = uploadDirectory+"/";
         }
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace FileServices.Manager
         /// <returns></returns>
         public async Task<bool> UploadFileAsync(string fileName,Stream fileStream)
         {
-            var uploadDirectoryPath = this.configuration.GetSection("UploadDirectory").Value+"/"+fileName;
+            var uploadDirectoryPath = this.uploadDirectory + fileName;
             if(uploadDirectoryPath == null)
             {
                 return await Task.FromResult(false);
@@ -38,7 +38,7 @@ namespace FileServices.Manager
         public async Task<MemoryStream> GetFileAsync(string fileName)
         {
             MemoryStream stream=new MemoryStream();
-            var uploadDirectoryPath = this.configuration.GetSection("UploadDirectory").Value + "/" + fileName;
+            var uploadDirectoryPath = this.uploadDirectory + fileName;
             if (uploadDirectoryPath == null)
             {
                 return await Task.FromResult<MemoryStream>(null);
